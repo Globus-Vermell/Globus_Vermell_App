@@ -12,12 +12,10 @@ class ListaEdificacionesScreen extends StatefulWidget {
 }
 
 class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
-  // Instanciamos el servicio aquí
   final BuildingService _buildingService = BuildingService();
 
   final ScrollController _scrollController = ScrollController();
   final List<Buildings> _edificios = [];
-
   bool _cargando = false;
   bool _todoCargado = false;
   int _paginaActual = 1;
@@ -37,6 +35,12 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
     });
   }
 
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   Future<void> _cargarMasEdificios() async {
     if (_cargando) return;
     setState(() => _cargando = true);
@@ -49,29 +53,22 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
       setState(() {
         _edificios.addAll(nuevosEdificios);
         _paginaActual++;
-
         if (nuevosEdificios.isEmpty) {
           _todoCargado = true;
         }
       });
     } catch (e) {
-      debugPrint("Ups, algo salió mal: $e");
+      debugPrint("Error cargando: $e");
     } finally {
       if (mounted) setState(() => _cargando = false);
     }
   }
 
   @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Mis Edificios"),
+        title: const Text("Mis Edificios "),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       body: _edificios.isEmpty && _cargando
@@ -86,7 +83,9 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
                     child: Center(child: CircularProgressIndicator()),
                   );
                 }
+
                 final edificio = _edificios[index];
+
                 return Card(
                   margin: const EdgeInsets.all(8),
                   child: ListTile(
@@ -94,7 +93,10 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
                       Icons.apartment,
                       color: Colors.deepPurple,
                     ),
-                    title: Text(edificio.name),
+                    title: Text(
+                      edificio.name,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
                     subtitle: Text(edificio.location),
                     trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                     onTap: () {
