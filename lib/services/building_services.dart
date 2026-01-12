@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import '../models/buildings.dart';
 
 class BuildingService {
+  // URL base del servidor
   static const String _baseUrl = 'https://projecte-de-innovacio.onrender.com';
 
   Future<List<Buildings>> getBuildings({int page = 1}) async {

@@ -31,9 +31,7 @@ class BuildingDetailScreen extends StatelessWidget {
                   // Mostramos si está validado o no con un chip
                   Chip(
                     label: Text(
-                      building.validate
-                          ? "Validado ✅"
-                          : "Pendiente de Revisión ⏳",
+                      building.validate ? "Validado " : "Pendiente de Revisión",
                       style: TextStyle(
                         color: building.validate
                             ? Colors.green.shade900
@@ -97,7 +95,7 @@ class BuildingDetailScreen extends StatelessWidget {
     );
   }
 
-  // Helper UwU para crear títulos de sección
+  // Helper para crear títulos de sección
   Widget _crearTituloSeccion(String titulo) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -112,7 +110,7 @@ class BuildingDetailScreen extends StatelessWidget {
     );
   }
 
-  // Helper UwU para crear cada fila de dato
+  // Helper para crear cada fila de dato
   Widget _crearDato(String etiqueta, String valor, IconData icono) {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 5),
