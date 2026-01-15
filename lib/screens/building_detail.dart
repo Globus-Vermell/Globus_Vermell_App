@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../models/buildings.dart';
 
 class BuildingDetailScreen extends StatelessWidget {
-  // Recibimos el objeto completo del edificio
   final Buildings building;
 
   const BuildingDetailScreen({super.key, required this.building});
@@ -10,126 +9,325 @@ class BuildingDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(building.name),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Column(
-                children: [
-                  const Icon(
-                    Icons.apartment,
-                    size: 100,
-                    color: Colors.deepPurple,
+      backgroundColor: Colors.white,
+      body: CustomScrollView(
+        slivers: [
+          // AppBar con el título
+          SliverAppBar(
+            backgroundColor: Colors.white,
+            elevation: 0,
+            pinned: true,
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back, color: Colors.black87),
+              onPressed: () => Navigator.pop(context),
+            ),
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Details',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
                   ),
-                  const SizedBox(height: 10),
-                  // Mostramos si está validado o no con un chip
-                  Chip(
-                    label: Text(
-                      building.validate ? "Validado " : "Pendiente de Revisión",
-                      style: TextStyle(
-                        color: building.validate
-                            ? Colors.green.shade900
-                            : Colors.orange.shade900,
+                ),
+                Text(
+                  building.name,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.grey[600],
+                    fontWeight: FontWeight.normal,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // Contenido
+          SliverToBoxAdapter(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Stack(
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      height: 300,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        image:
+                            (building.images != null &&
+                                building.images!.isNotEmpty)
+                            ? DecorationImage(
+                                image: NetworkImage(building.images!.first),
+                                fit: BoxFit.cover,
+                              )
+                            : null, // Si no hay imagen, no ponemos nada
+
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Colors.grey[300]!.withOpacity(0.3),
+                            Colors.grey[400]!,
+                          ],
+                        ),
+                      ),
+                      child:
+                          (building.images == null || building.images!.isEmpty)
+                          ? Icon(
+                              Icons.image_outlined,
+                              color: Colors.grey[500],
+                              size: 80,
+                            )
+                          : null,
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.transparent,
+                              Colors.black.withOpacity(0.7),
+                            ],
+                          ),
+                        ),
+                        padding: const EdgeInsets.all(20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: 12),
+                            // Nombre del edificio
+                            Text(
+                              building.name,
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                    backgroundColor: building.validate
-                        ? Colors.green.shade100
-                        : Colors.orange.shade100,
+                  ],
+                ),
+
+                // Contenido principal
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Chip de distancia
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 10,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Color(0xFFFFF1F0),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.location_on,
+                              color: Color(0xFFE41E26),
+                              size: 18,
+                            ),
+                            const SizedBox(width: 6),
+                            Text(
+                              '0.6 km de distància',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Color(0xFFE41E26),
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      const SizedBox(height: 24),
+
+                      // Título "Més informació"
+                      Text(
+                        'Més informació',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
+
+                      const SizedBox(height: 12),
+
+                      // Descripción
+                      Text(
+                        building.description.isNotEmpty
+                            ? building.description
+                            : "Obra mestra de Gaudí amb una façana acolorida i formes orgàniques úniques.",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey[700],
+                          height: 1.5,
+                        ),
+                      ),
+
+                      const SizedBox(height: 24),
+
+                      // Botón "Com arribar"
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            // Acción para navegar
+                            print("Navegando a: ${building.coordinates}");
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xFFE41E26),
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            elevation: 0,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.navigation, size: 20),
+                              const SizedBox(width: 8),
+                              Text(
+                                'Com arribar',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(height: 32),
+
+                      // Información adicional en cards discretas
+                      _InfoCard(
+                        icon: Icons.location_on_outlined,
+                        label: 'Ubicación',
+                        value: building.location,
+                      ),
+
+                      const SizedBox(height: 12),
+
+                      _InfoCard(
+                        icon: Icons.calendar_today_outlined,
+                        label: 'Año de construcción',
+                        value: '${building.construction_year}',
+                      ),
+
+                      const SizedBox(height: 12),
+
+                      _InfoCard(
+                        icon: Icons.square_foot_outlined,
+                        label: 'Superficie',
+                        value: '${building.surface_area} m²',
+                      ),
+
+                      const SizedBox(height: 12),
+
+                      _InfoCard(
+                        icon: Icons.map_outlined,
+                        label: 'Coordenadas',
+                        value: building.coordinates,
+                      ),
+
+                      const SizedBox(height: 12),
+
+                      _InfoCard(
+                        icon: Icons.category_outlined,
+                        label: 'Tipología (ID)',
+                        value: '${building.id_typology}',
+                      ),
+
+                      const SizedBox(height: 12),
+
+                      _InfoCard(
+                        icon: Icons.shield_outlined,
+                        label: 'Protección (ID)',
+                        value: '${building.id_protection}',
+                      ),
+
+                      const SizedBox(height: 12),
+                      const SizedBox(height: 40),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            const SizedBox(height: 20),
-            const Divider(),
-            _crearTituloSeccion("Información General"),
-            _crearDato("Ubicación", building.location, Icons.location_on),
-            _crearDato(
-              "Año Construcción",
-              "${building.construction_year}",
-              Icons.calendar_today,
-            ),
-            _crearDato("Coordenadas", building.coordinates, Icons.map),
-
-            const Divider(),
-            _crearTituloSeccion(" Detalles Técnicos"),
-            _crearDato(
-              "Superficie",
-              "${building.surface_area} m²",
-              Icons.square_foot,
-            ),
-            _crearDato(
-              "Tipología (ID)",
-              "${building.id_typology}",
-              Icons.category,
-            ),
-            _crearDato(
-              "Protección (ID)",
-              "${building.id_protection}",
-              Icons.shield,
-            ),
-
-            const Divider(),
-            _crearTituloSeccion("Descripción"),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: 8.0,
-                horizontal: 16.0,
-              ),
-              child: Text(
-                building.description.isNotEmpty
-                    ? building.description
-                    : "Sin descripción disponible.",
-                style: const TextStyle(fontSize: 16, height: 1.5),
-                textAlign: TextAlign.justify,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  // Helper para crear títulos de sección
-  Widget _crearTituloSeccion(String titulo) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10.0),
-      child: Text(
-        titulo,
-        style: const TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-          color: Colors.deepPurple,
-        ),
-      ),
-    );
-  }
-
-  // Helper para crear cada fila de dato
-  Widget _crearDato(String etiqueta, String valor, IconData icono) {
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 5),
-      elevation: 0, // Planito para que se vea limpio
-      color: Colors.grey.shade100,
-      child: ListTile(
-        leading: Icon(icono, color: Colors.deepPurpleAccent),
-        title: Text(
-          etiqueta,
-          style: const TextStyle(fontSize: 14, color: Colors.grey),
-        ),
-        subtitle: Text(
-          valor,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: Colors.black87,
           ),
-        ),
+        ],
+      ),
+    );
+  }
+}
+
+// Card de información discreta
+class _InfoCard extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final String value;
+
+  const _InfoCard({
+    required this.icon,
+    required this.label,
+    required this.value,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.grey[50],
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.grey[200]!),
+      ),
+      child: Row(
+        children: [
+          Icon(icon, color: Colors.grey[600], size: 22),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: TextStyle(fontSize: 13, color: Colors.grey[600]),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  value,
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.black87,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

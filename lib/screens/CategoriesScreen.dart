@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'building_list.dart';
-import 'CategoriesScreen.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class CategoriesScreen extends StatelessWidget {
+  const CategoriesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,13 +10,15 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        toolbarHeight: 100,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black87),
+          onPressed: () => Navigator.pop(context),
+        ),
         title: Row(
           children: [
-            // Lo que debería ir aquí es el logo
             Container(
-              width: 60,
-              height: 60,
+              width: 45,
+              height: 45,
               decoration: BoxDecoration(
                 color: Colors.red,
                 shape: BoxShape.circle,
@@ -29,13 +29,12 @@ class HomeScreen extends StatelessWidget {
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
-                    fontSize: 12,
+                    fontSize: 10,
                   ),
                 ),
               ),
             ),
-            const SizedBox(width: 15),
-            // Texto del título
+            const SizedBox(width: 12),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
@@ -43,7 +42,7 @@ class HomeScreen extends StatelessWidget {
                 Text(
                   'Monuments BCN',
                   style: TextStyle(
-                    fontSize: 22,
+                    fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Colors.black87,
                   ),
@@ -51,7 +50,7 @@ class HomeScreen extends StatelessWidget {
                 Text(
                   'Barcelona',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 14,
                     color: Colors.grey[600],
                     fontWeight: FontWeight.normal,
                   ),
@@ -73,7 +72,7 @@ class HomeScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Què vols fer?',
+              'Tria una categoria',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -82,52 +81,39 @@ class HomeScreen extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'Tria una opció per començar',
+              'Descobreix el patrimoni arquitectònic',
               style: TextStyle(fontSize: 16, color: Colors.grey[600]),
             ),
             const SizedBox(height: 30),
 
-            // Botón 1: Explorar Mapa
-            _MenuButtonBCN(
-              title: 'Explorar Mapa',
-              subtitle: 'Veure tots els monuments propers',
-              icon: Icons.location_on,
+            // Categoría 1: Etapes
+            _CategoryItem(
+              title: 'Etapes',
+              icon: Icons.calendar_today,
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ListaEdificacionesScreen(),
-                  ),
-                );
+                print("Click en Etapes");
               },
             ),
 
             const SizedBox(height: 15),
 
-            // Botón 2: Navegar per Categories
-            _MenuButtonBCN(
-              title: 'Navegar per Categories',
-              subtitle: 'Filtrar per tipus i època',
-              icon: Icons.layers,
+            // Categoría 2: Arquitectura Temàtica
+            _CategoryItem(
+              title: 'Arquitectura Temàtica',
+              icon: Icons.business,
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const CategoriesScreen(),
-                  ),
-                );
+                print("Click en Arquitectura Temàtica");
               },
             ),
 
             const SizedBox(height: 15),
 
-            // Botón 3: Guía de Temàtiques
-            _MenuButtonBCN(
-              title: 'Guia de Temàtiques',
-              subtitle: 'Aprèn sobre cada temàtica',
-              icon: Icons.menu_book,
+            // Categoría 3: Barris
+            _CategoryItem(
+              title: 'Barris',
+              icon: Icons.map,
               onTap: () {
-                print("Click en guía");
+                print("Click en Barris");
               },
             ),
           ],
@@ -137,16 +123,13 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-// Widget personalizado para los botones del menú
-class _MenuButtonBCN extends StatelessWidget {
+class _CategoryItem extends StatelessWidget {
   final String title;
-  final String subtitle;
   final IconData icon;
   final VoidCallback onTap;
 
-  const _MenuButtonBCN({
+  const _CategoryItem({
     required this.title,
-    required this.subtitle,
     required this.icon,
     required this.onTap,
   });
@@ -162,10 +145,9 @@ class _MenuButtonBCN extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(12),
         child: Padding(
-          padding: const EdgeInsets.all(18.0),
+          padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 20.0),
           child: Row(
             children: [
-              // Icono en cuadrado rojo
               Container(
                 width: 56,
                 height: 56,
@@ -176,25 +158,14 @@ class _MenuButtonBCN extends StatelessWidget {
                 child: Icon(icon, color: Colors.white, size: 28),
               ),
               const SizedBox(width: 16),
-              // Textos
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      title,
-                      style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black87,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      subtitle,
-                      style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-                    ),
-                  ],
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black87,
+                  ),
                 ),
               ),
             ],
