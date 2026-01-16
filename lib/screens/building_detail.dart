@@ -33,14 +33,6 @@ class BuildingDetailScreen extends StatelessWidget {
                     color: Colors.black87,
                   ),
                 ),
-                Text(
-                  building.name,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey[600],
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
               ],
             ),
           ),
@@ -175,7 +167,7 @@ class BuildingDetailScreen extends StatelessWidget {
                       Text(
                         building.description.isNotEmpty
                             ? building.description
-                            : "Obra mestra de Gaudí amb una façana acolorida i formes orgàniques úniques.",
+                            : "No hi ha descripció disponible per a aquest edifici.",
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.grey[700],
@@ -191,7 +183,7 @@ class BuildingDetailScreen extends StatelessWidget {
                         child: ElevatedButton(
                           onPressed: () {
                             // Acción para navegar
-                            print("Navegando a: ${building.coordinates}");
+                            print("Navegando a: ");
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Color(0xFFE41E26),
@@ -238,37 +230,35 @@ class BuildingDetailScreen extends StatelessWidget {
 
                       const SizedBox(height: 12),
 
-                      _InfoCard(
-                        icon: Icons.square_foot_outlined,
-                        label: 'Superficie',
-                        value: '${building.surface_area} m²',
-                      ),
+                      // Aquí ira el arquitecto que aún no lo tenemos en el model
+                      if (building.surface_area > 0) ...[
+                        _InfoCard(
+                          icon: Icons.square_foot_outlined,
+                          label: 'Superfície',
+                          value: '${building.surface_area} m²',
+                        ),
+                        const SizedBox(height: 12),
+                      ],
 
-                      const SizedBox(height: 12),
+                      if (building.typologyName != null &&
+                          building.typologyName!.isNotEmpty) ...[
+                        _InfoCard(
+                          icon: Icons.category_outlined,
+                          label: 'Tipología',
+                          value: building.typologyName!,
+                        ),
+                        const SizedBox(height: 12),
+                      ],
 
-                      _InfoCard(
-                        icon: Icons.map_outlined,
-                        label: 'Coordenadas',
-                        value: building.coordinates,
-                      ),
-
-                      const SizedBox(height: 12),
-
-                      _InfoCard(
-                        icon: Icons.category_outlined,
-                        label: 'Tipología (ID)',
-                        value: '${building.id_typology}',
-                      ),
-
-                      const SizedBox(height: 12),
-
-                      _InfoCard(
-                        icon: Icons.shield_outlined,
-                        label: 'Protección (ID)',
-                        value: '${building.id_protection}',
-                      ),
-
-                      const SizedBox(height: 12),
+                      if (building.protectionName != null &&
+                          building.protectionName!.isNotEmpty) ...[
+                        _InfoCard(
+                          icon: Icons.shield_outlined,
+                          label: 'Protección',
+                          value: building.protectionName!,
+                        ),
+                        const SizedBox(height: 12),
+                      ],
                       const SizedBox(height: 40),
                     ],
                   ),

@@ -7,9 +7,10 @@ class Buildings {
   final int surface_area;
   final int id_typology;
   final int id_protection;
-  final String coordinates;
   final bool validate;
   final List<String>? images;
+  final String? typologyName;
+  final String? protectionName;
 
   Buildings({
     required this.id_building,
@@ -20,9 +21,10 @@ class Buildings {
     required this.surface_area,
     required this.id_typology,
     required this.id_protection,
-    required this.coordinates,
     required this.validate,
     this.images,
+    this.typologyName,
+    this.protectionName,
   });
 
   // Fábrica para crear un Edificio desde los datos de Supabase (Map)
@@ -36,6 +38,16 @@ class Buildings {
           .toList();
     }
 
+    String? extractedTypology;
+    if (map['typology'] != null && map['typology'] is Map) {
+      extractedTypology = map['typology']['name'];
+    }
+
+    String? extractedProtection;
+    if (map['protection'] != null && map['protection'] is Map) {
+      extractedProtection = map['protection']['level'];
+    }
+
     return Buildings(
       id_building: map['id_building'] ?? 0,
       name: map['name'] ?? 'Sin nombre',
@@ -45,9 +57,10 @@ class Buildings {
       surface_area: map['surface_area'] ?? 0,
       id_typology: map['id_typology'] ?? 0,
       id_protection: map['id_protection'] ?? 0,
-      coordinates: map['coordinates'] ?? '',
       validate: map['validated'] ?? false,
       images: extractedImages,
+      typologyName: extractedTypology,
+      protectionName: extractedProtection,
     );
   }
 
@@ -61,7 +74,6 @@ class Buildings {
       'surface_area': surface_area,
       'id_typology': id_typology,
       'id_protection': id_protection,
-      'coordinates': coordinates,
       'validate': validate,
     };
   }
