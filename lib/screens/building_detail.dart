@@ -26,7 +26,7 @@ class BuildingDetailScreen extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'Details',
+                  'Detalls del edifici',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,

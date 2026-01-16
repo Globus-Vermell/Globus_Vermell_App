@@ -9,7 +9,7 @@ class BuildingService {
     try {
       final url = Uri.parse('$_baseUrl/buildings/api/list?page=$page');
 
-      print("📡 Llamando a la API: $url");
+      print(" Llamando a la API: $url");
       final response = await http.get(url);
 
       if (response.statusCode == 200) {

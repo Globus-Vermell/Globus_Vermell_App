@@ -41,7 +41,7 @@ class HomeScreen extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'Monuments BCN',
+                  'Globus Vermell',
                   style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,

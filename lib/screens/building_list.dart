@@ -80,7 +80,7 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Monuments BCN',
+              'Globus Vermell',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
