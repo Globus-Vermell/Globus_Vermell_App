@@ -3,26 +3,48 @@ import 'package:http/http.dart' as http;
 import '../models/buildings.dart';
 
 class BuildingService {
+  // 1. Singleton: Para que sea la MISMA instancia en toda la app
+  static final BuildingService _instance = BuildingService._internal();
+  factory BuildingService() => _instance;
+  BuildingService._internal();
+
   static const String _baseUrl = 'https://projecte-de-innovacio.onrender.com';
 
-  Future<List<Buildings>> getBuildings({int page = 1}) async {
+  // 2. Memoria Caché: Aquí guardaremos los edificios para no perderlos
+  List<Buildings> cacheEdificios = [];
+  bool primeraPaginaCargada = false; // Para saber si ya hicimos la pre-carga
+
+  Future<List<Buildings>> getBuildings({
+    int page = 1,
+    bool forceRefresh = false,
+  }) async {
+    // Si pedimos la página 1 y YA la tenemos cargada (y no forzamos recarga)
+    if (page == 1 && primeraPaginaCargada && !forceRefresh) {
+      print(" Usando datos de la caché (Pre-carga)");
+      return cacheEdificios;
+    }
+
     try {
       final url = Uri.parse('$_baseUrl/buildings/api/list?page=$page');
+      print("Llamando a la API: $url");
 
-      print(" Llamando a la API: $url");
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         final List<dynamic> listaJson = data['buildings'];
 
-        return listaJson.map((mapa) {
-          // 1. Imprimimos los datos de CADA edificio para ver si llega "images"
-          print(" Data de un edificio: $mapa");
-
-          // 2. Convertimos el mapa a objeto Building
+        final nuevosEdificios = listaJson.map((mapa) {
           return Buildings.fromMap(mapa);
-        }).toList(); // 3. Y al final lo convertimos todo a lista
+        }).toList();
+
+        // Si es la página 1, guardamos/actualizamos la caché
+        if (page == 1) {
+          cacheEdificios = nuevosEdificios;
+          primeraPaginaCargada = true;
+        }
+
+        return nuevosEdificios;
       } else {
         throw Exception('Error del servidor: ${response.statusCode}');
       }

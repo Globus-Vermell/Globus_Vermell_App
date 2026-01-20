@@ -1,10 +1,27 @@
 import 'package:flutter/material.dart';
 import 'building_list.dart';
 import 'CategoriesScreen.dart';
+import '../services/building_services.dart';
+import 'ThemesScreen.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  // 2. pre-carga
+  @override
+  void initState() {
+    super.initState();
+    // Dejamos que cargue en segundo plano.
+    print("Home: Iniciando pre-carga de edificios...");
+    BuildingService().getBuildings(page: 1);
+  }
+
+  // 3. El build
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,7 +32,6 @@ class HomeScreen extends StatelessWidget {
         toolbarHeight: 100,
         title: Row(
           children: [
-            // Lo que debería ir aquí es el logo
             Container(
               width: 60,
               height: 60,
@@ -26,16 +42,11 @@ class HomeScreen extends StatelessWidget {
               child: Center(
                 child: Text(
                   'Logo',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12,
-                  ),
+                  style: TextStyle(color: Colors.white, fontSize: 12),
                 ),
               ),
             ),
             const SizedBox(width: 15),
-            // Texto del título
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
@@ -50,11 +61,7 @@ class HomeScreen extends StatelessWidget {
                 ),
                 Text(
                   'Barcelona',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey[600],
-                    fontWeight: FontWeight.normal,
-                  ),
+                  style: TextStyle(fontSize: 16, color: Colors.grey[600]),
                 ),
               ],
             ),
@@ -74,11 +81,7 @@ class HomeScreen extends StatelessWidget {
           children: [
             Text(
               'Què vols fer?',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
-              ),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             Text(
@@ -87,7 +90,6 @@ class HomeScreen extends StatelessWidget {
             ),
             const SizedBox(height: 30),
 
-            // Botón 1: Explorar Mapa
             _MenuButtonBCN(
               title: 'Explorar Mapa',
               subtitle: 'Veure tots els monuments propers',
@@ -101,10 +103,7 @@ class HomeScreen extends StatelessWidget {
                 );
               },
             ),
-
             const SizedBox(height: 15),
-
-            // Botón 2: Navegar per Categories
             _MenuButtonBCN(
               title: 'Navegar per Categories',
               subtitle: 'Filtrar per tipus i època',
@@ -118,16 +117,16 @@ class HomeScreen extends StatelessWidget {
                 );
               },
             ),
-
             const SizedBox(height: 15),
-
-            // Botón 3: Guía de Temàtiques
             _MenuButtonBCN(
               title: 'Guia de Temàtiques',
               subtitle: 'Aprèn sobre cada temàtica',
               icon: Icons.menu_book,
               onTap: () {
-                print("Click en guía");
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ThemesScreen()),
+                );
               },
             ),
           ],

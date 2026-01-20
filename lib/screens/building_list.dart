@@ -23,7 +23,21 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
   @override
   void initState() {
     super.initState();
-    _cargarMasEdificios();
+
+    if (_buildingService.primeraPaginaCargada) {
+      // Si SÍ tiene datos, los copiamos a nuestra lista local
+      _edificios.addAll(_buildingService.cacheEdificios);
+
+      // Ajustamos la página para que la próxima carga sea la página 2
+      _paginaActual = 2;
+
+      if (_buildingService.cacheEdificios.isEmpty) {
+        _todoCargado = true;
+      }
+    } else {
+      // Si NO hay datos (porque el usuario entró súper rápido), cargamos normal
+      _cargarMasEdificios();
+    }
 
     _scrollController.addListener(() {
       if (_scrollController.position.pixels >=
