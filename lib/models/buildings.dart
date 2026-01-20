@@ -39,13 +39,13 @@ class Buildings {
     }
 
     String? extractedTypology;
-    if (map['typology'] != null && map['typology'] is Map) {
-      extractedTypology = map['typology']['name'];
+    if (map['typologies'] != null && map['typologies'] is Map) {
+      extractedTypology = map['typologies']['name'];
     }
 
     String? extractedProtection;
-    if (map['protection'] != null && map['protection'] is Map) {
-      extractedProtection = map['protection']['level'];
+    if (map['protections'] != null && map['protections'] is Map) {
+      extractedProtection = map['protections']['level'];
     }
 
     return Buildings(
