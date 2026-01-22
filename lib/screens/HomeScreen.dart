@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'building_list.dart';
+import 'BuildingList.dart';
 import 'CategoriesScreen.dart';
-import '../services/building_services.dart';
+import '../services/BuildingServices.dart';
 import 'ThemesScreen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -16,8 +16,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    // Dejamos que cargue en segundo plano.
-    print("Home: Iniciando pre-carga de edificios...");
     BuildingService().getBuildings(page: 1);
   }
 
@@ -164,7 +162,6 @@ class _MenuButtonBCN extends StatelessWidget {
           padding: const EdgeInsets.all(18.0),
           child: Row(
             children: [
-              // Icono en cuadrado rojo
               Container(
                 width: 56,
                 height: 56,

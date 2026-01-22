@@ -18,9 +18,7 @@ class BuildingService {
     int page = 1,
     bool forceRefresh = false,
   }) async {
-    // Si pedimos la página 1 y YA la tenemos cargada (y no forzamos recarga)
     if (page == 1 && primeraPaginaCargada && !forceRefresh) {
-      print(" Usando datos de la caché (Pre-carga)");
       return cacheEdificios;
     }
 
