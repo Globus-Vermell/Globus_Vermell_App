@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/buildings.dart';
-import '../controllers/BuildingDetailController.dart';
+import '../controllers/BuildingDetailController.dart'; // Asegúrate de que este import sea correcto (minúsculas)
 
 class BuildingDetailScreen extends StatefulWidget {
   final Buildings building;
@@ -27,6 +27,55 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
     super.dispose();
   }
 
+  // --- 1. FUNCIÓN PARA MOSTRAR LA LEYENDA (POPUP) ---
+  void _showLegend(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.white,
+        title: const Text("Llegenda d'Icones"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildLegendItem(
+              Icons.category,
+              "Tipologia Arquitectònica",
+              Colors.blue,
+            ),
+            const SizedBox(height: 12),
+            _buildLegendItem(
+              Icons.security,
+              "Nivell de Protecció",
+              Colors.orange,
+            ),
+            const SizedBox(height: 12),
+            _buildLegendItem(
+              Icons.calendar_today,
+              "Any de Construcció",
+              Colors.purple,
+            ),
+            const SizedBox(height: 12),
+            _buildLegendItem(
+              Icons.square_foot,
+              "Superfície Total",
+              Colors.green,
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text(
+              "Entesos",
+              style: TextStyle(color: Color(0xFFE41E26)),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final building = widget.building;
@@ -42,7 +91,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Título y Ubicación
+                  // Título
                   Text(
                     building.name,
                     style: const TextStyle(
@@ -52,6 +101,8 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                     ),
                   ),
                   const SizedBox(height: 8),
+
+                  // Ubicación
                   Row(
                     children: [
                       const Icon(
@@ -73,6 +124,29 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                   ),
 
                   const SizedBox(height: 24),
+
+                  // --- 2. CABECERA CON BOTÓN DE INFO ---
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        "Dades Tècniques",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(
+                          Icons.info_outline,
+                          color: Colors.grey,
+                        ),
+                        onPressed: () => _showLegend(context),
+                        tooltip: "Veure llegenda",
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
 
                   // Fichas de información (Tags)
                   Wrap(
@@ -109,20 +183,60 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                   const Divider(),
                   const SizedBox(height: 24),
 
-                  // Descripción
+                  // Título de la sección
                   const Text(
                     "Descripció",
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 12),
-                  Text(
-                    building.description,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey[800],
-                      height: 1.6,
-                    ),
-                  ),
+
+                  // Si tiene descripción y no está vacía, la mostramos
+                  (building.description.isNotEmpty)
+                      ? Text(
+                          building.description,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey[800],
+                            height: 1.6,
+                          ),
+                        )
+                      // Si NO tiene descripción, mostramos este aviso bonito
+                      : Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[50],
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: Colors.grey.withOpacity(0.2),
+                            ),
+                          ),
+                          child: Column(
+                            children: [
+                              Icon(
+                                Icons.info_outline,
+                                size: 40,
+                                color: Colors.grey[400],
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                "No hi ha descripció disponible",
+                                style: TextStyle(
+                                  color: Colors.grey[600],
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              Text(
+                                "Estem treballant per afegir més informació aviat.",
+                                style: TextStyle(
+                                  color: Colors.grey[500],
+                                  fontSize: 12,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                        ),
 
                   const SizedBox(height: 40),
                 ],
@@ -131,7 +245,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
           ),
         ],
       ),
-      // Botón flotante para acción principal (ej. Mapa)
+      // Botón flotante para acción principal
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _controller.openMap,
         backgroundColor: const Color(0xFFE41E26),
@@ -144,7 +258,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
     );
   }
 
-  // Widget para la barra superior con imagen
+  // Widget para la barra superior con imagen y chip de distancia
   Widget _buildSliverAppBar(Buildings building) {
     return SliverAppBar(
       expandedHeight: 300.0,
@@ -162,7 +276,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
         background: Stack(
           alignment: Alignment.bottomCenter,
           children: [
-            // Carrusel de Imágenes (Si hay)
+            // Carrusel de Imágenes
             if (building.images != null && building.images!.isNotEmpty)
               PageView.builder(
                 itemCount: building.images!.length,
@@ -187,7 +301,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                 ),
               ),
 
-            // Indicador de puntitos para el carrusel
+            // Indicador de puntitos
             if (building.images != null && building.images!.length > 1)
               Padding(
                 padding: const EdgeInsets.only(bottom: 16.0),
@@ -214,9 +328,74 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                   },
                 ),
               ),
+
+            // --- 3. CHIP DE DISTANCIA 0.6KM ---
+            Positioned(
+              bottom: 16, // Altura desde abajo
+              left: 16, // Distancia desde la izquierda
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 6,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.9),
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.navigation, color: Colors.grey[600], size: 14),
+                    const SizedBox(width: 4),
+                    Text(
+                      "0.6 km",
+                      style: TextStyle(
+                        color: Colors.grey[800],
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),
+    );
+  }
+
+  // Widget auxiliar para cada ítem de la leyenda
+  Widget _buildLegendItem(IconData icon, String text, Color color) {
+    return Row(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.1),
+            shape: BoxShape.circle,
+          ),
+          child: Icon(icon, size: 20, color: color),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Text(
+            text,
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.grey[800],
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+      ],
     );
   }
 
