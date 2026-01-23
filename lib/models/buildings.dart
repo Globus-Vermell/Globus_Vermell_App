@@ -12,6 +12,12 @@ class Buildings {
   final String? typologyName;
   final String? protectionName;
 
+  // Listas de datos extra
+  final List<String> architects;
+  final List<String> reforms;
+  final List<String> prizes;
+  final List<String> publications;
+
   Buildings({
     required this.id_building,
     required this.name,
@@ -25,27 +31,48 @@ class Buildings {
     this.images,
     this.typologyName,
     this.protectionName,
+    this.architects = const [],
+    this.reforms = const [],
+    this.prizes = const [],
+    this.publications = const [],
   });
 
-  // Fábrica para crear un Edificio desde los datos de Supabase (Map)
   factory Buildings.fromMap(Map<String, dynamic> map) {
-    // 1. Logica para sacar las imagenes de la lista de objetos
+    // Mapeo de IMÁGENES
     List<String> extractedImages = [];
     if (map['building_images'] != null) {
-      // Recorremos la lista de objetos y sacamos solo el 'image_url'
-      extractedImages = (map['building_images'] as List)
-          .map((item) => item['image_url'] as String)
-          .toList();
+      if (map['building_images'] is List) {
+        extractedImages = (map['building_images'] as List)
+            .map((item) {
+              if (item is Map) return item['image_url'] as String? ?? '';
+              if (item is String) return item;
+              return '';
+            })
+            .where((s) => s.isNotEmpty)
+            .toList();
+      }
     }
 
+    if (map['publications'] != null || map['building_publications'] != null) {
+      print(" DEBUG EDIFICIO: ${map['name']}");
+      print(" publications (raw): ${map['publications']}");
+      print(" building_publications (raw): ${map['building_publications']}");
+    }
+
+    // Mapeo de TIPOLOGÍA (Objeto -> String)
     String? extractedTypology;
     if (map['typologies'] != null && map['typologies'] is Map) {
       extractedTypology = map['typologies']['name'];
+    } else if (map['typologyName'] != null) {
+      extractedTypology = map['typologyName'];
     }
 
+    // Mapeo de PROTECCIÓN (Objeto -> String)
     String? extractedProtection;
     if (map['protections'] != null && map['protections'] is Map) {
       extractedProtection = map['protections']['level'];
+    } else if (map['protectionName'] != null) {
+      extractedProtection = map['protectionName'];
     }
 
     return Buildings(
@@ -61,20 +88,31 @@ class Buildings {
       images: extractedImages,
       typologyName: extractedTypology,
       protectionName: extractedProtection,
+
+      architects: _parseList(map['architects']),
+      reforms: _parseList(map['reforms']),
+      prizes: _parseList(map['prizes']),
+      publications: _parseList(map['publications']),
     );
   }
 
-  // Para enviar datos a Supabase
-  Map<String, dynamic> toMap() {
-    return {
-      'nombre': name,
-      'ubicacion': location,
-      'construction_year': construction_year,
-      'descripction': description,
-      'surface_area': surface_area,
-      'id_typology': id_typology,
-      'id_protection': id_protection,
-      'validate': validate,
-    };
+  static List<String> _parseList(dynamic input) {
+    if (input == null) return [];
+    if (input is! List) return [];
+
+    return input
+        .map((item) {
+          if (item is String) return item;
+
+          if (item is Map) {
+            if (item.containsKey('name')) return item['name'].toString();
+            if (item.containsKey('title')) return item['title'].toString();
+            return '';
+          }
+          return '';
+        })
+        .where((item) => item.isNotEmpty)
+        .toList()
+        .cast<String>();
   }
 }

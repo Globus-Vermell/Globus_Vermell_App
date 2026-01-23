@@ -335,14 +335,31 @@ class _BuildingCard extends StatelessWidget {
                       children: [
                         const Icon(
                           Icons.location_on,
-                          color: Colors.blue,
+                          color: Color(0xFFE41E26),
                           size: 16,
                         ),
                         const SizedBox(width: 4),
-                        const Expanded(
+                        Expanded(
                           child: Text(
-                            'Arquitectura Modernista',
-                            style: TextStyle(fontSize: 13, color: Colors.blue),
+                            // LÓGICA: Si hay publi, la muestra. Si no, "Sense publicació"
+                            (edificio.publications.isNotEmpty)
+                                ? edificio.publications.first
+                                : 'Sense publicació',
+
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: (edificio.publications.isNotEmpty)
+                                  ? const Color(0xFFE41E26)
+                                  : Colors.grey[700],
+
+                              fontWeight: (edificio.publications.isNotEmpty)
+                                  ? FontWeight.bold
+                                  : FontWeight.normal,
+
+                              fontStyle: (edificio.publications.isNotEmpty)
+                                  ? FontStyle.normal
+                                  : FontStyle.italic,
+                            ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
