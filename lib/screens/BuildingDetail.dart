@@ -27,7 +27,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
     super.dispose();
   }
 
-  // --- LEYENDA (Mantenemos el color Teal para arquitectos) ---
+  // LEYENDA
   void _showLegend(BuildContext context) {
     showDialog(
       context: context,
@@ -55,8 +55,6 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
               const SizedBox(height: 8),
               _buildLegendItem(Icons.emoji_events, "Premi", Colors.amber[800]!),
               const SizedBox(height: 8),
-              // Lo mantenemos en la leyenda para que sepan qué es el color del desplegable
-              _buildLegendItem(Icons.person, "Arquitecte", Colors.teal),
             ],
           ),
         ),
@@ -196,12 +194,12 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                   ),
                   const SizedBox(height: 8),
 
-                  // 5. WRAP CON LOS CHIPS (¡SIN ARQUITECTOS!)
+                  // 5. WRAP CON LOS CHIPS
                   Wrap(
                     spacing: 8,
                     runSpacing: 8,
                     children: [
-                      // --- DATOS BÁSICOS ---
+                      // DATOS BÁSICOS
                       if (building.typologyName != null)
                         _buildInfoChip(
                           Icons.category,
@@ -226,7 +224,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                           Colors.green,
                         ),
 
-                      // --- Reformas (Marrón) ---
+                      // Reformas (Marrón)
                       ...building.reforms.map(
                         (ref) => _buildInfoChip(
                           Icons.construction,
@@ -235,7 +233,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                         ),
                       ),
 
-                      // --- Premios (Ámbar / Oro) ---
+                      // Premios (Ámbar / Oro)
                       ...building.prizes.map(
                         (premio) => _buildInfoChip(
                           Icons.emoji_events,
@@ -243,8 +241,6 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                           Colors.amber[800]!,
                         ),
                       ),
-
-                      // ¡AQUÍ YA NO ESTÁN LOS ARQUITECTOS! (Desaparecidos)
                     ],
                   ),
 
@@ -381,7 +377,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
     );
   }
 
-  // --- WIDGETS AUXILIARES ---
+  // WIDGETS AUXILIARES
 
   Widget _buildSliverAppBar(Buildings building) {
     return SliverAppBar(
