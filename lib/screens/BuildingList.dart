@@ -341,21 +341,21 @@ class _BuildingCard extends StatelessWidget {
                         const SizedBox(width: 4),
                         Expanded(
                           child: Text(
-                            // LÓGICA: Si hay publi, la muestra. Si no, "Sense publicació"
+                            // CAMBIO 1: Si no hay publi
                             (edificio.publications.isNotEmpty)
                                 ? edificio.publications.first
-                                : 'Sense publicació',
+                                : "Sense publicació",
 
                             style: TextStyle(
                               fontSize: 13,
+                              // CAMBIO 2: Gris si no hay nada, Rojo si hay publi
                               color: (edificio.publications.isNotEmpty)
-                                  ? const Color(0xFFE41E26)
+                                  ? const Color.fromARGB(255, 0, 0, 0)
                                   : Colors.grey[700],
-
                               fontWeight: (edificio.publications.isNotEmpty)
                                   ? FontWeight.bold
                                   : FontWeight.normal,
-
+                              // CAMBIO 3: Cursiva si es "Sense publicació"
                               fontStyle: (edificio.publications.isNotEmpty)
                                   ? FontStyle.normal
                                   : FontStyle.italic,
