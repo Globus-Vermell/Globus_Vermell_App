@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 import '../models/buildings.dart';
 import '../controllers/BuildingListController.dart';
 import 'BuildingDetail.dart';
@@ -13,12 +15,9 @@ class ListaEdificacionesScreen extends StatefulWidget {
 
 class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
   final BuildingListController _controller = BuildingListController();
-
   final ScrollController _scrollController = ScrollController();
-  final List<Buildings> _edificios =
-      []; // Solo guardamos la lista para pintarla
+  final List<Buildings> _edificios = [];
 
-  // Variables visuales
   bool _cargando = false;
   bool _vistaLista = true;
 
@@ -27,11 +26,10 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
     super.initState();
     _cargarDatosIniciales();
 
-    // Listener del Scroll para cargar más
     _scrollController.addListener(() {
       if (_scrollController.position.pixels >=
           _scrollController.position.maxScrollExtent - 200) {
-        if (!_cargando && _controller.hasMoreData) {
+        if (!_cargando && _controller.hasMoreData && _vistaLista) {
           _cargarMasEdificios();
         }
       }
@@ -40,7 +38,6 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
 
   Future<void> _cargarDatosIniciales() async {
     setState(() => _cargando = true);
-    // El controller decide si saca datos de caché o de internet
     final iniciales = await _controller.getInitialData();
 
     if (mounted) {
@@ -53,7 +50,6 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
 
   Future<void> _cargarMasEdificios() async {
     setState(() => _cargando = true);
-
     final nuevos = await _controller.fetchNextPage();
 
     if (mounted) {
@@ -61,6 +57,26 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
         _edificios.addAll(nuevos);
         _cargando = false;
       });
+    }
+  }
+
+  Future<void> _usarGPS() async {
+    setState(() => _cargando = true);
+
+    final edificiosCercanos = await _controller.activarGPS();
+
+    if (mounted) {
+      setState(() {
+        _edificios.clear();
+        _edificios.addAll(edificiosCercanos);
+        _cargando = false;
+      });
+
+      if (edificiosCercanos.isNotEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Localització actualitzada!')),
+        );
+      }
     }
   }
 
@@ -104,9 +120,21 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _cargando ? null : _usarGPS,
+        backgroundColor: const Color(0xFFE41E26),
+        child: _cargando
+            ? const Padding(
+                padding: EdgeInsets.all(12.0),
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                  strokeWidth: 2,
+                ),
+              )
+            : const Icon(Icons.my_location, color: Colors.white),
+      ),
       body: Column(
         children: [
-          // Botones Mapa / Llista
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Row(
@@ -131,14 +159,12 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
               ],
             ),
           ),
-
-          // Contador
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                '${_edificios.length} monuments ordenats per distància',
+                '${_edificios.length} edificacions ordenades per distància',
                 style: TextStyle(
                   fontSize: 14,
                   color: Colors.grey[700],
@@ -147,46 +173,106 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
               ),
             ),
           ),
-
           const SizedBox(height: 12),
-
-          // Lista de edificios
-          Expanded(
-            child: _edificios.isEmpty && _cargando
-                ? const Center(child: CircularProgressIndicator())
-                : ListView.builder(
-                    controller: _scrollController,
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    // Si el controller dice que hay más, sumamos 1 para el loading spinner
-                    itemCount:
-                        _edificios.length + (_controller.hasMoreData ? 1 : 0),
-                    itemBuilder: (context, index) {
-                      if (index == _edificios.length) {
-                        return const Padding(
-                          padding: EdgeInsets.all(20.0),
-                          child: Center(child: CircularProgressIndicator()),
-                        );
-                      }
-
-                      final edificio = _edificios[index];
-
-                      return _BuildingCard(
-                        edificio: edificio,
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  BuildingDetailScreen(building: edificio),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                  ),
-          ),
+          Expanded(child: _vistaLista ? _construirLista() : _construirMapa()),
         ],
       ),
+    );
+  }
+
+  Widget _construirLista() {
+    if (_edificios.isEmpty && _cargando) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    return ListView.builder(
+      controller: _scrollController,
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      itemCount: _edificios.length + (_controller.hasMoreData ? 1 : 0),
+      itemBuilder: (context, index) {
+        if (index == _edificios.length) {
+          return const Padding(
+            padding: EdgeInsets.all(20.0),
+            child: Center(child: CircularProgressIndicator()),
+          );
+        }
+
+        final edificio = _edificios[index];
+
+        return _BuildingCard(
+          edificio: edificio,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => BuildingDetailScreen(building: edificio),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _construirMapa() {
+    final centro = _controller.miUbicacion ?? const LatLng(41.3851, 2.1734);
+
+    return FlutterMap(
+      options: MapOptions(initialCenter: centro, initialZoom: 14.0),
+      children: [
+        TileLayer(
+          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+          userAgentPackageName: 'com.example.globus_vermell',
+        ),
+        MarkerLayer(
+          markers: [
+            if (_controller.miUbicacion != null)
+              Marker(
+                point: _controller.miUbicacion!,
+                width: 60,
+                height: 60,
+                child: const Column(
+                  children: [
+                    Icon(Icons.person_pin_circle, color: Colors.blue, size: 40),
+                    Text(
+                      "Jo",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ..._edificios.map((edificio) {
+              if (edificio.latitude == 0 && edificio.longitude == 0) {
+                return const Marker(point: LatLng(0, 0), child: SizedBox());
+              }
+
+              return Marker(
+                point: LatLng(edificio.latitude, edificio.longitude),
+                width: 50,
+                height: 50,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            BuildingDetailScreen(building: edificio),
+                      ),
+                    );
+                  },
+                  child: const Icon(
+                    Icons.location_on,
+                    color: Color(0xFFE41E26),
+                    size: 40,
+                  ),
+                ),
+              );
+            }),
+          ],
+        ),
+      ],
     );
   }
 }
@@ -262,7 +348,6 @@ class _BuildingCard extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Imagen placeholder
               Container(
                 width: 80,
                 height: 80,
@@ -303,7 +388,6 @@ class _BuildingCard extends StatelessWidget {
                       ),
               ),
               const SizedBox(width: 12),
-              // Contenido
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -330,7 +414,6 @@ class _BuildingCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     const SizedBox(height: 8),
-                    // Categoría y distancia (Provisional)
                     Row(
                       children: [
                         const Icon(
@@ -341,21 +424,17 @@ class _BuildingCard extends StatelessWidget {
                         const SizedBox(width: 4),
                         Expanded(
                           child: Text(
-                            // CAMBIO 1: Si no hay publi
                             (edificio.publications.isNotEmpty)
                                 ? edificio.publications.first
                                 : "Sense publicació",
-
                             style: TextStyle(
                               fontSize: 13,
-                              // CAMBIO 2: Gris si no hay nada, Rojo si hay publi
                               color: (edificio.publications.isNotEmpty)
                                   ? const Color.fromARGB(255, 0, 0, 0)
                                   : Colors.grey[700],
                               fontWeight: (edificio.publications.isNotEmpty)
                                   ? FontWeight.bold
                                   : FontWeight.normal,
-                              // CAMBIO 3: Cursiva si es "Sense publicació"
                               fontStyle: (edificio.publications.isNotEmpty)
                                   ? FontStyle.normal
                                   : FontStyle.italic,

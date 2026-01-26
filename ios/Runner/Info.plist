@@ -47,5 +47,7 @@
 		<true/>
 		<key>UIStatusBarHidden</key>
 		<false/>
+		<key>NSLocationWhenInUseUsageDescription</key>
+		<string>Necesitamos saber dónde estás para mostrarte los edificios cerquita, papi.</string>
 	</dict>
 </plist>

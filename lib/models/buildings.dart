@@ -12,7 +12,9 @@ class Buildings {
   final String? typologyName;
   final String? protectionName;
 
-  // Listas de datos extra
+  final double latitude;
+  final double longitude;
+
   final List<String> architects;
   final List<String> reforms;
   final List<String> prizes;
@@ -31,6 +33,8 @@ class Buildings {
     this.images,
     this.typologyName,
     this.protectionName,
+    this.latitude = 0.0,
+    this.longitude = 0.0,
     this.architects = const [],
     this.reforms = const [],
     this.prizes = const [],
@@ -38,7 +42,6 @@ class Buildings {
   });
 
   factory Buildings.fromMap(Map<String, dynamic> map) {
-    // Mapeo de IMÁGENES
     List<String> extractedImages = [];
     if (map['building_images'] != null) {
       if (map['building_images'] is List) {
@@ -53,13 +56,6 @@ class Buildings {
       }
     }
 
-    if (map['publications'] != null || map['building_publications'] != null) {
-      print(" DEBUG EDIFICIO: ${map['name']}");
-      print(" publications (raw): ${map['publications']}");
-      print(" building_publications (raw): ${map['building_publications']}");
-    }
-
-    // Mapeo de TIPOLOGÍA (Objeto -> String)
     String? extractedTypology;
     if (map['typologies'] != null && map['typologies'] is Map) {
       extractedTypology = map['typologies']['name'];
@@ -67,7 +63,6 @@ class Buildings {
       extractedTypology = map['typologyName'];
     }
 
-    // Mapeo de PROTECCIÓN (Objeto -> String)
     String? extractedProtection;
     if (map['protections'] != null && map['protections'] is Map) {
       extractedProtection = map['protections']['level'];
@@ -89,6 +84,13 @@ class Buildings {
       typologyName: extractedTypology,
       protectionName: extractedProtection,
 
+      latitude: (map['latitude'] != null)
+          ? double.tryParse(map['latitude'].toString()) ?? 0.0
+          : 0.0,
+      longitude: (map['longitude'] != null)
+          ? double.tryParse(map['longitude'].toString()) ?? 0.0
+          : 0.0,
+
       architects: _parseList(map['architects']),
       reforms: _parseList(map['reforms']),
       prizes: _parseList(map['prizes']),
@@ -99,11 +101,9 @@ class Buildings {
   static List<String> _parseList(dynamic input) {
     if (input == null) return [];
     if (input is! List) return [];
-
     return input
         .map((item) {
           if (item is String) return item;
-
           if (item is Map) {
             if (item.containsKey('name')) return item['name'].toString();
             if (item.containsKey('title')) return item['title'].toString();

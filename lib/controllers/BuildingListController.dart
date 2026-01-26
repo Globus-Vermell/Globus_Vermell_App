@@ -1,19 +1,19 @@
+import 'package:geolocator/geolocator.dart';
+import 'package:latlong2/latlong.dart';
 import '../models/buildings.dart';
 import '../services/BuildingServices.dart';
 
 class BuildingListController {
   final BuildingService _service = BuildingService();
 
-  // Estado interno
   int _currentPage = 1;
   bool _hasMoreData = true;
   bool _isLoading = false;
+  LatLng? miUbicacion;
 
-  // Getters
   bool get hasMoreData => _hasMoreData;
   bool get isLoading => _isLoading;
 
-  // 2. Usamos 'async' aquí también para que sea más fácil y no de errores de tipo
   Future<List<Buildings>> getInitialData() async {
     if (_service.primeraPaginaCargada) {
       _currentPage = 2;
@@ -22,7 +22,6 @@ class BuildingListController {
       }
       return _service.cacheEdificios;
     } else {
-      // Como fetchNextPage devuelve un Future, usamos await
       return await fetchNextPage();
     }
   }
@@ -44,7 +43,54 @@ class BuildingListController {
       _isLoading = false;
       return newBuildings;
     } catch (e) {
-      print("Error en controller: $e");
+      _isLoading = false;
+      return [];
+    }
+  }
+
+  Future<List<Buildings>> activarGPS() async {
+    _isLoading = true;
+
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        _isLoading = false;
+        return [];
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      _isLoading = false;
+      return [];
+    }
+
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+
+      miUbicacion = LatLng(position.latitude, position.longitude);
+
+      _currentPage = 1;
+      _hasMoreData = true;
+
+      final gpsBuildings = await _service.getBuildings(
+        page: 1,
+        latitude: position.latitude,
+        longitude: position.longitude,
+        forceRefresh: true,
+      );
+
+      if (gpsBuildings.isNotEmpty) {
+        _currentPage++;
+      } else {
+        _hasMoreData = false;
+      }
+
+      _isLoading = false;
+      return gpsBuildings;
+    } catch (e) {
       _isLoading = false;
       return [];
     }

@@ -17,15 +17,26 @@ class BuildingService {
   Future<List<Buildings>> getBuildings({
     int page = 1,
     bool forceRefresh = false,
+    double? latitude,
+    double? longitude,
   }) async {
     if (page == 1 && primeraPaginaCargada && !forceRefresh) {
       return cacheEdificios;
     }
 
     try {
-      final url = Uri.parse('$_baseUrl/buildings/api/list?page=$page');
+      // 1. Primero construimos el TEXTO de la URL (String)
+      String urlString = '$_baseUrl/buildings/api/list?page=$page';
+
+      if (latitude != null && longitude != null) {
+        urlString += '&lat=$latitude&long=$longitude';
+      }
+
+      // 3. convertimos el texto a URI
+      final url = Uri.parse(urlString);
       print("Llamando a la API: $url");
 
+      // 4.  la llamada
       final response = await http.get(url);
 
       if (response.statusCode == 200) {
@@ -36,7 +47,6 @@ class BuildingService {
           return Buildings.fromMap(mapa);
         }).toList();
 
-        // Si es la página 1, guardamos/actualizamos la caché
         if (page == 1) {
           cacheEdificios = nuevosEdificios;
           primeraPaginaCargada = true;
