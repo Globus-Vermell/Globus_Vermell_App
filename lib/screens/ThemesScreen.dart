@@ -3,7 +3,7 @@ import '../controllers/ThemesController.dart';
 import '../models/Publications.dart';
 
 class ThemesScreen extends StatefulWidget {
-  const ThemesScreen({Key? key}) : super(key: key);
+  const ThemesScreen({super.key});
 
   @override
   State<ThemesScreen> createState() => _ThemesScreenState();

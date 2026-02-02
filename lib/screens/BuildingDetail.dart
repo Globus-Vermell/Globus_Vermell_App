@@ -5,8 +5,7 @@ import '../controllers/BuildingDetailController.dart';
 class BuildingDetailScreen extends StatefulWidget {
   final Buildings building;
 
-  const BuildingDetailScreen({Key? key, required this.building})
-    : super(key: key);
+  const BuildingDetailScreen({super.key, required this.building});
 
   @override
   State<BuildingDetailScreen> createState() => _BuildingDetailScreenState();
