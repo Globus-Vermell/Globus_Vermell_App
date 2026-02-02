@@ -4,6 +4,7 @@ import 'package:latlong2/latlong.dart';
 import '../models/buildings.dart';
 import '../controllers/BuildingListController.dart';
 import 'BuildingDetail.dart';
+import 'package:geolocator/geolocator.dart';
 
 class ListaEdificacionesScreen extends StatefulWidget {
   const ListaEdificacionesScreen({super.key});
@@ -200,6 +201,7 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
 
         return _BuildingCard(
           edificio: edificio,
+          miUbicacion: _controller.miUbicacion,
           onTap: () {
             Navigator.push(
               context,
@@ -330,11 +332,28 @@ class _ToggleButton extends StatelessWidget {
 class _BuildingCard extends StatelessWidget {
   final Buildings edificio;
   final VoidCallback onTap;
+  final LatLng? miUbicacion;
 
-  const _BuildingCard({required this.edificio, required this.onTap});
+  const _BuildingCard({
+    required this.edificio,
+    required this.onTap,
+    required this.miUbicacion,
+  });
 
   @override
   Widget build(BuildContext context) {
+    String distancia = '0.6 Km'; // Valor por defecto
+
+    if (miUbicacion != null && edificio.latitude != 0) {
+      double distanciaMetros = Geolocator.distanceBetween(
+        miUbicacion!.latitude,
+        miUbicacion!.longitude,
+        edificio.latitude,
+        edificio.longitude,
+      );
+      double distanciaKm = distanciaMetros / 1000;
+      distancia = "$distanciaKm.toStringAsFixed(1) Km";
+    }
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       elevation: 2,
@@ -451,7 +470,7 @@ class _BuildingCard extends StatelessWidget {
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          '0.6 km',
+                          distancia,
                           style: TextStyle(
                             fontSize: 13,
                             color: Colors.grey[700],
