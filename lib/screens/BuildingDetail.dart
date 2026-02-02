@@ -243,7 +243,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
 
                   const SizedBox(height: 40),
 
-                  // 4. DESCRIPCIÓN (Simétrica)
+                  // 4. DESCRIPCIÓN
                   _buildSectionHeader("DESCRIPCIÓ"),
                   const SizedBox(height: 16),
 
@@ -294,9 +294,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                       ).copyWith(dividerColor: Colors.transparent),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.blueGrey.withOpacity(
-                            0.04,
-                          ), // Fondo muy sutil
+                          color: Colors.blueGrey.withOpacity(0.04),
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(
                             color: Colors.grey.withOpacity(0.15),
@@ -374,9 +372,8 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
     );
   }
 
-  // --- WIDGETS AUXILIARES "BEAUTY" ---
+  // --- WIDGETS AUXILIARES ---
 
-  // Nuevo Header de Sección para dar orden visual
   Widget _buildSectionHeader(String title, {VoidCallback? onInfo}) {
     return Row(
       children: [
@@ -394,7 +391,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
           style: const TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.bold,
-            letterSpacing: 1.0, // Espaciado elegante
+            letterSpacing: 1.0,
             color: Colors.black54,
           ),
         ),
@@ -419,7 +416,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
 
   Widget _buildSliverAppBar(Buildings building, String distanciaPorDefecto) {
     return SliverAppBar(
-      expandedHeight: 320.0, // Un poco más alto para lucir la foto
+      expandedHeight: 320.0,
       pinned: true,
       backgroundColor: Colors.white,
       elevation: 0,
@@ -463,7 +460,6 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                 ),
               ),
 
-            // Degradado inferior para que se vean los puntos
             Positioned(
               bottom: 0,
               left: 0,
@@ -579,7 +575,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
     );
   }
 
-  // Chip de Información (Más redondeado)
+  // Chip de Informació
   Widget _buildInfoChip(IconData icon, String label, Color color) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
