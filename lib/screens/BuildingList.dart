@@ -206,7 +206,10 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => BuildingDetailScreen(building: edificio),
+                builder: (context) => BuildingDetailScreen(
+                  building: edificio,
+                  miUbicacion: _controller.miUbicacion,
+                ),
               ),
             );
           },
@@ -259,8 +262,10 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            BuildingDetailScreen(building: edificio),
+                        builder: (context) => BuildingDetailScreen(
+                          building: edificio,
+                          miUbicacion: _controller.miUbicacion,
+                        ),
                       ),
                     );
                   },

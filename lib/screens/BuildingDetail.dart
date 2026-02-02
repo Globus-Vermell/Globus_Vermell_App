@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:latlong2/latlong.dart';
 import '../models/buildings.dart';
 import '../controllers/BuildingDetailController.dart';
+import 'package:geolocator/geolocator.dart';
 
 class BuildingDetailScreen extends StatefulWidget {
   final Buildings building;
+  final LatLng? miUbicacion;
 
-  const BuildingDetailScreen({super.key, required this.building});
+  const BuildingDetailScreen({
+    super.key,
+    required this.building,
+    this.miUbicacion,
+  });
 
   @override
   State<BuildingDetailScreen> createState() => _BuildingDetailScreenState();
@@ -83,11 +90,24 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
   Widget build(BuildContext context) {
     final building = widget.building;
 
+    String distanciaPorDefecto = '0.6 Km'; // Valor por defecto
+
+    if (widget.miUbicacion != null && building.latitude != 0) {
+      double distanciaMetros = Geolocator.distanceBetween(
+        widget.miUbicacion!.latitude,
+        widget.miUbicacion!.longitude,
+        building.latitude,
+        building.longitude,
+      );
+      double distanciaKm = distanciaMetros / 1000;
+      distanciaPorDefecto = "${distanciaKm.toStringAsFixed(1)} Km";
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: CustomScrollView(
         slivers: [
-          _buildSliverAppBar(building),
+          _buildSliverAppBar(building, distanciaPorDefecto),
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.symmetric(
@@ -397,7 +417,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
     );
   }
 
-  Widget _buildSliverAppBar(Buildings building) {
+  Widget _buildSliverAppBar(Buildings building, String distanciaPorDefecto) {
     return SliverAppBar(
       expandedHeight: 320.0, // Un poco más alto para lucir la foto
       pinned: true,
@@ -517,7 +537,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                     ),
                     const SizedBox(width: 4),
                     Text(
-                      "0.6 km",
+                      distanciaPorDefecto,
                       style: TextStyle(
                         color: Colors.grey[800],
                         fontSize: 12,
