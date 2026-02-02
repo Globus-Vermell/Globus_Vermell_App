@@ -352,7 +352,7 @@ class _BuildingCard extends StatelessWidget {
         edificio.longitude,
       );
       double distanciaKm = distanciaMetros / 1000;
-      distancia = "$distanciaKm.toStringAsFixed(1) Km ";
+      distancia = "${distanciaKm.toStringAsFixed(1)} Km";
     }
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
