@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../Theme/theme.dart';
+import '../theme/theme_provider.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -8,13 +12,12 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  bool _modoAltoContraste = true;
-  bool _modoOscuro = false;
+  bool _modoAltoContraste = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -23,9 +26,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87),
         ),
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+      body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 10),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -38,29 +40,40 @@ class _SettingsScreenState extends State<SettingsScreen> {
               const SizedBox(height: 15),
               _buildSwitch(
                 titulo: "Modo Oscuro",
-                valor: _modoOscuro,
-                onChanged: (val) => setState(() => _modoOscuro = val),
+                valor: Provider.of<ThemeProvider>(context).themeData == darkMode,
+                onChanged: (val) {
+                  Provider.of<ThemeProvider>(context, listen: false).toggleTheme();
+                },
               ),
               const SizedBox(height: 15),
               _buildDesplegable(),
             ],
           ),
         ),
-      ),
     );
   }
 
-  Widget _buildSwitch({required String titulo, required bool valor, required ValueChanged<bool> onChanged}) {
+  Widget _buildSwitch({
+    required String titulo,
+    required bool valor,
+    required ValueChanged<bool> onChanged
+  }) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
+        color: Colors.deepPurple[50],
+        borderRadius: BorderRadius.circular(12),
       ),
-      child: SwitchListTile(
+      child: ListTile(
         title: Text(titulo, style: const TextStyle(fontWeight: FontWeight.w500)),
-        value: valor,
-        onChanged: onChanged,
-        activeThumbColor: Colors.redAccent,
+        shape: const Border(),
+        onTap: null,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 10),
+        trailing: Switch(
+          value: valor,
+          onChanged: onChanged,
+          activeThumbColor: Colors.redAccent,
+          overlayColor: WidgetStateProperty.all(Colors.transparent),
+        ),
       ),
     );
   }
@@ -68,7 +81,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget _buildDesplegable() {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.cyanAccent,
+        color: Colors.grey[200],
         borderRadius: BorderRadius.circular(15),
       ),
       child: ExpansionTile(

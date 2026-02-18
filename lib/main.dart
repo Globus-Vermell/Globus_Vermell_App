@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:globus_vermell_app/screens/botton_bar.dart';
+import 'package:globus_vermell_app/theme/theme_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -13,7 +14,12 @@ Future<void> main() async {
     anonKey: dotenv.env['SUPABASE_ANON_KEY'] ?? '',
   );
 
-  runApp(const MisEdificiosApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => ThemeProvider(),
+      child: const MisEdificiosApp(),
+    ),
+  );
 }
 
 class MisEdificiosApp extends StatelessWidget {
@@ -24,10 +30,7 @@ class MisEdificiosApp extends StatelessWidget {
     return MaterialApp(
       title: 'Gestor de Edificios',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      theme: Provider.of<ThemeProvider>(context).themeData,
       home: const BottonBar(),
     );
   }
