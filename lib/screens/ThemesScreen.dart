@@ -51,9 +51,9 @@ class _ThemesScreenState extends State<ThemesScreen> {
             Text(
               'Publicacions',
               style: TextStyle(
-                color: Colors.black,
-                fontSize: 22,
+                fontSize: 18,
                 fontWeight: FontWeight.bold,
+                color: Colors.black87,
               ),
               textAlign: TextAlign.center,
             ),
