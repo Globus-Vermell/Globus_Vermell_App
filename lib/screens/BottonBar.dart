@@ -1,27 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:globus_vermell_app/screens/ThemesScreen.dart';
 
 import 'BuildingList.dart';
 import 'CategoriesScreen.dart';
-import 'HomeScreen.dart';
+import 'ThemesScreen.dart';
 
 class BottonBar extends StatefulWidget {
   const BottonBar({super.key});
 
   @override
-<<<<<<< HEAD:lib/screens/botton_Bar.dart
-  State<botton_Bar> createState() => _botton_BarState();
-}
-
-class _botton_BarState extends State<botton_Bar> {
-  int _selected_index = 0;
-=======
   State<BottonBar> createState() => BottonBarState();
-
 }
+
 class BottonBarState extends State<BottonBar> {
   int _selectedIndex = 0;
->>>>>>> 62ce096f151bd5095341e0a78e3fa2abe677d67b:lib/screens/BottonBar.dart
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
