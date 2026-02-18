@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:globus_vermell_app/screens/botton_Bar.dart';
+import 'package:globus_vermell_app/screens/BottonBar.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'screens/HomeScreen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,7 +28,7 @@ class MisEdificiosApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const botton_Bar(),
+      home: const BottonBar(),
     );
   }
 }

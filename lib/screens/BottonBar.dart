@@ -5,18 +5,26 @@ import 'BuildingList.dart';
 import 'CategoriesScreen.dart';
 import 'HomeScreen.dart';
 
-class botton_Bar extends StatefulWidget {
-  const botton_Bar({super.key});
+class BottonBar extends StatefulWidget {
+  const BottonBar({super.key});
 
   @override
+<<<<<<< HEAD:lib/screens/botton_Bar.dart
   State<botton_Bar> createState() => _botton_BarState();
 }
 
 class _botton_BarState extends State<botton_Bar> {
   int _selected_index = 0;
+=======
+  State<BottonBar> createState() => BottonBarState();
+
+}
+class BottonBarState extends State<BottonBar> {
+  int _selectedIndex = 0;
+>>>>>>> 62ce096f151bd5095341e0a78e3fa2abe677d67b:lib/screens/BottonBar.dart
   void _onItemTapped(int index) {
     setState(() {
-      _selected_index = index;
+      _selectedIndex = index;
     });
   }
 
@@ -29,7 +37,7 @@ class _botton_BarState extends State<botton_Bar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _widgetOptions[_selected_index],
+      body: _widgetOptions[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.map), label: 'Mapa'),
@@ -42,7 +50,7 @@ class _botton_BarState extends State<botton_Bar> {
             label: 'Categoria',
           ),
         ],
-        currentIndex: _selected_index,
+        currentIndex: _selectedIndex,
         selectedItemColor: Colors.red,
         onTap: _onItemTapped,
       ),
