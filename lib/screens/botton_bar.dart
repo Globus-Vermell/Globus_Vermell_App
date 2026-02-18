@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:globus_vermell_app/screens/settings_screen.dart';
 import 'BuildingList.dart';
-import 'CategoriesScreen.dart';
 import 'ThemesScreen.dart';
 
 class BottonBar extends StatefulWidget {
@@ -22,7 +21,7 @@ class BottonBarState extends State<BottonBar> {
   final List<Widget> _widgetOptions = <Widget>[
     const ListaEdificacionesScreen(),
     const ThemesScreen(),
-    const CategoriesScreen(),
+    const SettingsScreen(),
   ];
 
   @override
@@ -32,14 +31,8 @@ class BottonBarState extends State<BottonBar> {
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.map), label: 'Mapa'),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.menu_book),
-            label: 'Publicacions',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.category),
-            label: 'Categoria',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.menu_book), label: 'Publicacions',),
+          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Configuració',),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.red,
