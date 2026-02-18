@@ -172,7 +172,6 @@ class _MenuButtonBCN extends StatelessWidget {
                 child: Icon(icon, color: Colors.white, size: 28),
               ),
               const SizedBox(width: 16),
-              // Textos
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

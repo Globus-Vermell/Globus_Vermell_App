@@ -14,11 +14,29 @@ class Publication {
   });
 
   factory Publication.fromMap(Map<String, dynamic> map) {
+    var rawThemes = map['themes'];
+    String finalThemes = '';
+
+    if (rawThemes == null) {
+      finalThemes = '';
+    } else if (rawThemes is String) {
+      finalThemes = rawThemes;
+    } else if (rawThemes is List) {
+      finalThemes = rawThemes.join(', ');
+    } else {
+      finalThemes = rawThemes.toString();
+    }
+
     return Publication(
-      idPublication: map['id_publication'] ?? 0,
+      idPublication: map['id_publication'] is int
+          ? map['id_publication']
+          : int.tryParse(map['id_publication'].toString()) ?? 0,
+
       title: map['title'] ?? 'Sin título',
       description: map['description'] ?? '',
-      themes: map['themes'] ?? '',
+
+      themes: finalThemes,
+
       publicationEdition: map['publication_edition'] ?? '',
     );
   }

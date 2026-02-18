@@ -14,7 +14,7 @@ class _ThemesScreenState extends State<ThemesScreen> {
 
   Map<String, List<Publication>> _organizedData = {
     'etapes': [],
-    'tematica': [],
+    'arquitectura tematica': [],
     'barris': [],
   };
 
@@ -40,120 +40,178 @@ class _ThemesScreenState extends State<ThemesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: const Color(0xFFF8F9FA),
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
+        automaticallyImplyLeading: false,
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: const [
             Text(
-              'Totes les Temàtiques',
+              'Publicacions',
               style: TextStyle(
                 color: Colors.black,
-                fontSize: 20,
-                fontWeight: FontWeight.w500,
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
               ),
+              textAlign: TextAlign.center,
             ),
             Text(
-              'Descobreix les publicacions per categoria',
-              style: TextStyle(color: Colors.grey, fontSize: 12),
+              'Descobreix publicacions per categoria',
+              style: TextStyle(color: Colors.grey, fontSize: 13),
             ),
           ],
         ),
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator(color: Colors.red))
           : ListView(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
               children: [
-                _buildSectionTitle('ETAPES'),
-                const SizedBox(height: 16),
-                _buildPublicationList(_organizedData['etapes']!),
+                _buildSectionHeader('ETAPES', Icons.timeline),
+                const SizedBox(height: 12),
+                _buildPublicationList(_organizedData['etapes'] ?? []),
                 const SizedBox(height: 32),
 
-                _buildSectionTitle('ARQUITECTURA TEMÀTICA'),
-                const SizedBox(height: 16),
-                _buildPublicationList(_organizedData['tematica']!),
+                _buildSectionHeader(
+                  'ARQUITECTURA TEMÀTICA',
+                  Icons.architecture,
+                ),
+                const SizedBox(height: 12),
+                _buildPublicationList(
+                  _organizedData['arquitectura tematica'] ?? [],
+                ),
                 const SizedBox(height: 32),
 
-                _buildSectionTitle('BARRIS'),
-                const SizedBox(height: 16),
-                _buildPublicationList(_organizedData['barris']!),
+                _buildSectionHeader('BARRIS', Icons.location_city),
+                const SizedBox(height: 12),
+                _buildPublicationList(_organizedData['barris'] ?? []),
+                const SizedBox(height: 40),
               ],
             ),
     );
   }
 
-  Widget _buildSectionTitle(String title) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 4),
-      child: Text(
-        title,
-        style: TextStyle(
-          color: Colors.grey[400],
-          fontSize: 13,
-          fontWeight: FontWeight.w500,
-          letterSpacing: 0.5,
+  Widget _buildSectionHeader(String title, IconData icon) {
+    return Row(
+      children: [
+        Icon(icon, size: 18, color: Colors.grey[600]),
+        const SizedBox(width: 8),
+        Text(
+          title,
+          style: TextStyle(
+            color: Colors.grey[800],
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 1.1,
+          ),
         ),
-      ),
+      ],
     );
   }
 
   Widget _buildPublicationList(List<Publication> items) {
-    if (items.isEmpty) {
-      return _buildEmptyMessage();
-    }
+    if (items.isEmpty) return _buildEmptyMessage();
 
     return ListView.separated(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: items.length,
-      separatorBuilder: (context, index) => const SizedBox(height: 12),
+      separatorBuilder: (context, index) => const SizedBox(height: 16),
       itemBuilder: (context, index) {
         final item = items[index];
-        return Card(
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: ListTile(
-            contentPadding: const EdgeInsets.all(12),
-            leading: Container(
-              width: 50,
-              height: 50,
-              decoration: BoxDecoration(
-                color: Colors.red[50],
-                borderRadius: BorderRadius.circular(8),
+        return Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: Colors.grey.withOpacity(0.1)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.04),
+                blurRadius: 12,
+                offset: const Offset(0, 4),
               ),
-              child: const Icon(Icons.article, color: Colors.red),
-            ),
-            title: Text(
-              item.title,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-            ),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 4),
-                Text(
-                  item.themes,
-                  style: TextStyle(color: Colors.blue[300], fontSize: 12),
+            ],
+          ),
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(16),
+              onTap: () {
+                // Futura navegación
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            item.title,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 17,
+                              color: Color(0xFF2D3436),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 4,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      item.themes.toUpperCase(),
+                      style: TextStyle(
+                        color: Colors.blue[600],
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      item.description,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: Colors.grey[600],
+                        fontSize: 14,
+                        height: 1.4,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          'Veure més',
+                          style: TextStyle(
+                            color: Colors.red[400],
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                          ),
+                        ),
+                        Icon(
+                          Icons.chevron_right,
+                          size: 18,
+                          color: Colors.red[400],
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-                Text(
-                  item.description,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
+              ),
             ),
-            onTap: () {
-              // Navegación Proximamente a detalle de publicación
-            },
           ),
         );
       },
@@ -162,22 +220,24 @@ class _ThemesScreenState extends State<ThemesScreen> {
 
   Widget _buildEmptyMessage() {
     return Container(
-      padding: const EdgeInsets.all(20),
+      width: double.infinity,
+      padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        color: Colors.white.withOpacity(0.5),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: Colors.grey.withOpacity(0.1),
+          style: BorderStyle.none,
+        ),
       ),
       child: Center(
         child: Text(
           'No hi ha publicacions disponibles',
-          style: TextStyle(color: Colors.grey[500], fontSize: 15),
+          style: TextStyle(
+            color: Colors.grey[400],
+            fontSize: 14,
+            fontStyle: FontStyle.italic,
+          ),
         ),
       ),
     );
