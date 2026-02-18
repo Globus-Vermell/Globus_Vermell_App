@@ -57,10 +57,6 @@ class _ThemesScreenState extends State<ThemesScreen> {
               ),
               textAlign: TextAlign.center,
             ),
-            Text(
-              'Descobreix publicacions per categoria',
-              style: TextStyle(color: Colors.grey, fontSize: 13),
-            ),
           ],
         ),
       ),
