@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:globus_vermell_app/theme/theme.dart';
 import 'package:provider/provider.dart';
-
-import '../Theme/theme.dart';
 import '../theme/theme_provider.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -12,7 +11,6 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  bool _modoAltoContraste = false;
 
   @override
   Widget build(BuildContext context) {
@@ -34,13 +32,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
             children: [
               _buildSwitch(
                 titulo: "Modo alto contraste",
-                valor: _modoAltoContraste,
-                onChanged: (val) => setState(() => _modoAltoContraste = val),
+                valor: context.watch<ThemeProvider>().isHighContrast,
+                onChanged: (val) {
+                  Provider.of<ThemeProvider>(context, listen: false).toggleHighContrast();
+                },
               ),
               const SizedBox(height: 15),
               _buildSwitch(
                 titulo: "Modo Oscuro",
-                valor: Provider.of<ThemeProvider>(context).themeData == darkMode,
+                valor: context.watch<ThemeProvider>().isDarkMode,
                 onChanged: (val) {
                   Provider.of<ThemeProvider>(context, listen: false).toggleTheme();
                 },

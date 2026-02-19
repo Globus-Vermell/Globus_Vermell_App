@@ -1,21 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:globus_vermell_app/Theme/theme.dart';
+import 'package:globus_vermell_app/theme/theme.dart';
 
 class ThemeProvider with ChangeNotifier {
-  ThemeData _themeData = lightMode;
+  bool _isDark = false;
+  bool _isHighContrast = false;
 
-  ThemeData get themeData => _themeData;
-  set themeData(ThemeData value) {
-    _themeData = value;
-    notifyListeners();
+  bool get isDarkMode => _isDark;
+  bool get isHighContrast => _isHighContrast;
+
+  ThemeData get themeData {
+    if (_isDark) {
+      return _isHighContrast ? highContrastDarkMode : darkMode;
+    } else {
+      return _isHighContrast ? highContrastLightMode : lightMode;
+    }
   }
 
   void toggleTheme() {
-    if (_themeData == lightMode) {
-      _themeData = darkMode;
-    } else {
-      _themeData = lightMode;
-    }
+    _isDark = !_isDark;
     notifyListeners();
-    }
+  }
+
+  void toggleHighContrast() {
+    _isHighContrast = !_isHighContrast;
+    notifyListeners();
+  }
 }
