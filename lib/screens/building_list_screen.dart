@@ -95,7 +95,6 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
         title: Column(

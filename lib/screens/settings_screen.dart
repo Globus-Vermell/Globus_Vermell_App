@@ -20,7 +20,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
         title: Text( context.translate(AppKeys.settings),
