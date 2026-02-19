@@ -1,7 +1,7 @@
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
-import '../models/buildings.dart';
-import '../services/BuildingServices.dart';
+import '../models/building_model.dart';
+import '../services/building_service.dart';
 
 class BuildingListController {
   final BuildingService _service = BuildingService();

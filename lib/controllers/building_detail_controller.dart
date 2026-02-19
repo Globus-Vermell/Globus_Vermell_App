@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/buildings.dart';
+import '../models/building_model.dart';
 
 class BuildingDetailController {
   final Buildings building;

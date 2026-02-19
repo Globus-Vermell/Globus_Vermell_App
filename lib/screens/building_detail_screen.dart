@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
-import '../models/buildings.dart';
-import '../controllers/BuildingDetailController.dart';
+import '../models/building_model.dart';
+import '../controllers/building_detail_controller.dart';
 import 'package:geolocator/geolocator.dart';
 
 class BuildingDetailScreen extends StatefulWidget {

@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../models/Publications.dart';
+import '../models/publication_model.dart';
 
 class PublicationService {
   static final PublicationService _instance = PublicationService._internal();

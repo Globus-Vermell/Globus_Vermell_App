@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
-import '../models/buildings.dart';
-import '../controllers/BuildingListController.dart';
-import 'BuildingDetail.dart';
+import '../models/building_model.dart';
+import '../controllers/building_list_controller.dart';
+import 'building_detail_screen.dart';
 import 'package:geolocator/geolocator.dart';
 
 class ListaEdificacionesScreen extends StatefulWidget {

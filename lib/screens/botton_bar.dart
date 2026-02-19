@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:globus_vermell_app/screens/settings_screen.dart';
-import 'BuildingList.dart';
-import 'ThemesScreen.dart';
+import 'building_list_screen.dart';
+import 'themes_screen.dart';
 
 class BottonBar extends StatefulWidget {
   const BottonBar({super.key});
@@ -11,7 +11,7 @@ class BottonBar extends StatefulWidget {
 }
 
 class BottonBarState extends State<BottonBar> {
-  int _selectedIndex = 2;
+  int _selectedIndex = 0;
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;

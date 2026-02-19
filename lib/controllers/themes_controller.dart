@@ -1,5 +1,5 @@
-import '../models/Publications.dart';
-import '../services/PublicationsService.dart';
+import '../models/publication_model.dart';
+import '../services/publications_service.dart';
 
 class ThemesController {
   final PublicationService _service = PublicationService();

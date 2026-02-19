@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../models/buildings.dart';
+import '../models/building_model.dart';
 
 class BuildingService {
   // 1. Singleton: Para que sea la MISMA instancia en toda la app

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../controllers/ThemesController.dart';
-import '../models/Publications.dart';
+import '../controllers/themes_controller.dart';
+import '../models/publication_model.dart';
 
 class ThemesScreen extends StatefulWidget {
   const ThemesScreen({super.key});
