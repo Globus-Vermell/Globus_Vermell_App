@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:globus_vermell_app/theme/theme.dart';
 import 'package:provider/provider.dart';
-import '../theme/theme_provider.dart';
+import '../providers/language_provider.dart';
+import '../providers/theme_provider.dart';
+import '../utils/app_text.dart';
 
 class SettingsScreen extends StatefulWidget {
+
   const SettingsScreen({super.key});
 
   @override
@@ -14,14 +16,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final codigoIdioma = context.watch<LanguageProvider>().currentLocale.languageCode;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        title: const Text(
-          'Configuració',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87),
+        title: Text(
+          AppTexts.getText(codigoIdioma, 'configuracion'),
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87),
         ),
       ),
       body: Padding(
@@ -31,18 +34,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _buildSwitch(
-                titulo: "Modo alto contraste",
+                titulo: AppTexts.getText(codigoIdioma, 'alto_contraste'),
                 valor: context.watch<ThemeProvider>().isHighContrast,
                 onChanged: (val) {
-                  Provider.of<ThemeProvider>(context, listen: false).toggleHighContrast();
+                  context.read<ThemeProvider>().toggleHighContrast();
                 },
               ),
               const SizedBox(height: 15),
               _buildSwitch(
-                titulo: "Modo Oscuro",
+                titulo: AppTexts.getText(codigoIdioma, 'modo_oscuro'),
                 valor: context.watch<ThemeProvider>().isDarkMode,
                 onChanged: (val) {
-                  Provider.of<ThemeProvider>(context, listen: false).toggleTheme();
+                  context.read<ThemeProvider>().toggleTheme();
                 },
               ),
               const SizedBox(height: 15),
@@ -79,18 +82,29 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Widget _buildDesplegable() {
+    final langProvider = context.read<LanguageProvider>();
+
     return Container(
       decoration: BoxDecoration(
-        color: Colors.grey[200],
+        color: Colors.deepPurple[50],
         borderRadius: BorderRadius.circular(15),
       ),
       child: ExpansionTile(
         shape: const Border(),
-        title: const Text("Idioma", style: TextStyle(fontWeight: FontWeight.w500)),
-        children: const [
-          Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Text("Wow"),
+        title: Text(AppTexts.getText(langProvider.currentLocale.languageCode, 'idioma'), style: TextStyle(fontWeight: FontWeight.w500)),
+        leading: const Icon(Icons.language),
+        children: [
+          ListTile(
+            title: const Text("Español"),
+            onTap: () => langProvider.changeLanguage('es'),
+          ),
+          ListTile(
+            title: const Text("English"),
+            onTap: () => langProvider.changeLanguage('en'),
+          ),
+          ListTile(
+            title: const Text("Català"),
+            onTap: () => langProvider.changeLanguage('ca'),
           ),
         ],
       ),
