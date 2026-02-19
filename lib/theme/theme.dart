@@ -50,9 +50,7 @@ ThemeData lightMode = ThemeData(
     surfaceContainerHighest: Color(0xfff1dfdc),
   ),
   useMaterial3: true,
-  appBarTheme: const AppBarTheme(
-    centerTitle: true,
-  ),
+  appBarTheme: bar,
 );
 
 ThemeData highContrastLightMode = ThemeData(
@@ -105,9 +103,7 @@ ThemeData highContrastLightMode = ThemeData(
     surfaceContainerHighest: Color(0xffd4c3c0),
   ),
   useMaterial3: true,
-  appBarTheme: const AppBarTheme(
-    centerTitle: true,
-  ),
+  appBarTheme: bar,
 );
 
 ThemeData darkMode = ThemeData(
@@ -160,9 +156,7 @@ ThemeData darkMode = ThemeData(
     surfaceContainerHighest: Color(0xff3d3230),
   ),
   useMaterial3: true,
-  appBarTheme: const AppBarTheme(
-    centerTitle: true,
-  ),
+  appBarTheme: bar,
 );
 
 ThemeData highContrastDarkMode = ThemeData(
@@ -215,8 +209,15 @@ ThemeData highContrastDarkMode = ThemeData(
     surfaceContainerHighest: Color(0xff504442),
   ),
   useMaterial3: true,
-  appBarTheme: const AppBarTheme(
-    centerTitle: true,
-  ),
+  appBarTheme: bar,
 );
 //Falta aprender
+
+AppBarTheme bar = AppBarTheme(
+  centerTitle: true,
+  elevation: 0,
+  backgroundColor: Colors.white,
+  iconTheme: const IconThemeData(color: Colors.black),
+);
+
+//

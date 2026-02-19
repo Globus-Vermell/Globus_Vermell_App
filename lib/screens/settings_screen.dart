@@ -20,8 +20,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
         title: Text( context.translate(AppKeys.settings),
           style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87),
         ),
