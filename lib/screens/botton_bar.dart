@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:globus_vermell_app/screens/settings_screen.dart';
-import 'package:provider/provider.dart';
-import '../providers/language_provider.dart';
-import '../utils/app_text.dart';
+import 'package:globus_vermell_app/utils/app_keys.dart';
+import '../utils/lang_extensions.dart';
 import 'building_list_screen.dart';
 import 'themes_screen.dart';
 
@@ -29,14 +28,13 @@ class BottonBarState extends State<BottonBar> {
 
   @override
   Widget build(BuildContext context) {
-    final codigoIdioma = context.watch<LanguageProvider>().currentLocale.languageCode;
     return Scaffold(
       body: _widgetOptions[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.map), label: AppTexts.getText(codigoIdioma, 'mapa'),),
-          BottomNavigationBarItem(icon: const Icon(Icons.menu_book), label: AppTexts.getText(codigoIdioma, 'publicaciones'),),
-          BottomNavigationBarItem(icon: const Icon(Icons.settings), label: AppTexts.getText(codigoIdioma, 'configuracion')),
+          BottomNavigationBarItem(icon: Icon(Icons.map), label: context.translate(AppKeys.map),),
+           BottomNavigationBarItem(icon: Icon(Icons.menu_book), label: context.translate(AppKeys.publications),),
+          BottomNavigationBarItem(icon: const Icon(Icons.settings), label: context.translate(AppKeys.settings)),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.red,

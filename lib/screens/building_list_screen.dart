@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:globus_vermell_app/utils/app_keys.dart';
+import 'package:globus_vermell_app/utils/lang_extensions.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:provider/provider.dart';
 import '../models/building_model.dart';
 import '../controllers/building_list_controller.dart';
-import '../providers/language_provider.dart';
-import '../utils/app_text.dart';
 import 'building_detail_screen.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -92,7 +91,6 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final codigoIdioma = context.watch<LanguageProvider>().currentLocale.languageCode;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -136,7 +134,7 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
                 Expanded(
                   child: _ToggleButton(
                     icon: Icons.location_on_outlined,
-                    text: AppTexts.getText(codigoIdioma, 'mapa'),
+                    text: context.translate(AppKeys.map),
                     isSelected: !_vistaLista,
                     onTap: () => setState(() => _vistaLista = false),
                   ),
@@ -145,7 +143,7 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
                 Expanded(
                   child: _ToggleButton(
                     icon: Icons.format_list_bulleted,
-                    text: AppTexts.getText(codigoIdioma, 'lista'),
+                    text: context.translate(AppKeys.list),
                     isSelected: _vistaLista,
                     onTap: () => setState(() => _vistaLista = true),
                   ),
