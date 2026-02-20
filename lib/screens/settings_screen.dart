@@ -18,11 +18,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text( context.translate(AppKeys.settings),
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87),
-        ),
+        title: Text( context.translate(AppKeys.settings)),
       ),
       body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 10),
@@ -60,7 +57,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.deepPurple[50],
         borderRadius: BorderRadius.circular(12),
       ),
       child: ListTile(
@@ -83,7 +79,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.deepPurple[50],
         borderRadius: BorderRadius.circular(15),
       ),
       child: ExpansionTile(

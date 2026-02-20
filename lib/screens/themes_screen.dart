@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../controllers/themes_controller.dart';
 import '../models/publication_model.dart';
+import '../utils/app_keys.dart';
+import '../utils/lang_extensions.dart';
 
 class ThemesScreen extends StatefulWidget {
   const ThemesScreen({super.key});
@@ -45,16 +47,8 @@ class _ThemesScreenState extends State<ThemesScreen> {
         automaticallyImplyLeading: false,
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            Text(
-              'Publicacions',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
-              ),
-              textAlign: TextAlign.center,
-            ),
+          children:  [
+            Text(context.translate(AppKeys.publications)),
           ],
         ),
       ),
