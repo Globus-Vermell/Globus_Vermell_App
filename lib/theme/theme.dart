@@ -222,7 +222,7 @@ AppBarTheme bar = AppBarTheme(
   centerTitle: true,
   elevation: 0,
   backgroundColor: Colors.white,
-  titleTextStyle: GoogleFonts.tiroDevanagariMarathi(
+  titleTextStyle: GoogleFonts.montserrat(
     color: Colors.black87,
     fontSize: 18,
     fontWeight: FontWeight.bold,
