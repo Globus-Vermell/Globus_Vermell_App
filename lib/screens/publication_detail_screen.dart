@@ -10,115 +10,131 @@ class PublicationDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: CustomScrollView(
-        slivers: [
-          _buildSliverAppBar(context),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 24.0,
-                vertical: 24.0,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_rounded, color: Colors.black87),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 24.0,
+            vertical: 24.0,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center, // Centra la cabecera
+            children: [
+              // 1. CABECERA PRINCIPAL (Título Centrado y Más Grande)
+              Text(
+                publication.title,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 34, // Tamaño aumentado
+                  fontWeight: FontWeight.w900, // Fuente más gruesa
+                  height: 1.2,
+                  color: Colors.black87,
+                ),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              const SizedBox(height: 16),
+
+              // Edición (Icono centrado)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // 1. CABECERA PRINCIPAL (Título)
-                  Text(
-                    publication.title,
-                    style: const TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.w800,
-                      height: 1.1,
-                      color: Colors.black87,
-                    ),
+                  const Icon(
+                    Icons.bookmark_outline_rounded,
+                    color: Colors.grey,
+                    size: 18,
                   ),
-                  const SizedBox(height: 8),
-
-                  // Edición
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.bookmark_outline_rounded,
-                        color: Colors.grey,
-                        size: 18,
-                      ),
-                      const SizedBox(width: 6),
-                    ],
-                  ),
-                  Divider(color: Colors.grey[200], thickness: 1),
-                  const SizedBox(height: 32),
-
-                  // 2. TEMAS (Usando los Chips redonditos UwU)
-                  if (publication.themes.isNotEmpty) ...[
-                    _buildSectionHeader("TEMES"),
-                    const SizedBox(height: 16),
-                    Wrap(
-                      spacing: 10,
-                      runSpacing: 10,
-                      children: publication.themes
-                          // Si los temas vienen separados por comas, los dividimos
-                          .split(',')
-                          .map((tema) => _buildInfoChip(
-                                Icons.label_important_rounded,
-                                tema.trim(),
-                                const Color(0xFFE41E26), // El rojo de tu app
-                              ))
-                          .toList(),
-                    ),
-                    const SizedBox(height: 40),
-                  ],
-
-                  // 3. DESCRIPCIÓN
-                  _buildSectionHeader("DESCRIPCIÓ"),
-                  const SizedBox(height: 16),
-
-                  (publication.description.isNotEmpty)
-                      ? Text(
-                          publication.description,
-                          textAlign: TextAlign.justify,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.grey[800],
-                            height: 1.6,
-                          ),
-                        )
-                      : Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(24),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[50],
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: Column(
-                            children: [
-                              Icon(
-                                Icons.description_outlined,
-                                size: 40,
-                                color: Colors.grey[300],
-                              ),
-                              const SizedBox(height: 12),
-                              Text(
-                                "Sense descripció disponible",
-                                style: TextStyle(
-                                  color: Colors.grey[500],
-                                  fontStyle: FontStyle.italic,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                  
-                  const SizedBox(height: 100), // Espacio al final para que no quede pegado
+                  const SizedBox(width: 6),
+                  // Nota: En tu código anterior quitaste el texto de la edición. 
+                  // Si quieres volver a ponerlo, añádelo aquí dentro de un Text().
                 ],
               ),
-            ),
+              const SizedBox(height: 24),
+              Divider(color: Colors.grey[200], thickness: 1),
+              const SizedBox(height: 32),
+
+              // Contenedor para volver a alinear el resto de la información a la izquierda
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // 2. TEMAS
+                    if (publication.themes.isNotEmpty) ...[
+                      _buildSectionHeader("TEMES"),
+                      const SizedBox(height: 16),
+                      Wrap(
+                        spacing: 10,
+                        runSpacing: 10,
+                        children: publication.themes
+                            .split(',')
+                            .map((tema) => _buildInfoChip(
+                                  Icons.label_important_rounded,
+                                  tema.trim(),
+                                  const Color(0xFFE41E26), 
+                                ))
+                            .toList(),
+                      ),
+                      const SizedBox(height: 40),
+                    ],
+
+                    // 3. DESCRIPCIÓN
+                    _buildSectionHeader("DESCRIPCIÓ"),
+                    const SizedBox(height: 16),
+
+                    (publication.description.isNotEmpty)
+                        ? Text(
+                            publication.description,
+                            textAlign: TextAlign.justify,
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.grey[800],
+                              height: 1.6,
+                            ),
+                          )
+                        : Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(24),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[50],
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: Column(
+                              children: [
+                                Icon(
+                                  Icons.description_outlined,
+                                  size: 40,
+                                  color: Colors.grey[300],
+                                ),
+                                const SizedBox(height: 12),
+                                Text(
+                                  "Sense descripció disponible",
+                                  style: TextStyle(
+                                    color: Colors.grey[500],
+                                    fontStyle: FontStyle.italic,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                    
+                    const SizedBox(height: 100), 
+                  ],
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
 
-  // --- WIDGETS AUXILIARES (¡Heredados de BuildingDetailScreen nya~!) ---
+  // --- WIDGETS AUXILIARES ---
 
   Widget _buildSectionHeader(String title) {
     return Row(
@@ -170,53 +186,6 @@ class PublicationDetailScreen extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildSliverAppBar(BuildContext context) {
-    return SliverAppBar(
-      expandedHeight: 250.0, // Un poquito más pequeña que la del edificio
-      pinned: true,
-      backgroundColor: const Color(0xFFE41E26),
-      elevation: 0,
-      leading: Container(
-        margin: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.2), // Botón traslúcido bonito
-          shape: BoxShape.circle,
-        ),
-        child: IconButton(
-          icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-          padding: EdgeInsets.zero,
-        ),
-      ),
-      flexibleSpace: FlexibleSpaceBar(
-        background: Stack(
-          alignment: Alignment.center,
-          children: [
-            // Fondo rojo degradado elegante UwU
-            Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    Color(0xFFE41E26),
-                    Color(0xFFB31219), // Un tonito más oscuro
-                  ],
-                ),
-              ),
-            ),
-            // Icono enorme de libro en el fondo
-            Icon(
-              Icons.auto_stories_rounded,
-              size: 130,
-              color: Colors.white.withOpacity(0.15),
-            ),
-          ],
-        ),
       ),
     );
   }
