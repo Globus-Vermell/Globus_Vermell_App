@@ -3,6 +3,7 @@ import '../controllers/themes_controller.dart';
 import '../models/publication_model.dart';
 import '../utils/app_keys.dart';
 import '../utils/lang_extensions.dart';
+import 'publication_detail_screen.dart';
 
 class ThemesScreen extends StatefulWidget {
   const ThemesScreen({super.key});
@@ -47,9 +48,7 @@ class _ThemesScreenState extends State<ThemesScreen> {
         automaticallyImplyLeading: false,
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children:  [
-            Text(context.translate(AppKeys.publications)),
-          ],
+          children: [Text(context.translate(AppKeys.publications))],
         ),
       ),
       body: _isLoading
@@ -127,7 +126,15 @@ class _ThemesScreenState extends State<ThemesScreen> {
             child: InkWell(
               borderRadius: BorderRadius.circular(16),
               onTap: () {
-                // Futura navegación
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PublicationDetailScreen(
+                      publication:
+                          item, 
+                    ),
+                  ),
+                );
               },
               child: Padding(
                 padding: const EdgeInsets.all(16),

@@ -3,6 +3,9 @@ import 'package:latlong2/latlong.dart';
 import '../models/building_model.dart';
 import '../controllers/building_detail_controller.dart';
 import 'package:geolocator/geolocator.dart';
+// ✨ IMPORTANTE: Añadimos los imports de los servicios y la nueva pantalla nya~
+import '../services/publications_service.dart'; 
+import 'publication_detail_screen.dart'; 
 
 class BuildingDetailScreen extends StatefulWidget {
   final Buildings building;
@@ -31,6 +34,58 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  // ✨ FUNCIÓN MÁGICA PARA ABRIR LA PUBLICACIÓN UwU ✨
+  Future<void> _openPublication(String title) async {
+    // 1. Mostramos un circulito de carga para que el usuario sepa que estamos pensando
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(
+        child: CircularProgressIndicator(color: Color(0xFFE41E26)),
+      ),
+    );
+
+    try {
+      // 2. Traemos todas las publicaciones de tu API
+      final publications = await PublicationService().getPublications();
+      
+      // Asegurarnos de que el widget sigue montado antes de usar context
+      if (!mounted) return;
+      
+      // Quitamos el circulito de carga
+      Navigator.pop(context);
+
+      // 3. Buscamos la que coincida con nuestro título (quitando espacios por si acaso)
+      final publication = publications.firstWhere(
+        (p) => p.title.trim().toLowerCase() == title.trim().toLowerCase(),
+        orElse: () => throw Exception('Publicació no trobada'),
+      );
+
+      // 4. ¡Navegamos a la pantalla de detalle pasándole el objeto completo! (´• ω •`)
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => PublicationDetailScreen(publication: publication),
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      
+      // Si el circulito de carga sigue ahí por un error, lo quitamos
+      if (Navigator.canPop(context)) {
+        Navigator.pop(context);
+      }
+      
+      // Mostramos un mensajito de error tierno
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('No s\'ha pogut trobar aquesta publicació 🥺'),
+          backgroundColor: Color(0xFFE41E26),
+        ),
+      );
+    }
   }
 
   // LEYENDA
@@ -152,37 +207,41 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
 
                   const SizedBox(height: 20),
 
-                  // 2. BADGE DE PUBLICACIÓN
+                  // 2. BADGE DE PUBLICACIÓN ✨ (Ahora con InkWell y la función mágica)
                   if (building.publications.isNotEmpty)
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 14,
-                        vertical: 8,
-                      ),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFE41E26).withOpacity(0.08),
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(
-                            Icons.auto_stories_rounded,
-                            size: 18,
-                            color: Color(0xFFE41E26),
-                          ),
-                          const SizedBox(width: 8),
-                          Flexible(
-                            child: Text(
-                              building.publications.first,
-                              style: const TextStyle(
-                                color: Color(0xFFE41E26),
-                                fontWeight: FontWeight.w700,
-                                fontSize: 13,
+                    InkWell(
+                      borderRadius: BorderRadius.circular(50),
+                      onTap: () => _openPublication(building.publications.first),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 14,
+                          vertical: 8,
+                        ),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFE41E26).withOpacity(0.08),
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              Icons.auto_stories_rounded,
+                              size: 18,
+                              color: Color(0xFFE41E26),
+                            ),
+                            const SizedBox(width: 8),
+                            Flexible(
+                              child: Text(
+                                building.publications.first,
+                                style: const TextStyle(
+                                  color: Color(0xFFE41E26),
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 13,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
 
