@@ -1,4 +1,4 @@
-# mascota_virtual
+# Globus_Vermell_App
 
 A new Flutter project.
 
