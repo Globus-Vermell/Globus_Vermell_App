@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import '../models/publication_model.dart';
 
@@ -25,11 +26,11 @@ class PublicationService {
         // 3. Convertimos cada item de la lista en un objeto Publication
         return listaJson.map((json) => Publication.fromMap(json)).toList();
       } else {
-        print("Ups! Error del servidor: ${response.statusCode}");
+        debugPrint("Ups! Error del servidor: ${response.statusCode}");
         return [];
       }
     } catch (e) {
-      print("Error fetching publications: $e");
+      debugPrint("Error fetching publications: $e");
       return [];
     }
   }

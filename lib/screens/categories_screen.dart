@@ -91,7 +91,7 @@ class CategoriesScreen extends StatelessWidget {
               title: 'Etapes',
               icon: Icons.calendar_today,
               onTap: () {
-                print("Click en Etapes");
+                debugPrint("Click en Etapes");
               },
             ),
 
@@ -102,7 +102,7 @@ class CategoriesScreen extends StatelessWidget {
               title: 'Arquitectura Temàtica',
               icon: Icons.business,
               onTap: () {
-                print("Click en Arquitectura Temàtica");
+                debugPrint("Click en Arquitectura Temàtica");
               },
             ),
 
@@ -113,7 +113,7 @@ class CategoriesScreen extends StatelessWidget {
               title: 'Barris',
               icon: Icons.map,
               onTap: () {
-                print("Click en Barris");
+                debugPrint("Click en Barris");
               },
             ),
           ],
@@ -140,7 +140,7 @@ class _CategoryItem extends StatelessWidget {
       color: Colors.white,
       elevation: 2,
       borderRadius: BorderRadius.circular(12),
-      shadowColor: Colors.black.withOpacity(0.1),
+      shadowColor: Colors.black.withValues(alpha: 0.1),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(12),

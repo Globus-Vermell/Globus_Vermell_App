@@ -5,6 +5,7 @@ import 'package:globus_vermell_app/utils/lang_extensions.dart';
 import 'package:latlong2/latlong.dart';
 import '../models/building_model.dart';
 import '../controllers/building_list_controller.dart';
+import '../models/publication_model.dart';
 import 'building_detail_screen.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -20,6 +21,7 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
   final BuildingListController _controller = BuildingListController();
   final ScrollController _scrollController = ScrollController();
   final List<Buildings> _edificios = [];
+  List<Publication> _publicacionesFiltro = [];
 
   bool _cargando = false;
   bool _vistaLista = true;
@@ -42,10 +44,28 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
   Future<void> _cargarDatosIniciales() async {
     setState(() => _cargando = true);
     final iniciales = await _controller.getInitialData();
-
+    final publicaciones = await _controller.obtenerPublicacionesParaFiltro();
     if (mounted) {
       setState(() {
         _edificios.addAll(iniciales);
+        _publicacionesFiltro = publicaciones;
+        _cargando = false;
+      });
+    }
+  }
+
+  Future<void> _filtrarPorPublicacion(int? idPublicacion) async {
+    setState(() => _cargando = true);
+
+    if (idPublicacion == 0) {
+      idPublicacion = null;
+    }
+    final filtrados = await _controller.aplicarFiltro(idPublicacion);
+
+    if (mounted) {
+      setState(() {
+        _edificios.clear();
+        _edificios.addAll(filtrados);
         _cargando = false;
       });
     }
@@ -151,16 +171,41 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                '${_edificios.length} edificacions ordenades per distància',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey[700],
-                  fontWeight: FontWeight.w500,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '${_edificios.length} edificacions ordenades per distancia',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.grey[700],
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-              ),
+
+                PopupMenuButton<int?>(
+                  icon: const Icon(Icons.filter_list_rounded),
+                  tooltip: 'Filtrar per publicació',
+                  onSelected: _filtrarPorPublicacion,
+                  itemBuilder: (BuildContext context) {
+                    List<PopupMenuEntry<int?>> items = [
+                      const PopupMenuItem<int?>(
+                        value: 0,
+                        child: Text('Veure tots'),
+                      ),
+                    ];
+                    for (var pub in _publicacionesFiltro) {
+                      items.add(
+                        PopupMenuItem<int?>(
+                          value: pub.idPublication,
+                          child: Text(pub.title),
+                        ),
+                      );
+                    }
+                    return items;
+                  },
+                ),
+              ],
             ),
           ),
           const SizedBox(height: 12),
@@ -292,7 +337,7 @@ class _ToggleButton extends StatelessWidget {
       color: isSelected ? const Color(0xFFE41E26) : Colors.white,
       elevation: isSelected ? 0 : 2,
       borderRadius: BorderRadius.circular(8),
-      shadowColor: Colors.black.withOpacity(0.1),
+      shadowColor: Colors.black.withValues(alpha: 0.1),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(8),
@@ -351,7 +396,7 @@ class _BuildingCard extends StatelessWidget {
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       elevation: 2,
-      shadowColor: Colors.black.withOpacity(0.1),
+      shadowColor: Colors.black.withValues(alpha: 0.1),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: InkWell(
         onTap: onTap,
