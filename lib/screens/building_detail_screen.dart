@@ -474,7 +474,10 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: _controller.openMap,
+        onPressed: () {
+          // Mandamos el mensajito secreto de regreso UwU
+          Navigator.pop(context, 'show_map'); 
+        },
         backgroundColor: const Color(0xFFE41E26),
         elevation: 4,
         icon: const Icon(Icons.map_rounded, color: Colors.white),

@@ -20,6 +20,10 @@ class ListaEdificacionesScreen extends StatefulWidget {
 class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
   final BuildingListController _controller = BuildingListController();
   final ScrollController _scrollController = ScrollController();
+  
+  // ✨ ¡NUEVO! El controlador mágico para mover la cámara del mapa UwU ✨
+  final MapController _mapController = MapController(); 
+
   final List<Buildings> _edificios = [];
   List<Publication> _publicacionesFiltro = [];
 
@@ -106,12 +110,12 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
   @override
   void dispose() {
     _scrollController.dispose();
+    _mapController.dispose(); // No olvidemos limpiar el mapita UwU
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -236,8 +240,8 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
         return _BuildingCard(
           edificio: edificio,
           miUbicacion: _controller.miUbicacion,
-          onTap: () {
-            Navigator.push(
+          onTap: () async {
+            final result = await Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => BuildingDetailScreen(
@@ -246,6 +250,20 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
                 ),
               ),
             );
+
+            if (result == 'show_map') {
+              setState(() => _vistaLista = false);
+              
+              // Le damos un poquitito de tiempo al mapa para que cargue en pantalla
+              Future.delayed(const Duration(milliseconds: 300), () {
+                if (edificio.latitude != 0 && edificio.longitude != 0) {
+                  _mapController.move(
+                    LatLng(edificio.latitude, edificio.longitude),
+                    17.0,
+                  );
+                }
+              });
+            }
           },
         );
       },
@@ -256,6 +274,7 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
     final centro = _controller.miUbicacion ?? const LatLng(41.3851, 2.1734);
 
     return FlutterMap(
+      mapController: _mapController,
       options: MapOptions(initialCenter: centro, initialZoom: 14.0),
       children: [
         TileLayer(
@@ -292,8 +311,9 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
                 width: 50,
                 height: 50,
                 child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
+                  onTap: () async {
+                    // ✨ ¡TAMBIÉN LO PONEMOS AQUÍ POR SI ESTÁS EN EL MAPA! UwU ✨
+                    final result = await Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => BuildingDetailScreen(
@@ -302,6 +322,16 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
                         ),
                       ),
                     );
+
+                    if (result == 'show_map') {
+                      setState(() => _vistaLista = false);
+                      Future.delayed(const Duration(milliseconds: 300), () {
+                         _mapController.move(
+                          LatLng(edificio.latitude, edificio.longitude),
+                          17.0,
+                        );
+                      });
+                    }
                   },
                   child: const Icon(
                     Icons.location_on,
