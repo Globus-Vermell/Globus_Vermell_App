@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 import '../models/publication_model.dart';
 import '../services/publications_service.dart';
 
@@ -7,9 +9,9 @@ class ThemesController {
   Future<Map<String, List<Publication>>> getOrganizedPublications() async {
     final allPubs = await _service.getPublications();
 
-    print(" REVISANDO NOMBRES DE TEMAS:");
+    debugPrint(" REVISANDO NOMBRES DE TEMAS:");
     for (var p in allPubs) {
-      print(" - Título: ${p.title} | Tema: '${p.themes}'");
+      debugPrint(" - Título: ${p.title} | Tema: '${p.themes}'");
     }
 
     return {

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import '../models/building_model.dart';
 
@@ -40,7 +41,7 @@ class BuildingService {
 
       // 3. convertimos el texto a URI
       final url = Uri.parse(urlString);
-      print("Llamando a la API: $url");
+      debugPrint("Llamando a la API: $url");
 
       // 4.  la llamada
       final response = await http.get(url);
@@ -63,7 +64,7 @@ class BuildingService {
         throw Exception('Error del servidor: ${response.statusCode}');
       }
     } catch (e) {
-      print(" Error fetching data: $e");
+      debugPrint(" Error fetching data: $e");
       return [];
     }
   }
