@@ -20,6 +20,8 @@ class Buildings {
   final List<String> prizes;
   final List<String> publications;
 
+  final List<String> usos;
+
   Buildings({
     required this.idBuilding,
     required this.name,
@@ -35,6 +37,7 @@ class Buildings {
     this.protectionName,
     this.latitude = 0.0,
     this.longitude = 0.0,
+    this.usos = const [],
     this.architects = const [],
     this.reforms = const [],
     this.prizes = const [],
@@ -82,6 +85,7 @@ class Buildings {
       validate: map['validated'] ?? false,
       images: extractedImages,
       typologyName: extractedTypology,
+      usos: _parseList(map['usos']),
       protectionName: extractedProtection,
 
       latitude: (map['latitude'] != null)

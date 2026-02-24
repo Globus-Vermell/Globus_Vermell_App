@@ -38,7 +38,6 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
 
   // ✨ FUNCIÓN MÁGICA PARA ABRIR LA PUBLICACIÓN UwU ✨
   Future<void> _openPublication(String title) async {
-    // 1. Mostramos un circulito de carga para que el usuario sepa que estamos pensando
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -48,22 +47,17 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
     );
 
     try {
-      // 2. Traemos todas las publicaciones de tu API
       final publications = await PublicationService().getPublications();
       
-      // Asegurarnos de que el widget sigue montado antes de usar context
       if (!mounted) return;
       
-      // Quitamos el circulito de carga
       Navigator.pop(context);
 
-      // 3. Buscamos la que coincida con nuestro título (quitando espacios por si acaso)
       final publication = publications.firstWhere(
         (p) => p.title.trim().toLowerCase() == title.trim().toLowerCase(),
         orElse: () => throw Exception('Publicació no trobada'),
       );
 
-      // 4. ¡Navegamos a la pantalla de detalle pasándole el objeto completo! (´• ω •`)
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -73,12 +67,10 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
     } catch (e) {
       if (!mounted) return;
       
-      // Si el circulito de carga sigue ahí por un error, lo quitamos
       if (Navigator.canPop(context)) {
         Navigator.pop(context);
       }
       
-      // Mostramos un mensajito de error tierno
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('No s\'ha pogut trobar aquesta publicació 🥺'),
@@ -88,7 +80,6 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
     }
   }
 
-  // LEYENDA
   void _showLegend(BuildContext context) {
     showDialog(
       context: context,
@@ -103,7 +94,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
               _buildLegendItem(
                 Icons.auto_stories_rounded,
                 "Publicació",
-                Color(0xFFE41E26),
+                const Color(0xFFE41E26),
               ),
               const SizedBox(height: 12),
               _buildLegendItem(Icons.category, "Tipologia", Colors.blue),
@@ -145,7 +136,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
   Widget build(BuildContext context) {
     final building = widget.building;
 
-    String distanciaPorDefecto = '0.6 Km'; // Valor por defecto
+    String distanciaPorDefecto = '0.6 Km';
 
     if (widget.miUbicacion != null && building.latitude != 0) {
       double distanciaMetros = Geolocator.distanceBetween(
@@ -172,7 +163,6 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // 1. CABECERA PRINCIPAL (Título y Ubicación)
                   Text(
                     building.name,
                     style: const TextStyle(
@@ -207,7 +197,6 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
 
                   const SizedBox(height: 20),
 
-                  // 2. BADGE DE PUBLICACIÓN ✨ (Ahora con InkWell y la función mágica)
                   if (building.publications.isNotEmpty)
                     InkWell(
                       borderRadius: BorderRadius.circular(50),
@@ -249,7 +238,6 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                   Divider(color: Colors.grey[200], thickness: 1),
                   const SizedBox(height: 32),
 
-                  // 3. FITXA TÈCNICA
                   _buildSectionHeader(
                     "FITXA TÈCNICA",
                     onInfo: () => _showLegend(context),
@@ -302,7 +290,6 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
 
                   const SizedBox(height: 40),
 
-                  // 4. DESCRIPCIÓN
                   _buildSectionHeader("DESCRIPCIÓ"),
                   const SizedBox(height: 16),
 
@@ -360,13 +347,13 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                           ),
                         ),
                         child: ExpansionTile(
-                          iconColor: Color(0xFFE41E26),
-                          collapsedIconColor: Color(0xFFE41E26),
+                          iconColor: const Color(0xFFE41E26),
+                          collapsedIconColor: const Color(0xFFE41E26),
                           tilePadding: const EdgeInsets.symmetric(
                             horizontal: 16,
                             vertical: 4,
                           ),
-                          title: Text(
+                          title: const Text(
                             "Arquitectes",
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
@@ -374,7 +361,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                               color: Color(0xFFE41E26),
                             ),
                           ),
-                          leading: Icon(
+                          leading: const Icon(
                             Icons.person_rounded,
                             color: Color(0xFFE41E26),
                           ),
@@ -387,7 +374,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                               ),
                               child: Row(
                                 children: [
-                                  Icon(
+                                  const Icon(
                                     Icons.subdirectory_arrow_right_rounded,
                                     color: Color(0xFFE41E26),
                                     size: 18,
@@ -411,6 +398,74 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                       ),
                     ),
 
+                  const SizedBox(height: 16), // Espaciadito bonito (◕‿◕✿)
+
+                  // 6. ¡AQUÍ ESTÁ TU NUEVO DESPLEGABLE DE USOS! ✨
+                  if (building.usos.isNotEmpty)
+                    Theme(
+                      data: Theme.of(
+                        context,
+                      ).copyWith(dividerColor: Colors.transparent),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.blueGrey.withOpacity(0.04),
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: Colors.grey.withOpacity(0.15),
+                          ),
+                        ),
+                        child: ExpansionTile(
+                          iconColor: const Color(0xFFE41E26),
+                          collapsedIconColor: const Color(0xFFE41E26),
+                          tilePadding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 4,
+                          ),
+                          title: const Text(
+                            "Usos",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: Color(0xFFE41E26),
+                            ),
+                          ),
+                          leading: const Icon(
+                            Icons.domain_rounded, // ¡Iconito de edificio! UwU
+                            color: Color(0xFFE41E26),
+                          ),
+                          children: building.usos.map((uso) {
+                            return Padding(
+                              padding: const EdgeInsets.only(
+                                bottom: 12,
+                                left: 16,
+                                right: 16,
+                              ),
+                              child: Row(
+                                children: [
+                                  const Icon(
+                                    Icons.subdirectory_arrow_right_rounded,
+                                    color: Color(0xFFE41E26),
+                                    size: 18,
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Text(
+                                      uso,
+                                      style: TextStyle(
+                                        color: Colors.grey[800],
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ),
+
                   const SizedBox(height: 100),
                 ],
               ),
@@ -419,7 +474,10 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: _controller.openMap,
+        onPressed: () {
+          // Mandamos el mensajito secreto de regreso UwU
+          Navigator.pop(context, 'show_map'); 
+        },
         backgroundColor: const Color(0xFFE41E26),
         elevation: 4,
         icon: const Icon(Icons.map_rounded, color: Colors.white),
@@ -548,7 +606,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                         (i) => AnimatedContainer(
                           duration: const Duration(milliseconds: 300),
                           margin: const EdgeInsets.symmetric(horizontal: 4),
-                          width: i == index ? 20 : 8, // Animación de gusano
+                          width: i == index ? 20 : 8, 
                           height: 8,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(4),
@@ -563,7 +621,6 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                 ),
               ),
 
-            // Chip Distancia Flotante
             Positioned(
               bottom: 20,
               left: 20,
@@ -575,19 +632,19 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.95),
                   borderRadius: BorderRadius.circular(30),
-                  boxShadow: [
+                  boxShadow: const [
                     BoxShadow(
                       color: Colors.black12,
                       blurRadius: 8,
-                      offset: const Offset(0, 4),
+                      offset: Offset(0, 4),
                     ),
                   ],
                 ),
                 child: Row(
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.near_me_rounded,
-                      color: const Color(0xFFE41E26),
+                      color: Color(0xFFE41E26),
                       size: 16,
                     ),
                     const SizedBox(width: 4),
@@ -609,7 +666,6 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
     );
   }
 
-  // Helper para leyenda
   Widget _buildLegendItem(IconData icon, String text, Color color) {
     return Row(
       children: [
@@ -634,14 +690,13 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
     );
   }
 
-  // Chip de Informació
   Widget _buildInfoChip(IconData icon, String label, Color color) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.08),
+        color: color.withOpacity(0.08),
         borderRadius: BorderRadius.circular(30), // Más redondeado
-        border: Border.all(color: color.withValues(alpha: 0.2)),
+        border: Border.all(color: color.withOpacity(0.2)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
