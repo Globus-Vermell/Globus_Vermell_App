@@ -1,12 +1,12 @@
 class Buildings {
-  final int id_building;
+  final int idBuilding;
   final String name;
   final String location;
-  final int construction_year;
+  final int constructionYear;
   final String description;
-  final int surface_area;
-  final int id_typology;
-  final int id_protection;
+  final int surfaceArea;
+  final int idTypology;
+  final int idProtection;
   final bool validate;
   final List<String>? images;
   final String? typologyName;
@@ -21,14 +21,14 @@ class Buildings {
   final List<String> publications;
 
   Buildings({
-    required this.id_building,
+    required this.idBuilding,
     required this.name,
     required this.location,
-    required this.construction_year,
+    required this.constructionYear,
     required this.description,
-    required this.surface_area,
-    required this.id_typology,
-    required this.id_protection,
+    required this.surfaceArea,
+    required this.idTypology,
+    required this.idProtection,
     required this.validate,
     this.images,
     this.typologyName,
@@ -71,14 +71,14 @@ class Buildings {
     }
 
     return Buildings(
-      id_building: map['id_building'] ?? 0,
+      idBuilding: map['id_building'] ?? 0,
       name: map['name'] ?? 'Sin nombre',
       location: map['location'] ?? 'Sin ubicación',
-      construction_year: map['construction_year'] ?? 0,
+      constructionYear: map['construction_year'] ?? 0,
       description: map['description'] ?? 'Sin descripción',
-      surface_area: map['surface_area'] ?? 0,
-      id_typology: map['id_typology'] ?? 0,
-      id_protection: map['id_protection'] ?? 0,
+      surfaceArea: map['surface_area'] ?? 0,
+      idTypology: map['id_typology'] ?? 0,
+      idProtection: map['id_protection'] ?? 0,
       validate: map['validated'] ?? false,
       images: extractedImages,
       typologyName: extractedTypology,

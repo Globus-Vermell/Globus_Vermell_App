@@ -140,7 +140,7 @@ class _CategoryItem extends StatelessWidget {
       color: Colors.white,
       elevation: 2,
       borderRadius: BorderRadius.circular(12),
-      shadowColor: Colors.black.withOpacity(0.1),
+      shadowColor: Colors.black.withValues(alpha: 0.1),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(12),

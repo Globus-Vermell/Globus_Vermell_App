@@ -218,7 +218,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                           vertical: 8,
                         ),
                         decoration: BoxDecoration(
-                          color: const Color(0xFFE41E26).withOpacity(0.08),
+                          color: const Color(0xFFE41E26).withValues(alpha: 0.08),
                           borderRadius: BorderRadius.circular(50),
                         ),
                         child: Row(
@@ -274,13 +274,13 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                         ),
                       _buildInfoChip(
                         Icons.calendar_today,
-                        '${building.construction_year}',
+                        '${building.constructionYear}',
                         Colors.purple,
                       ),
-                      if (building.surface_area > 0)
+                      if (building.surfaceArea > 0)
                         _buildInfoChip(
                           Icons.square_foot,
-                          '${building.surface_area} m²',
+                          '${building.surfaceArea} m²',
                           Colors.green,
                         ),
                       ...building.reforms.map(
@@ -353,10 +353,10 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                       ).copyWith(dividerColor: Colors.transparent),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.blueGrey.withOpacity(0.04),
+                          color: Colors.blueGrey.withValues(alpha: 0.04),
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(
-                            color: Colors.grey.withOpacity(0.15),
+                            color: Colors.grey.withValues(alpha: 0.15),
                           ),
                         ),
                         child: ExpansionTile(
@@ -482,7 +482,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
       leading: Container(
         margin: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.9),
+          color: Colors.white.withValues(alpha: 0.9),
           shape: BoxShape.circle,
         ),
         child: IconButton(
@@ -529,7 +529,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [Colors.transparent, Colors.black.withOpacity(0.5)],
+                    colors: [Colors.transparent, Colors.black.withValues(alpha: 0.5)],
                   ),
                 ),
               ),
@@ -554,7 +554,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                             borderRadius: BorderRadius.circular(4),
                             color: i == index
                                 ? Colors.white
-                                : Colors.white.withOpacity(0.4),
+                                : Colors.white.withValues(alpha: 0.4),
                           ),
                         ),
                       ),
@@ -573,7 +573,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                   vertical: 6,
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.95),
+                  color: Colors.white.withValues(alpha: 0.95),
                   borderRadius: BorderRadius.circular(30),
                   boxShadow: [
                     BoxShadow(
@@ -616,7 +616,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.15),
+            color: color.withValues(alpha: 0.15),
             shape: BoxShape.circle,
           ),
           child: Icon(icon, size: 18, color: color),
@@ -639,20 +639,20 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.08),
+        color: color.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(30), // Más redondeado
-        border: Border.all(color: color.withOpacity(0.2)),
+        border: Border.all(color: color.withValues(alpha: 0.2)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 16, color: color.withOpacity(0.8)),
+          Icon(icon, size: 16, color: color.withValues(alpha: 0.8)),
           const SizedBox(width: 8),
           Flexible(
             child: Text(
               label,
               style: TextStyle(
-                color: color.withOpacity(0.9),
+                color: color.withValues(alpha: 0.9),
                 fontWeight: FontWeight.w600,
                 fontSize: 13,
               ),

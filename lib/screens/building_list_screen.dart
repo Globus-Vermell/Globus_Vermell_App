@@ -337,7 +337,7 @@ class _ToggleButton extends StatelessWidget {
       color: isSelected ? const Color(0xFFE41E26) : Colors.white,
       elevation: isSelected ? 0 : 2,
       borderRadius: BorderRadius.circular(8),
-      shadowColor: Colors.black.withOpacity(0.1),
+      shadowColor: Colors.black.withValues(alpha: 0.1),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(8),
@@ -396,7 +396,7 @@ class _BuildingCard extends StatelessWidget {
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       elevation: 2,
-      shadowColor: Colors.black.withOpacity(0.1),
+      shadowColor: Colors.black.withValues(alpha: 0.1),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: InkWell(
         onTap: onTap,
