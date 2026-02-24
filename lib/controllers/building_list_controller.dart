@@ -1,7 +1,9 @@
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import '../models/building_model.dart';
+import '../models/publication_model.dart';
 import '../services/building_service.dart';
+import '../services/publications_service.dart';
 
 class BuildingListController {
   final BuildingService _service = BuildingService();
@@ -10,12 +12,13 @@ class BuildingListController {
   bool _hasMoreData = true;
   bool _isLoading = false;
   LatLng? miUbicacion;
+  int? publicationFiltro;
 
   bool get hasMoreData => _hasMoreData;
   bool get isLoading => _isLoading;
 
   Future<List<Buildings>> getInitialData() async {
-    if (_service.primeraPaginaCargada) {
+    if (_service.primeraPaginaCargada && publicationFiltro == null) {
       _currentPage = 2;
       if (_service.cacheEdificios.isEmpty) {
         _hasMoreData = false;
@@ -26,13 +29,21 @@ class BuildingListController {
     }
   }
 
+  Future<List<Publication>> obtenerPublicacionesParaFiltro() async {
+    try {
+      return await PublicationService().getPublications();
+    } catch (e) {
+      return [];
+    }
+  }
+
   Future<List<Buildings>> fetchNextPage() async {
     if (_isLoading || !_hasMoreData) return [];
 
     _isLoading = true;
 
     try {
-      final newBuildings = await _service.getBuildings(page: _currentPage);
+      final newBuildings = await _service.getBuildings(page: _currentPage, publicationId: publicationFiltro);
 
       if (newBuildings.isEmpty) {
         _hasMoreData = false;
@@ -79,6 +90,7 @@ class BuildingListController {
         page: 1,
         latitude: position.latitude,
         longitude: position.longitude,
+        publicationId: publicationFiltro,
         forceRefresh: true,
       );
 
@@ -90,6 +102,34 @@ class BuildingListController {
 
       _isLoading = false;
       return gpsBuildings;
+    } catch (e) {
+      _isLoading = false;
+      return [];
+    }
+  }
+  Future<List<Buildings>> aplicarFiltro(int? idPublicacion) async {
+    _isLoading = true;
+    publicationFiltro = idPublicacion;
+    _currentPage = 1;
+    _hasMoreData = true;
+
+    try {
+      final filteredBuildings = await _service.getBuildings(
+        page: 1,
+        publicationId: publicationFiltro,
+        latitude: miUbicacion?.latitude,
+        longitude: miUbicacion?.longitude,
+        forceRefresh: true,
+      );
+
+      if (filteredBuildings.isNotEmpty) {
+        _currentPage++;
+      } else {
+        _hasMoreData = false;
+      }
+
+      _isLoading = false;
+      return filteredBuildings;
     } catch (e) {
       _isLoading = false;
       return [];

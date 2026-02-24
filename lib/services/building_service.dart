@@ -19,8 +19,9 @@ class BuildingService {
     bool forceRefresh = false,
     double? latitude,
     double? longitude,
+    int? publicationId,
   }) async {
-    if (page == 1 && primeraPaginaCargada && !forceRefresh) {
+    if (page == 1 && primeraPaginaCargada && !forceRefresh && publicationId == null)  {
       return cacheEdificios;
     }
 
@@ -31,6 +32,11 @@ class BuildingService {
       if (latitude != null && longitude != null) {
         urlString += '&lat=$latitude&long=$longitude';
       }
+
+      if (publicationId != null) {
+        urlString += '&publication=$publicationId';
+      }
+
 
       // 3. convertimos el texto a URI
       final url = Uri.parse(urlString);
