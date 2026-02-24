@@ -24,7 +24,7 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
   List<Publication> _publicacionesFiltro = [];
 
   bool _cargando = false;
-  bool _vistaLista = true;
+  bool _vistaLista = false;
 
   @override
   void initState() {
@@ -39,6 +39,29 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
         }
       }
     });
+  }
+
+  void _mostrarMenuPublicaciones() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return ListView.builder(
+          shrinkWrap: true,
+          itemCount: _publicacionesFiltro.length,
+          itemBuilder: (context, index) {
+            final pub = _publicacionesFiltro[index];
+
+            return ListTile(
+              title: Text(pub.title),
+              onTap: () {
+                Navigator.pop(context);
+                _filtrarPorPublicacion(pub.idPublication);
+              },
+            );
+          },
+        );
+      },
+    );
   }
 
   Future<void> _cargarDatosIniciales() async {
@@ -170,42 +193,51 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  '${_edificios.length} edificacions ordenades per distancia',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey[700],
-                    fontWeight: FontWeight.w500,
+                Expanded(
+                  child: _buildFiltro(
+                    texto: 'Totes',
+                    isSelected: _controller.publicationFiltro == null,
+                    onTap: () => _filtrarPorPublicacion(null),
                   ),
                 ),
-
-                PopupMenuButton<int?>(
-                  icon: const Icon(Icons.filter_list_rounded),
-                  tooltip: 'Filtrar per publicació',
-                  onSelected: _filtrarPorPublicacion,
-                  itemBuilder: (BuildContext context) {
-                    List<PopupMenuEntry<int?>> items = [
-                      const PopupMenuItem<int?>(
-                        value: 0,
-                        child: Text('Veure tots'),
-                      ),
-                    ];
-                    for (var pub in _publicacionesFiltro) {
-                      items.add(
-                        PopupMenuItem<int?>(
-                          value: pub.idPublication,
-                          child: Text(pub.title),
-                        ),
-                      );
-                    }
-                    return items;
-                  },
+                const SizedBox(width: 8),
+                Expanded(
+                  flex: 2,
+                  child: _buildFiltro(
+                    texto: 'Publicació',
+                    icono: Icons.keyboard_arrow_down_rounded,
+                    isSelected: _controller.publicationFiltro != null,
+                    onTap: _mostrarMenuPublicaciones,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  flex: 2,
+                  child: _buildFiltro(
+                    texto: 'Properes',
+                    icono: Icons.location_on_outlined,
+                    isSelected: false,
+                    onTap: _usarGPS,
+                  ),
                 ),
               ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                '${_edificios.length} edificacions ordenades per distancia',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey[700],
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
             ),
           ),
           const SizedBox(height: 12),
@@ -314,6 +346,45 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
           ],
         ),
       ],
+    );
+  }
+
+  Widget _buildFiltro({
+    required String texto,
+    IconData? icono,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(30),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        decoration: BoxDecoration(
+          color: isSelected ? Colors.primaries[0] : Colors.white,
+          borderRadius: BorderRadius.circular(30),
+          border: Border.all(
+            color: isSelected ? Colors.primaries[0] : Colors.grey.withValues(alpha: 0.3),
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (icono != null) ...[
+              Icon(icono, size: 16, color: isSelected ? Colors.white : Colors.black87),
+              const SizedBox(width: 6),
+            ],
+            Text(
+              texto,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: isSelected ? Colors.white : Colors.black87,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
