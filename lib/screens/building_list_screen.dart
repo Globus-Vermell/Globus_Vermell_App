@@ -140,7 +140,6 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -151,7 +150,6 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Colors.black87,
               ),
             ),
           ],

@@ -21,7 +21,7 @@ ThemeData lightMode = ThemeData(
     onError: Color(0xffffffff),
     errorContainer: Color(0xffffdad6),
     onErrorContainer: Color(0xff93000a),
-    surface: Color(0xfffff8f6),
+    surface: Color(0xfffbfbfb),
     onSurface: Color(0xff231918),
     onSurfaceVariant: Color(0xff534341),
     outline: Color(0xff857370),
@@ -45,13 +45,15 @@ ThemeData lightMode = ThemeData(
     surfaceDim: Color(0xffe8d6d3),
     surfaceBright: Color(0xfffff8f6),
     surfaceContainerLowest: Color(0xffffffff),
-    surfaceContainerLow: Color(0xfffff0ee),
+    surfaceContainerLow: Color(0xffffffff),
     surfaceContainer: Color(0xfffceae7),
     surfaceContainerHigh: Color(0xfff7e4e1),
     surfaceContainerHighest: Color(0xfff1dfdc),
   ),
   useMaterial3: true,
-  appBarTheme: bar,
+  appBarTheme: bar.copyWith(
+    backgroundColor: Colors.red,
+  ),
   textTheme: texto,
 );
 
@@ -153,7 +155,7 @@ ThemeData darkMode = ThemeData(
     surfaceDim: Color(0xff1a1110),
     surfaceBright: Color(0xff423735),
     surfaceContainerLowest: Color(0xff140c0b),
-    surfaceContainerLow: Color(0xff231918),
+    surfaceContainerLow: Color(0xfff32d18),
     surfaceContainer: Color(0xff271d1c),
     surfaceContainerHigh: Color(0xff322826),
     surfaceContainerHighest: Color(0xff3d3230),
@@ -221,9 +223,7 @@ ThemeData highContrastDarkMode = ThemeData(
 AppBarTheme bar = AppBarTheme(
   centerTitle: true,
   elevation: 0,
-  backgroundColor: Colors.white,
   titleTextStyle: GoogleFonts.montserrat(
-    color: Colors.black87,
     fontSize: 18,
     fontWeight: FontWeight.bold,
   ),
@@ -231,4 +231,4 @@ AppBarTheme bar = AppBarTheme(
 
 TextTheme texto = GoogleFonts.montserratTextTheme();
 
-//
+
