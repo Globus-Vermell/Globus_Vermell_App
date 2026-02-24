@@ -21,8 +21,7 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
   final BuildingListController _controller = BuildingListController();
   final ScrollController _scrollController = ScrollController();
   
-  // ✨ ¡NUEVO! El controlador mágico para mover la cámara del mapa UwU ✨
-  final MapController _mapController = MapController(); 
+  final MapController _mapController = MapController();
 
   final List<Buildings> _edificios = [];
   List<Publication> _publicacionesFiltro = [];
