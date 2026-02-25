@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:globus_vermell_app/screens/settings_screen.dart';
-import 'package:globus_vermell_app/utils/app_keys.dart';
 import '../utils/lang_extensions.dart';
 import 'building_list_screen.dart';
 import 'themes_screen.dart';
@@ -32,9 +31,9 @@ class BottomBarState extends State<BottomBar> {
       body: _widgetOptions[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.map), label: context.translate(AppKeys.map),),
-           BottomNavigationBarItem(icon: Icon(Icons.menu_book), label: context.translate(AppKeys.publications),),
-          BottomNavigationBarItem(icon: const Icon(Icons.settings), label: context.translate(AppKeys.settings)),
+          BottomNavigationBarItem(icon: Icon(Icons.map), label: context.loc.map,),
+           BottomNavigationBarItem(icon: Icon(Icons.menu_book), label: context.loc.publications,),
+          BottomNavigationBarItem(icon: const Icon(Icons.settings), label: context.loc.settings,),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.red,

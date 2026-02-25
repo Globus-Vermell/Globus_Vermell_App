@@ -1,0 +1,21 @@
+{
+  "@@locale": "es",
+  "settings": "Configuración",
+  "darkMode": "Modo Oscuro",
+  "highContrast": "Alto Contraste",
+  "language": "Idioma",
+  "map": "Mapa",
+  "publications": "Publicaciones",
+  "list": "Lista",
+  "all": "Todas",
+  "nearby": "Cercanos",
+  "buildingsByDistance": "Edificaciones ordenadas por distancia",
+  "locationUpdated": "¡Localización actualizada!",
+  "noPublication": "Sin publicación",
+  "techSheet": "FICHA TÉCNICA",
+  "description": "DESCRIPCIÓN",
+  "architects": "Arquitectos",
+  "uses": "Usos",
+  "viewInMap": "Ver en el mapa",
+  "iconsLegend": "Leyenda de iconos"
+}

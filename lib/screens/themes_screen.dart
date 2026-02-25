@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../controllers/themes_controller.dart';
 import '../models/publication_model.dart';
-import '../utils/app_keys.dart';
 import '../utils/lang_extensions.dart';
 import 'publication_detail_screen.dart';
 
@@ -47,7 +46,7 @@ class _ThemesScreenState extends State<ThemesScreen> {
         automaticallyImplyLeading: false,
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [Text(context.translate(AppKeys.publications))],
+          children: [Text(context.loc.publications)],
         ),
       ),
       body: _isLoading

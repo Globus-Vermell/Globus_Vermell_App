@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:globus_vermell_app/utils/app_keys.dart';
 import 'package:globus_vermell_app/utils/lang_extensions.dart';
 import 'package:latlong2/latlong.dart';
 import '../models/building_model.dart';
@@ -189,7 +188,7 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
       _mapController.move(_controller.miUbicacion, 17.0);
     }
     if (edificiosCercanos.isNotEmpty) {
-      final String mensaje = context.translate(AppKeys.locationUpdated);
+      final String mensaje = context.loc.locationUpdated;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(mensaje),
@@ -243,7 +242,7 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
                 Expanded(
                   child: _ToggleButton(
                     icon: Icons.location_on_outlined,
-                    text: context.translate(AppKeys.map),
+                    text: context.loc.map,
                     isSelected: !_vistaLista,
                     onTap: () => setState(() => _vistaLista = false),
                   ),
@@ -252,7 +251,7 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
                 Expanded(
                   child: _ToggleButton(
                     icon: Icons.format_list_bulleted,
-                    text: context.translate(AppKeys.list),
+                    text: context.loc.list,
                     isSelected: _vistaLista,
                     onTap: () => setState(() => _vistaLista = true),
                   ),
@@ -269,7 +268,7 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
               children: [
                 Expanded(
                   child: _buildFiltro(
-                    texto: context.translate(AppKeys.all),
+                    texto: context.loc.all,
                     isSelected: _controller.publicationFiltro == 0,
                     onTap: () => _filtrarPorPublicacion(0),
                   ),
@@ -278,7 +277,7 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
                 Expanded(
                   flex: 2,
                   child: _buildFiltro(
-                    texto: context.translate(AppKeys.publications),
+                    texto: context.loc.publications,
                     icono: Icons.keyboard_arrow_down_rounded,
                     isSelected: _controller.publicationFiltro != 0,
                     onTap: _mostrarMenuPublicaciones,
@@ -288,7 +287,7 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
                 Expanded(
                   flex: 2,
                   child: _buildFiltro(
-                    texto: context.translate(AppKeys.nearby),
+                    texto: context.loc.nearby,
                     icono: Icons.location_on_outlined,
                     isSelected: false,
                     onTap: _usarGPS,
@@ -302,7 +301,7 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
             child: Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                '${_edificios.length} ${context.translate(AppKeys.buildingsByDistance)}',
+                '${_edificios.length} ${context.loc.buildingsByDistance}',
                 style: TextStyle(
                   fontSize: 14,
                   color: Colors.grey[700],
@@ -653,7 +652,7 @@ class _BuildingCard extends StatelessWidget {
                           child: Text(
                             (edificio.publications.isNotEmpty)
                                 ? edificio.publications.first
-                                : context.translate(AppKeys.noPublication),
+                                : context.loc.noPublication,
                             style: TextStyle(
                               fontSize: 13,
                               color: (edificio.publications.isNotEmpty)

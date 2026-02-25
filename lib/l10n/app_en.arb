@@ -1,0 +1,21 @@
+{
+  "@@locale": "en",
+  "settings": "Settings",
+  "darkMode": "Dark Mode",
+  "highContrast": "High Contrast",
+  "language": "Language",
+  "map": "Map",
+  "publications": "Publications",
+  "list": "List",
+  "all": "All",
+  "nearby": "Nearby",
+  "buildingsByDistance": "Buildings ordered by distance",
+  "locationUpdated": "Location updated!",
+  "noPublication": "No publication",
+  "techSheet": "TECHNICAL SPECIFICATIONS",
+  "description": "DESCRIPTION",
+  "architects": "Architects",
+  "uses": "Uses",
+  "viewInMap": "View on map",
+  "iconsLegend": "Icons legend"
+}

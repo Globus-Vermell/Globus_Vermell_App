@@ -1,0 +1,21 @@
+{
+  "@@locale": "ca",
+  "settings": "Configuració",
+  "darkMode": "Mode Fosc",
+  "highContrast": "Alt Contrast",
+  "language": "Idioma",
+  "map": "Mapa",
+  "publications": "Publicacions",
+  "list": "Llista",
+  "all": "Totes",
+  "nearby": "Propers",
+  "buildingsByDistance": "Edificacions ordenades per distància",
+  "locationUpdated": "Localització actualitzada!",
+  "noPublication": "Sense publicació",
+  "techSheet": "FITXA TÈCNICA",
+  "description": "DESCRIPCIÓ",
+  "architects": "Arquitectes",
+  "uses": "Usos",
+  "viewInMap": "Veure al mapa",
+  "iconsLegend": "Llegenda d'icones"
+}

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:globus_vermell_app/utils/app_keys.dart';
 import 'package:globus_vermell_app/utils/get_distancia.dart';
 import 'package:latlong2/latlong.dart';
 import '../models/building_model.dart';
@@ -86,7 +85,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
       builder: (context) => AlertDialog(
         backgroundColor: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: Text(context.translate(AppKeys.iconsLegend)),
+        title: Text(context.loc.iconsLegend, style: const TextStyle(color: Color(0xFFE41E26)),),
         content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -229,7 +228,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                   const SizedBox(height: 32),
 
                   _buildSectionHeader(
-                    context.translate(AppKeys.techSheet),
+                    context.loc.techSheet,
                     onInfo: () => _showLegend(context),
                   ),
                   const SizedBox(height: 16),
@@ -280,7 +279,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
 
                   const SizedBox(height: 40),
 
-                  _buildSectionHeader(context.translate(AppKeys.description)),
+                  _buildSectionHeader(context.loc.description),
                   const SizedBox(height: 16),
 
                   (building.description.isNotEmpty &&
@@ -344,7 +343,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                             vertical: 4,
                           ),
                           title: Text(
-                            context.translate(AppKeys.architects),
+                            context.loc.architects,
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
@@ -411,7 +410,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                             vertical: 4,
                           ),
                           title: Text(
-                            context.translate(AppKeys.uses),
+                            context.loc.uses,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
@@ -470,7 +469,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
         elevation: 4,
         icon: const Icon(Icons.map_rounded, color: Colors.white),
         label: Text(
-          context.translate(AppKeys.viewInMap),
+          context.loc.viewInMap,
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ),

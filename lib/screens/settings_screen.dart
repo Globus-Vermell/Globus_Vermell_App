@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:globus_vermell_app/utils/lang_extensions.dart';
 import 'package:provider/provider.dart';
 import '../providers/language_provider.dart';
 import '../providers/theme_provider.dart';
-import '../utils/app_keys.dart';
+import '../utils/lang_extensions.dart';
 
 class SettingsScreen extends StatefulWidget {
 
@@ -19,7 +18,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text( context.translate(AppKeys.settings)),
+        title: Text( context.loc.settings),
       ),
       body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 10),
@@ -28,7 +27,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _buildSwitch(
-                titulo: context.translate(AppKeys.highContrast),
+                titulo: context.loc.highContrast,
                 valor: context.watch<ThemeProvider>().isHighContrast,
                 onChanged: (val) {
                   context.read<ThemeProvider>().toggleHighContrast();
@@ -36,7 +35,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               const SizedBox(height: 15),
               _buildSwitch(
-                titulo: context.translate(AppKeys.darkMode),
+                titulo: context.loc.darkMode,
                 valor: context.watch<ThemeProvider>().isDarkMode,
                 onChanged: (val) {
                   context.read<ThemeProvider>().toggleTheme();
@@ -83,7 +82,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
       child: ExpansionTile(
         shape: const Border(),
-        title: Text(context.translate(AppKeys.language), style: TextStyle(fontWeight: FontWeight.w500)),
+        title: Text(context.loc.language, style: TextStyle(fontWeight: FontWeight.w500)),
         leading: const Icon(Icons.language),
         children: [
           ListTile(
