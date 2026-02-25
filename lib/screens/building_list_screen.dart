@@ -10,6 +10,7 @@ import '../controllers/building_list_controller.dart';
 import '../models/publication_model.dart';
 import '../utils/get_distancia.dart';
 import 'building_detail_screen.dart';
+import 'publication_detail_screen.dart';
 
 class ListaEdificacionesScreen extends StatefulWidget {
   const ListaEdificacionesScreen({super.key});
@@ -47,23 +48,87 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
   }
 
   void _mostrarMenuPublicaciones() {
-    showModalBottomSheet(
+    showGeneralDialog(
       context: context,
-      builder: (context) {
-        return ListView.builder(
-          shrinkWrap: true,
-          itemCount: _publicacionesFiltro.length,
-          itemBuilder: (context, index) {
-            final pub = _publicacionesFiltro[index];
+      barrierDismissible: true,
+      barrierLabel: 'Tancar',
+      transitionDuration: const Duration(milliseconds: 300),
+      pageBuilder: (context, anim1, anim2) {
+        return Align(
+          alignment: Alignment.topCenter,
+          child: Container(
+            margin: const EdgeInsets.only(top: 275, left: 16, right: 16), 
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.1),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                )
+              ],
+            ),
+            child: Material(
+              color: Colors.transparent,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.5, 
+                ),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  padding: EdgeInsets.zero,
+                  itemCount: _publicacionesFiltro.length,
+                  itemBuilder: (context, index) {
+                    final pub = _publicacionesFiltro[index];
 
-            return ListTile(
-              title: Text(pub.title),
-              onTap: () {
-                Navigator.pop(context);
-                _filtrarPorPublicacion(pub.idPublication);
-              },
-            );
-          },
+                    return ListTile(
+                      title: Text(
+                        pub.title,
+                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                      ),
+                      onTap: () {
+                        Navigator.pop(context);
+                        _filtrarPorPublicacion(pub.idPublication);
+                      },
+                      trailing: IconButton(
+                        icon: const Icon(
+                          Icons.visibility, 
+                          color: Color(0xFFE41E26),
+                          size: 20,
+                        ),
+                        tooltip: 'Veure publicació',
+                        onPressed: () {
+                          Navigator.pop(context); 
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PublicationDetailScreen(
+                                publication: pub, 
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+      transitionBuilder: (context, anim1, anim2, child) {
+        return SlideTransition(
+          position: Tween<Offset>(
+            begin: const Offset(0, -0.1), 
+            end: Offset.zero,
+          ).animate(CurvedAnimation(parent: anim1, curve: Curves.easeOut)),
+          child: FadeTransition(
+            opacity: anim1,
+            child: child,
+          ),
         );
       },
     );
