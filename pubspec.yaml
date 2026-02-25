@@ -46,6 +46,7 @@ dependencies:
   flutter_map: ^7.0.0
   latlong2: ^0.9.1
   provider: ^6.1.5
+  cached_network_image: ^3.4.1
   google_fonts: ^8.0.2
 
 

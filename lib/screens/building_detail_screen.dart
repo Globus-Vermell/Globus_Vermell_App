@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:globus_vermell_app/utils/get_distancia.dart';
 import 'package:latlong2/latlong.dart';
@@ -544,8 +545,8 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                 itemCount: building.images.length,
                 onPageChanged: _controller.onPageChanged,
                 itemBuilder: (context, index) {
-                  return Image.network(
-                    building.images[index],
+                  return CachedNetworkImage(
+                    imageUrl: building.images[index],
                     fit: BoxFit.cover,
                     width: double.infinity,
                   );

@@ -54,13 +54,13 @@ class _ThemesScreenState extends State<ThemesScreen> {
           : ListView(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
               children: [
-                _buildSectionHeader('ETAPES', Icons.timeline),
+                _buildSectionHeader(context.loc.stages, Icons.timeline),
                 const SizedBox(height: 12),
                 _buildPublicationList(_organizedData['etapes'] ?? []),
                 const SizedBox(height: 32),
 
                 _buildSectionHeader(
-                  'ARQUITECTURA TEMÀTICA',
+                  context.loc.thematicArchitecture,
                   Icons.architecture,
                 ),
                 const SizedBox(height: 12),
@@ -69,7 +69,7 @@ class _ThemesScreenState extends State<ThemesScreen> {
                 ),
                 const SizedBox(height: 32),
 
-                _buildSectionHeader('BARRIS', Icons.location_city),
+                _buildSectionHeader(context.loc.neighborhoods, Icons.location_city),
                 const SizedBox(height: 12),
                 _buildPublicationList(_organizedData['barris'] ?? []),
                 const SizedBox(height: 40),

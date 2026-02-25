@@ -1,5 +1,6 @@
 // ignore_for_file: prefer-single-widget-per-file, avoid-passing-async-when-sync-expected, prefer-extracting-callbacks
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:globus_vermell_app/utils/lang_extensions.dart';
@@ -584,17 +585,16 @@ class _BuildingCard extends StatelessWidget {
                 child: (edificio.images.isNotEmpty)
                     ? ClipRRect(
                         borderRadius: BorderRadius.circular(8),
-                        child: Image.network(
-                          edificio.images.first,
+                        child: CachedNetworkImage(
+                          imageUrl:  edificio.images.first,
                           fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) {
+                          errorWidget: (context,url, error,) {
                             return Icon(
                               Icons.broken_image,
                               color: Colors.grey[400],
                             );
                           },
-                          loadingBuilder: (context, child, loadingProgress) {
-                            if (loadingProgress == null) return child;
+                          placeholder: (context, url) {
                             return const Center(
                               child: SizedBox(
                                 width: 20,

@@ -25,5 +25,8 @@
   "surface": "Surface",
   "renovation": "Renovation",
   "award": "Award",
-  "understood": "Got it"
+  "understood": "Got it",
+  "stages": "STAGES",
+  "thematicArchitecture": "THEMATIC ARCHITECTURE",
+  "neighborhoods": "NEIGHBORHOODS"
 }
