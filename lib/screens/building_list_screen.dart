@@ -93,7 +93,7 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
                       },
                       trailing: IconButton(
                         icon: const Icon(
-                          Icons.visibility, 
+                          Icons.info_outline,
                           color: Color(0xFFE41E26),
                           size: 20,
                         ),
