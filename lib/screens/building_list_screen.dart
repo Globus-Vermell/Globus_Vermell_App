@@ -80,12 +80,9 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
     }
   }
 
-  Future<void> _filtrarPorPublicacion(int? idPublicacion) async {
+  Future<void> _filtrarPorPublicacion(int idPublicacion) async {
     setState(() => _cargando = true);
 
-    if (idPublicacion == 0) {
-      idPublicacion = null;
-    }
     final filtrados = await _controller.aplicarFiltro(idPublicacion);
 
     if (mounted) {
@@ -120,6 +117,9 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
         _edificios.addAll(edificiosCercanos);
         _cargando = false;
       });
+      if (!_vistaLista && _controller.miUbicacion.latitude != 0) {
+        _mapController.move(_controller.miUbicacion, 17.0);
+      }
 
       if (edificiosCercanos.isNotEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -200,8 +200,8 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
                 Expanded(
                   child: _buildFiltro(
                     texto: 'Totes',
-                    isSelected: _controller.publicationFiltro == null,
-                    onTap: () => _filtrarPorPublicacion(null),
+                    isSelected: _controller.publicationFiltro == 0,
+                    onTap: () => _filtrarPorPublicacion(0),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -210,7 +210,7 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
                   child: _buildFiltro(
                     texto: 'Publicació',
                     icono: Icons.keyboard_arrow_down_rounded,
-                    isSelected: _controller.publicationFiltro != null,
+                    isSelected: _controller.publicationFiltro != 0,
                     onTap: _mostrarMenuPublicaciones,
                   ),
                 ),
@@ -300,7 +300,12 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
   }
 
   Widget _construirMapa() {
-    final centro = _controller.miUbicacion ?? const LatLng(41.3851, 2.1734);
+    LatLng centro = _controller.miUbicacion;
+    if (centro.latitude == 0 && centro.longitude == 0) {
+      //El centro del mapa será el edificio más cercano o en su defecto el centro de Barcelona.
+      centro = _edificios.isNotEmpty && _edificios.first.latitude != 0 ?
+      LatLng(_edificios.first.latitude, _edificios.first.longitude) : const LatLng(41.3879, 2.16992);
+    }
 
     return FlutterMap(
       mapController: _mapController,
@@ -312,9 +317,9 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
         ),
         MarkerLayer(
           markers: [
-            if (_controller.miUbicacion != null)
+            if (_controller.miUbicacion.latitude != 0)
               Marker(
-                point: _controller.miUbicacion!,
+                point: _controller.miUbicacion,
                 width: 60,
                 height: 60,
                 child: const Column(
@@ -500,11 +505,11 @@ class _BuildingCard extends StatelessWidget {
                   color: Colors.grey[200],
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: (edificio.images != null && edificio.images!.isNotEmpty)
+                child: (edificio.images.isNotEmpty)
                     ? ClipRRect(
                         borderRadius: BorderRadius.circular(8),
                         child: Image.network(
-                          edificio.images!.first,
+                          edificio.images.first,
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) {
                             return Icon(

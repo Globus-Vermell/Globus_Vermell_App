@@ -109,7 +109,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
               const SizedBox(height: 12),
               _buildLegendItem(Icons.construction, "Reforma", Colors.brown),
               const SizedBox(height: 12),
-              _buildLegendItem(Icons.emoji_events, "Premi", Colors.amber[800]!),
+              _buildLegendItem(Icons.emoji_events, "Premi", Colors.amber),
               const SizedBox(height: 12),
             ],
           ),
@@ -270,7 +270,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                         (premio) => _buildInfoChip(
                           Icons.emoji_events,
                           premio,
-                          Colors.amber[800]!,
+                          Colors.amber,
                         ),
                       ),
                     ],
@@ -538,13 +538,13 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
         background: Stack(
           alignment: Alignment.bottomCenter,
           children: [
-            if (building.images != null && building.images!.isNotEmpty)
+            if (building.images.isNotEmpty)
               PageView.builder(
-                itemCount: building.images!.length,
+                itemCount: building.images.length,
                 onPageChanged: _controller.onPageChanged,
                 itemBuilder: (context, index) {
                   return Image.network(
-                    building.images![index],
+                    building.images[index],
                     fit: BoxFit.cover,
                     width: double.infinity,
                   );
@@ -578,7 +578,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
               ),
             ),
 
-            if (building.images != null && building.images!.length > 1)
+            if (building.images.length > 1)
               Padding(
                 padding: const EdgeInsets.only(bottom: 20.0),
                 child: ValueListenableBuilder<int>(
@@ -587,7 +587,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: List.generate(
-                        building.images!.length,
+                        building.images.length,
                         (i) => AnimatedContainer(
                           duration: const Duration(milliseconds: 300),
                           margin: const EdgeInsets.symmetric(horizontal: 4),

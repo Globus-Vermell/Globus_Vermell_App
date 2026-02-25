@@ -11,14 +11,15 @@ class BuildingListController {
   int _currentPage = 1;
   bool _hasMoreData = true;
   bool _isLoading = false;
-  LatLng? miUbicacion;
-  int? publicationFiltro;
+
+  LatLng miUbicacion = const LatLng(0, 0);
+  int publicationFiltro = 0;
 
   bool get hasMoreData => _hasMoreData;
   bool get isLoading => _isLoading;
 
   Future<List<Buildings>> getInitialData() async {
-    if (_service.primeraPaginaCargada && publicationFiltro == null) {
+    if (_service.primeraPaginaCargada && publicationFiltro == 0) {
       _currentPage = 2;
       if (_service.cacheEdificios.isEmpty) {
         _hasMoreData = false;
@@ -43,7 +44,10 @@ class BuildingListController {
     _isLoading = true;
 
     try {
-      final newBuildings = await _service.getBuildings(page: _currentPage, publicationId: publicationFiltro);
+      final newBuildings = await _service.getBuildings(
+        page: _currentPage,
+        publicationId: publicationFiltro == 0 ? null : publicationFiltro,
+      );
 
       if (newBuildings.isEmpty) {
         _hasMoreData = false;
@@ -92,7 +96,7 @@ class BuildingListController {
         page: 1,
         latitude: position.latitude,
         longitude: position.longitude,
-        publicationId: publicationFiltro,
+        publicationId: publicationFiltro == 0 ? null : publicationFiltro,
         forceRefresh: true,
       );
 
@@ -109,18 +113,19 @@ class BuildingListController {
       return [];
     }
   }
+
   Future<List<Buildings>> aplicarFiltro(int? idPublicacion) async {
     _isLoading = true;
-    publicationFiltro = idPublicacion;
+    publicationFiltro = idPublicacion ?? 0;
     _currentPage = 1;
     _hasMoreData = true;
 
     try {
       final filteredBuildings = await _service.getBuildings(
         page: 1,
-        publicationId: publicationFiltro,
-        latitude: miUbicacion?.latitude,
-        longitude: miUbicacion?.longitude,
+        publicationId: publicationFiltro == 0 ? null : publicationFiltro,
+        latitude: miUbicacion.latitude == 0.0 ? null : miUbicacion.latitude,
+        longitude: miUbicacion.longitude == 0.0 ? null : miUbicacion.longitude,
         forceRefresh: true,
       );
 

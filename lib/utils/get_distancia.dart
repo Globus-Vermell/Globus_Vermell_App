@@ -8,7 +8,7 @@ String getDistancia(
     ){
   String distancia = '0.6 Km';
 
-  if (ubicacion != null && edificio.latitude != 0) {
+  if (ubicacion != null && ubicacion.latitude != 0 && edificio.latitude != 0) {
     double distanciaMetros = Geolocator.distanceBetween(
       ubicacion.latitude,
       ubicacion.longitude,

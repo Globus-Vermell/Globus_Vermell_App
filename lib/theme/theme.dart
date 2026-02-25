@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-ThemeData lightMode = ThemeData(
+final ThemeData lightMode = ThemeData(
   colorScheme: ColorScheme.light(
     brightness: Brightness.light,
     primary: Color(0xff904b40),
@@ -57,7 +57,7 @@ ThemeData lightMode = ThemeData(
   textTheme: texto,
 );
 
-ThemeData highContrastLightMode = ThemeData(
+final ThemeData highContrastLightMode = ThemeData(
   colorScheme: ColorScheme.highContrastLight(
     brightness: Brightness.light,
     primary: Color(0xff511a13),
@@ -111,7 +111,7 @@ ThemeData highContrastLightMode = ThemeData(
   textTheme: texto,
 );
 
-ThemeData darkMode = ThemeData(
+final ThemeData darkMode = ThemeData(
   colorScheme: ColorScheme.dark(
     brightness: Brightness.dark,
     primary: Color(0xffffb4a8),
@@ -165,7 +165,7 @@ ThemeData darkMode = ThemeData(
   textTheme: texto,
 );
 
-ThemeData highContrastDarkMode = ThemeData(
+final ThemeData highContrastDarkMode = ThemeData(
   colorScheme: ColorScheme.highContrastDark(
     brightness: Brightness.dark,
     primary: Color(0xffffece9),
@@ -220,7 +220,7 @@ ThemeData highContrastDarkMode = ThemeData(
 );
 //Falta aprender
 
-AppBarTheme bar = AppBarTheme(
+final AppBarTheme bar = AppBarTheme(
   centerTitle: true,
   elevation: 0,
   titleTextStyle: GoogleFonts.montserrat(
@@ -229,6 +229,6 @@ AppBarTheme bar = AppBarTheme(
   ),
 );
 
-TextTheme texto = GoogleFonts.montserratTextTheme();
+final TextTheme texto = GoogleFonts.montserratTextTheme();
 
 

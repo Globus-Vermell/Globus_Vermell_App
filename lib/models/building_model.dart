@@ -8,7 +8,7 @@ class Buildings {
   final int idTypology;
   final int idProtection;
   final bool validate;
-  final List<String>? images;
+  final List<String> images;
   final String? typologyName;
   final String? protectionName;
 
@@ -32,7 +32,7 @@ class Buildings {
     required this.idTypology,
     required this.idProtection,
     required this.validate,
-    this.images,
+    this.images = const [],
     this.typologyName,
     this.protectionName,
     this.latitude = 0.0,
