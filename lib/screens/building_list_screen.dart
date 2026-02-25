@@ -1,3 +1,5 @@
+// ignore_for_file: prefer-single-widget-per-file, avoid-passing-async-when-sync-expected, prefer-extracting-callbacks
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:globus_vermell_app/utils/app_keys.dart';
@@ -111,21 +113,24 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
 
     final edificiosCercanos = await _controller.activarGPS();
 
-    if (mounted) {
-      setState(() {
-        _edificios.clear();
-        _edificios.addAll(edificiosCercanos);
-        _cargando = false;
-      });
-      if (!_vistaLista && _controller.miUbicacion.latitude != 0) {
-        _mapController.move(_controller.miUbicacion, 17.0);
-      }
+    if (!mounted) return;
 
-      if (edificiosCercanos.isNotEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Localització actualitzada!')),
-        );
-      }
+    setState(() {
+      _edificios.clear();
+      _edificios.addAll(edificiosCercanos);
+      _cargando = false;
+    });
+    if (!_vistaLista && _controller.miUbicacion.latitude != 0) {
+      _mapController.move(_controller.miUbicacion, 17.0);
+    }
+    if (edificiosCercanos.isNotEmpty) {
+      final String mensaje = context.translate(AppKeys.locationUpdated);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(mensaje),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
     }
   }
 
@@ -146,10 +151,7 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
           children: [
             const Text(
               'Globus Vermell',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
           ],
         ),
@@ -194,12 +196,15 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: 8.0,
+            ),
             child: Row(
               children: [
                 Expanded(
                   child: _buildFiltro(
-                    texto: 'Totes',
+                    texto: context.translate(AppKeys.all),
                     isSelected: _controller.publicationFiltro == 0,
                     onTap: () => _filtrarPorPublicacion(0),
                   ),
@@ -208,7 +213,7 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
                 Expanded(
                   flex: 2,
                   child: _buildFiltro(
-                    texto: 'Publicació',
+                    texto: context.translate(AppKeys.publications),
                     icono: Icons.keyboard_arrow_down_rounded,
                     isSelected: _controller.publicationFiltro != 0,
                     onTap: _mostrarMenuPublicaciones,
@@ -218,7 +223,7 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
                 Expanded(
                   flex: 2,
                   child: _buildFiltro(
-                    texto: 'Properes',
+                    texto: context.translate(AppKeys.nearby),
                     icono: Icons.location_on_outlined,
                     isSelected: false,
                     onTap: _usarGPS,
@@ -232,7 +237,7 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
             child: Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                '${_edificios.length} edificacions ordenades per distancia',
+                '${_edificios.length} ${context.translate(AppKeys.buildingsByDistance)}',
                 style: TextStyle(
                   fontSize: 14,
                   color: Colors.grey[700],
@@ -303,8 +308,9 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
     LatLng centro = _controller.miUbicacion;
     if (centro.latitude == 0 && centro.longitude == 0) {
       //El centro del mapa será el edificio más cercano o en su defecto el centro de Barcelona.
-      centro = _edificios.isNotEmpty && _edificios.first.latitude != 0 ?
-      LatLng(_edificios.first.latitude, _edificios.first.longitude) : const LatLng(41.3879, 2.16992);
+      centro = _edificios.isNotEmpty && _edificios.first.latitude != 0
+          ? LatLng(_edificios.first.latitude, _edificios.first.longitude)
+          : const LatLng(41.3879, 2.16992);
     }
 
     return FlutterMap(
@@ -395,14 +401,20 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
           color: isSelected ? Colors.primaries[0] : Colors.white,
           borderRadius: BorderRadius.circular(30),
           border: Border.all(
-            color: isSelected ? Colors.primaries[0] : Colors.grey.withValues(alpha: 0.3),
+            color: isSelected
+                ? Colors.primaries[0]
+                : Colors.grey.withValues(alpha: 0.3),
           ),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             if (icono != null) ...[
-              Icon(icono, size: 16, color: isSelected ? Colors.white : Colors.black87),
+              Icon(
+                icono,
+                size: 16,
+                color: isSelected ? Colors.white : Colors.black87,
+              ),
               const SizedBox(width: 6),
             ],
             Text(
@@ -576,7 +588,7 @@ class _BuildingCard extends StatelessWidget {
                           child: Text(
                             (edificio.publications.isNotEmpty)
                                 ? edificio.publications.first
-                                : "Sense publicació",
+                                : context.translate(AppKeys.noPublication),
                             style: TextStyle(
                               fontSize: 13,
                               color: (edificio.publications.isNotEmpty)

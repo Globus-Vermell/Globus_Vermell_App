@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:globus_vermell_app/utils/app_keys.dart';
 import 'package:globus_vermell_app/utils/get_distancia.dart';
 import 'package:latlong2/latlong.dart';
 import '../models/building_model.dart';
 import '../controllers/building_detail_controller.dart';
 import '../services/publications_service.dart';
-import 'publication_detail_screen.dart'; 
+import '../utils/lang_extensions.dart';
+import 'publication_detail_screen.dart';
 
 class BuildingDetailScreen extends StatefulWidget {
   final Buildings building;
@@ -84,7 +86,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
       builder: (context) => AlertDialog(
         backgroundColor: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Text("Llegenda d'Icones"),
+        title: Text(context.translate(AppKeys.iconsLegend)),
         content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -227,7 +229,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                   const SizedBox(height: 32),
 
                   _buildSectionHeader(
-                    "FITXA TÈCNICA",
+                    context.translate(AppKeys.techSheet),
                     onInfo: () => _showLegend(context),
                   ),
                   const SizedBox(height: 16),
@@ -278,7 +280,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
 
                   const SizedBox(height: 40),
 
-                  _buildSectionHeader("DESCRIPCIÓ"),
+                  _buildSectionHeader(context.translate(AppKeys.description)),
                   const SizedBox(height: 16),
 
                   (building.description.isNotEmpty &&
@@ -341,9 +343,9 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                             horizontal: 16,
                             vertical: 4,
                           ),
-                          title: const Text(
-                            "Arquitectes",
-                            style: TextStyle(
+                          title: Text(
+                            context.translate(AppKeys.architects),
+                            style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
                               color: Color(0xFFE41E26),
@@ -408,8 +410,8 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                             horizontal: 16,
                             vertical: 4,
                           ),
-                          title: const Text(
-                            "Usos",
+                          title: Text(
+                            context.translate(AppKeys.uses),
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
@@ -467,8 +469,8 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
         backgroundColor: const Color(0xFFE41E26),
         elevation: 4,
         icon: const Icon(Icons.map_rounded, color: Colors.white),
-        label: const Text(
-          "Veure al mapa",
+        label: Text(
+          context.translate(AppKeys.viewInMap),
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ),

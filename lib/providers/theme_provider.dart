@@ -9,11 +9,8 @@ class ThemeProvider with ChangeNotifier {
   bool get isHighContrast => _isHighContrast;
 
   ThemeData get themeData {
-    if (_isDark) {
-      return _isHighContrast ? highContrastDarkMode : darkMode;
-    } else {
-      return _isHighContrast ? highContrastLightMode : lightMode;
-    }
+    return _isDark ? _isHighContrast ? highContrastDarkMode : darkMode :
+    _isHighContrast ? highContrastLightMode : lightMode;
   }
 
   void toggleTheme() {
