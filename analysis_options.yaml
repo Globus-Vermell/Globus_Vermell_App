@@ -28,8 +28,34 @@ linter:
 # https://dart.dev/guides/language/analysis-options
 
 dcm:
-  rules:
-    - avoid-dynamic
-    - avoid-unused-parameters
   metrics:
-    cyclomatic-complexity: 15
+    cyclomatic-complexity: 10       # Complejidad lógica máxima por método.
+    halstead-volume: 150            # Límite de complejidad computacional.
+    lines-of-code: 100              # Límite de líneas por archivo para mantener SRP.
+    maximum-nesting-level: 3        # Límite de niveles de anidación permitidos.
+    number-of-parameters: 4         # Máximo de parámetros por función o constructor.
+    source-lines-of-code: 50        # Límite de líneas de código fuente por método.
+
+  metrics-exclude:
+    - test/**
+    - lib/**/*.g.dart               # Excluye archivos autogenerados (ej. json_serializable).
+    - lib/**/*.freezed.dart         # Excluye archivos generados por freezed.
+
+  rules:
+    - avoid-dynamic                     # Restringe el uso de tipos dinámicos.
+    - avoid-non-null-assertion          # Prohíbe el uso del operador '!'.
+    - avoid-unnecessary-type-casts      # Evita casteos redundantes con 'as'.
+    - avoid-unnecessary-type-assertions # Evita el uso redundante del operador 'is'.
+
+    - avoid-global-state                # Prohíbe el estado global mutable.
+    - prefer-single-widget-per-file     # Limita a un widget principal por archivo.
+    - prefer-extracting-callbacks       # Obliga a extraer lógica de callbacks a métodos.
+    - avoid-late-keyword                # Restringe inicializaciones tardías.
+
+    - avoid-redundant-async             # Evita declaraciones 'async' sin 'await'.
+    - avoid-passing-async-when-sync-expected
+    - prefer-async-await                # Fomenta 'async/await' sobre el uso crudo de Futures.
+
+    - no-boolean-literal-compare        # Evita comparaciones redundantes (ej. valor == true).
+    - no-empty-block                    # Prohíbe bloques de control de flujo vacíos.
+    - prefer-conditional-expressions    # Prioriza operadores ternarios sobre if/else simples.
