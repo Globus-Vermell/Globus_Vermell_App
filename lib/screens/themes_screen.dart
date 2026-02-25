@@ -164,16 +164,6 @@ class _ThemesScreenState extends State<ThemesScreen> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      item.themes.toUpperCase(),
-                      style: TextStyle(
-                        color: Colors.blue[600],
-                        fontSize: 11,
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: 0.5,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
                       item.description,
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
