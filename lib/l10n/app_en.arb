@@ -17,5 +17,13 @@
   "architects": "Architects",
   "uses": "Uses",
   "viewInMap": "View on map",
-  "iconsLegend": "Icons legend"
+  "iconsLegend": "Icons legend",
+  "publication": "Publication",
+  "typology": "Typology",
+  "protection": "Protection",
+  "yearConst": "Year of const.",
+  "surface": "Surface",
+  "renovation": "Renovation",
+  "award": "Award",
+  "understood": "Got it"
 }

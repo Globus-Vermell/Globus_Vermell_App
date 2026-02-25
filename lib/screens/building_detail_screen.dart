@@ -92,25 +92,25 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
             children: [
               _buildLegendItem(
                 Icons.auto_stories_rounded,
-                "Publicació",
+                context.loc.publication,
                 const Color(0xFFE41E26),
               ),
               const SizedBox(height: 12),
-              _buildLegendItem(Icons.category, "Tipologia", Colors.blue),
+              _buildLegendItem(Icons.category, context.loc.typology, Colors.blue),
               const SizedBox(height: 12),
-              _buildLegendItem(Icons.security, "Protecció", Colors.orange),
+              _buildLegendItem(Icons.security, context.loc.protection, Colors.orange),
               const SizedBox(height: 12),
               _buildLegendItem(
                 Icons.calendar_today,
-                "Any Const.",
+                context.loc.yearConst,
                 Colors.purple,
               ),
               const SizedBox(height: 12),
-              _buildLegendItem(Icons.square_foot, "Superfície", Colors.green),
+              _buildLegendItem(Icons.square_foot, context.loc.surface, Colors.green),
               const SizedBox(height: 12),
-              _buildLegendItem(Icons.construction, "Reforma", Colors.brown),
+              _buildLegendItem(Icons.construction, context.loc.renovation, Colors.brown),
               const SizedBox(height: 12),
-              _buildLegendItem(Icons.emoji_events, "Premi", Colors.amber),
+              _buildLegendItem(Icons.emoji_events, context.loc.award, Colors.amber),
               const SizedBox(height: 12),
             ],
           ),
@@ -118,8 +118,8 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text(
-              "Entesos",
+            child: Text(
+              context.loc.understood,
               style: TextStyle(
                 color: Color(0xFFE41E26),
                 fontWeight: FontWeight.bold,

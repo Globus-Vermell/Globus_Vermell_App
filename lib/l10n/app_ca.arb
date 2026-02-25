@@ -17,5 +17,13 @@
   "architects": "Arquitectes",
   "uses": "Usos",
   "viewInMap": "Veure al mapa",
-  "iconsLegend": "Llegenda d'icones"
+  "iconsLegend": "Llegenda d'icones",
+  "publication": "Publicació",
+  "typology": "Tipologia",
+  "protection": "Protecció",
+  "yearConst": "Any Const.",
+  "surface": "Superfície",
+  "renovation": "Reforma",
+  "award": "Premi",
+  "understood": "Entesos"
 }
