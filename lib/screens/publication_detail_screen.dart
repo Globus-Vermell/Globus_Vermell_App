@@ -25,22 +25,20 @@ class PublicationDetailScreen extends StatelessWidget {
             vertical: 24.0,
           ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center, // Centra la cabecera
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // 1. CABECERA PRINCIPAL (Título Centrado y Más Grande)
               Text(
                 publication.title,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
-                  fontSize: 34, // Tamaño aumentado
-                  fontWeight: FontWeight.w900, // Fuente más gruesa
+                  fontSize: 34,
+                  fontWeight: FontWeight.w900,
                   height: 1.2,
                   color: Colors.black87,
                 ),
               ),
               const SizedBox(height: 16),
 
-              // Edición (Icono centrado)
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -50,8 +48,6 @@ class PublicationDetailScreen extends StatelessWidget {
                     size: 18,
                   ),
                   const SizedBox(width: 6),
-                  // Nota: En tu código anterior quitaste el texto de la edición. 
-                  // Si quieres volver a ponerlo, añádelo aquí dentro de un Text().
                 ],
               ),
               const SizedBox(height: 24),

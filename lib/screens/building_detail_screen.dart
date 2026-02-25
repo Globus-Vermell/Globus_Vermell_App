@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:globus_vermell_app/utils/get_distancia.dart';
 import 'package:latlong2/latlong.dart';
 import '../models/building_model.dart';
 import '../controllers/building_detail_controller.dart';
 import 'package:geolocator/geolocator.dart';
-// ✨ IMPORTANTE: Añadimos los imports de los servicios y la nueva pantalla nya~
-import '../services/publications_service.dart'; 
+import '../services/publications_service.dart';
 import 'publication_detail_screen.dart'; 
 
 class BuildingDetailScreen extends StatefulWidget {
@@ -36,7 +36,6 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
     super.dispose();
   }
 
-  // ✨ FUNCIÓN MÁGICA PARA ABRIR LA PUBLICACIÓN UwU ✨
   Future<void> _openPublication(String title) async {
     showDialog(
       context: context,
@@ -73,7 +72,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
       
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('No s\'ha pogut trobar aquesta publicació 🥺'),
+          content: Text('No s\'ha pogut trobar aquesta publicació.'),
           backgroundColor: Color(0xFFE41E26),
         ),
       );
@@ -135,19 +134,9 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final building = widget.building;
+    final ubicacion = widget.miUbicacion;
 
-    String distanciaPorDefecto = '0.6 Km';
-
-    if (widget.miUbicacion != null && building.latitude != 0) {
-      double distanciaMetros = Geolocator.distanceBetween(
-        widget.miUbicacion!.latitude,
-        widget.miUbicacion!.longitude,
-        building.latitude,
-        building.longitude,
-      );
-      double distanciaKm = distanciaMetros / 1000;
-      distanciaPorDefecto = "${distanciaKm.toStringAsFixed(1)} Km";
-    }
+    String distanciaPorDefecto = getDistancia(ubicacion, building, context);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -398,9 +387,8 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                       ),
                     ),
 
-                  const SizedBox(height: 16), // Espaciadito bonito (◕‿◕✿)
+                  const SizedBox(height: 16),
 
-                  // 6. ¡AQUÍ ESTÁ TU NUEVO DESPLEGABLE DE USOS! ✨
                   if (building.usos.isNotEmpty)
                     Theme(
                       data: Theme.of(
@@ -430,7 +418,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                             ),
                           ),
                           leading: const Icon(
-                            Icons.domain_rounded, // ¡Iconito de edificio! UwU
+                            Icons.domain_rounded,
                             color: Color(0xFFE41E26),
                           ),
                           children: building.usos.map((uso) {
@@ -475,8 +463,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          // Mandamos el mensajito secreto de regreso UwU
-          Navigator.pop(context, 'show_map'); 
+          Navigator.pop(context, 'show_map');
         },
         backgroundColor: const Color(0xFFE41E26),
         elevation: 4,
@@ -489,7 +476,6 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
     );
   }
 
-  // --- WIDGETS AUXILIARES ---
 
   Widget _buildSectionHeader(String title, {VoidCallback? onInfo}) {
     return Row(
@@ -695,7 +681,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(30), // Más redondeado
+        borderRadius: BorderRadius.circular(30),
         border: Border.all(color: color.withValues(alpha: 0.2)),
       ),
       child: Row(

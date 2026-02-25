@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import '../models/building_model.dart';
 
@@ -9,7 +10,7 @@ class BuildingService {
   factory BuildingService() => _instance;
   BuildingService._internal();
 
-  static const String _baseUrl = 'https://projecte-de-innovacio.onrender.com';
+  static final String _baseUrl = dotenv.env["API_URL"] ?? "Error";
 
   // 2. Memoria Caché: Aquí guardaremos los edificios para no perderlos
   List<Buildings> cacheEdificios = [];

@@ -14,7 +14,6 @@ class BuildingDetailController {
     currentImageIndex.value = index;
   }
 
-  // Ejemplo de lógica futura: Abrir ubicación en Google Maps Aún falta hacerla del todo
   Future<void> openMap() async {
     debugPrint("Abriendo mapa para: ${building.name}");
   }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:globus_vermell_app/providers/language_provider.dart';
-import 'package:globus_vermell_app/screens/botton_bar.dart';
+import 'package:globus_vermell_app/screens/bottom_bar.dart';
 import 'package:globus_vermell_app/providers/theme_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';

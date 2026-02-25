@@ -6,6 +6,7 @@ import 'package:latlong2/latlong.dart';
 import '../models/building_model.dart';
 import '../controllers/building_list_controller.dart';
 import '../models/publication_model.dart';
+import '../utils/get_distancia.dart';
 import 'building_detail_screen.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -132,7 +133,7 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
   @override
   void dispose() {
     _scrollController.dispose();
-    _mapController.dispose(); // No olvidemos limpiar el mapita UwU
+    _mapController.dispose();
     super.dispose();
   }
 
@@ -341,7 +342,6 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
                 height: 50,
                 child: GestureDetector(
                   onTap: () async {
-                    // ✨ ¡TAMBIÉN LO PONEMOS AQUÍ POR SI ESTÁS EN EL MAPA! UwU ✨
                     final result = await Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -479,18 +479,8 @@ class _BuildingCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String distancia = '0.6 Km'; // Valor por defecto
+    String distancia = getDistancia(miUbicacion, edificio, context);
 
-    if (miUbicacion != null && edificio.latitude != 0) {
-      double distanciaMetros = Geolocator.distanceBetween(
-        miUbicacion!.latitude,
-        miUbicacion!.longitude,
-        edificio.latitude,
-        edificio.longitude,
-      );
-      double distanciaKm = distanciaMetros / 1000;
-      distancia = "${distanciaKm.toStringAsFixed(1)} Km";
-    }
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       elevation: 2,

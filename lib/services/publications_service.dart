@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import '../models/publication_model.dart';
 
@@ -8,7 +9,7 @@ class PublicationService {
   factory PublicationService() => _instance;
   PublicationService._internal();
 
-  static const String _baseUrl = 'https://projecte-de-innovacio.onrender.com';
+  static final String _baseUrl = dotenv.env["API_URL"] ?? "Error";
 
   Future<List<Publication>> getPublications() async {
     try {
