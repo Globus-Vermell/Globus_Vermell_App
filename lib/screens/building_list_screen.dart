@@ -8,7 +8,6 @@ import '../controllers/building_list_controller.dart';
 import '../models/publication_model.dart';
 import '../utils/get_distancia.dart';
 import 'building_detail_screen.dart';
-import 'package:geolocator/geolocator.dart';
 
 class ListaEdificacionesScreen extends StatefulWidget {
   const ListaEdificacionesScreen({super.key});

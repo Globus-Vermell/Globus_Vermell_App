@@ -3,7 +3,6 @@ import 'package:globus_vermell_app/utils/get_distancia.dart';
 import 'package:latlong2/latlong.dart';
 import '../models/building_model.dart';
 import '../controllers/building_detail_controller.dart';
-import 'package:geolocator/geolocator.dart';
 import '../services/publications_service.dart';
 import 'publication_detail_screen.dart'; 
 
