@@ -135,7 +135,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
     final building = widget.building;
     final ubicacion = widget.miUbicacion;
 
-    String distanciaPorDefecto = getDistancia(ubicacion, building, context);
+    String distanciaPorDefecto = getDistancia(ubicacion, building);
 
     return Scaffold(
       backgroundColor: Colors.white,

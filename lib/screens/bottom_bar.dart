@@ -5,14 +5,14 @@ import '../utils/lang_extensions.dart';
 import 'building_list_screen.dart';
 import 'themes_screen.dart';
 
-class BottonBar extends StatefulWidget {
-  const BottonBar({super.key});
+class BottomBar extends StatefulWidget {
+  const BottomBar({super.key});
 
   @override
-  State<BottonBar> createState() => BottonBarState();
+  State<BottomBar> createState() => BottomBarState();
 }
 
-class BottonBarState extends State<BottonBar> {
+class BottomBarState extends State<BottomBar> {
   int _selectedIndex = 0;
   void _onItemTapped(int index) {
     setState(() {

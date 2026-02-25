@@ -478,7 +478,7 @@ class _BuildingCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String distancia = getDistancia(miUbicacion, edificio, context);
+    String distancia = getDistancia(miUbicacion, edificio);
 
     return Card(
       margin: const EdgeInsets.only(bottom: 12),

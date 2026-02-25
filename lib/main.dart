@@ -50,7 +50,7 @@ class MisEdificiosApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      home: const BottonBar(),
+      home: const BottomBar(),
     );
   }
 }

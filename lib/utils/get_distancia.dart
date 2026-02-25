@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import '../models/building_model.dart';
@@ -6,7 +5,6 @@ import '../models/building_model.dart';
 String getDistancia(
     LatLng? ubicacion,
     Buildings edificio,
-    BuildContext context,
     ){
   String distancia = '0.6 Km';
 
