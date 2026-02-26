@@ -70,50 +70,74 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
             ),
             child: Material(
               color: Colors.transparent,
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxHeight: MediaQuery.of(context).size.height * 0.5,
-                ),
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  padding: EdgeInsets.zero,
-                  itemCount: _publicacionesFiltro.length,
-                  itemBuilder: (context, index) {
-                    final pub = _publicacionesFiltro[index];
-
-                    return ListTile(
-                      title: Text(
-                        pub.title,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      onTap: () {
-                        Navigator.pop(context);
-                        _filtrarPorPublicacion(pub.idPublication);
-                      },
-                      trailing: IconButton(
-                        icon: const Icon(
-                          Icons.info_outline,
-                          color: Color(0xFFE41E26),
-                          size: 20,
-                        ),
-                        tooltip: 'Veure publicació',
-                        onPressed: () {
-                          Navigator.pop(context);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  PublicationDetailScreen(publication: pub),
+              child: Column(
+                mainAxisSize: MainAxisSize.min, 
+                children: [
+                  ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxHeight: MediaQuery.of(context).size.height * 0.45,
+                    ),
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      padding: EdgeInsets.zero,
+                      itemCount: _publicacionesFiltro.length,
+                      itemBuilder: (context, index) {
+                        final pub = _publicacionesFiltro[index];
+                        return ListTile(
+                          title: Text(
+                            pub.title,
+                            style: const TextStyle(fontSize: 14),
+                          ),
+                          onTap: () {
+                            Navigator.pop(context);
+                            _filtrarPorPublicacion(pub.idPublication);
+                          },
+                          trailing: IconButton(
+                            icon: const Icon(
+                              Icons.info_outline,
+                              color: Color(0xFFE41E26),
+                              size: 20,
                             ),
-                          );
-                        },
+                            tooltip: 'Veure publicació',
+                            onPressed: () {
+                              Navigator.pop(context);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      PublicationDetailScreen(publication: pub),
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0, right: 4.0),
+                    child: Align(
+                      alignment: Alignment.centerRight, 
+                      child: TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        style: TextButton.styleFrom(
+                          backgroundColor: const Color(0xFFE41E26), 
+                          foregroundColor: Colors.white, 
+                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                        child: Text(
+                          context.loc.close, 
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
