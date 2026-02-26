@@ -1,5 +1,10 @@
 {
   "@@locale": "ca",
+  "languageEnglish": "Anglès",
+  "languageSpanish": "Castellà",
+  "languageCatalan": "Català",
+  "languageFrench": "Francès",
+  "languageArabic": "Àrab",
   "settings": "Configuració",
   "darkMode": "Mode Fosc",
   "highContrast": "Alt Contrast",
@@ -34,5 +39,7 @@
   "connectionError": "Error de connexió. Revisa el teu internet.",
   "pubNotFound": "No s'ha pogut trobar aquesta publicació.",
   "noPublicationsAvailable": "No hi ha publicacions disponibles",
-  "viewMore": "Veure més"
+  "viewMore": "Veure més",
+  "close": "Tancar",
+  "me": "Jo"
 }

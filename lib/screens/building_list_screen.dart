@@ -49,7 +49,7 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
     showGeneralDialog(
       context: context,
       barrierDismissible: true,
-      barrierLabel: 'Tancar',
+      barrierLabel: context.loc.close,
       transitionDuration: const Duration(milliseconds: 300),
       pageBuilder: (context, anim1, anim2) {
         return Align(
@@ -435,11 +435,11 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
                 point: _controller.miUbicacion,
                 width: 60,
                 height: 60,
-                child: const Column(
+                child:  Column(
                   children: [
                     Icon(Icons.person_pin_circle, color: Colors.blue, size: 40),
                     Text(
-                      "Jo",
+                      context.loc.me,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.blue,

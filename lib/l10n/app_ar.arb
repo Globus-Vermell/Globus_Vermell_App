@@ -1,5 +1,10 @@
 {
   "@@locale": "ar",
+  "languageEnglish": "الإنجليزية",
+  "languageSpanish": "الإسبانية",
+  "languageCatalan": "الكتالونية",
+  "languageFrench": "الفرنسية",
+  "languageArabic": "العربية",
   "settings": "الإعدادات",
   "darkMode": "الوضع الداكن",
   "highContrast": "تباين عالٍ",
@@ -34,5 +39,7 @@
   "connectionError": "خطأ في الاتصال. تحقق من الإنترنت.",
   "pubNotFound": "تعذر العثور على هذا المنشور.",
   "noPublicationsAvailable": "لا توجد منشورات متاحة",
-  "viewMore": "عرض المزيد"
+  "viewMore": "عرض المزيد",
+  "close": "إغلاق",
+  "me": "أنا"
 }

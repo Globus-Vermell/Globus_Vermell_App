@@ -86,23 +86,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
         leading: const Icon(Icons.language),
         children: [
           ListTile(
-            title: const Text("Español"),
+            title: Text(context.loc.languageSpanish),
             onTap: () => langProvider.changeLanguage('es'),
           ),
           ListTile(
-            title: const Text("Català"),
+            title: Text(context.loc.languageCatalan),
             onTap: () => langProvider.changeLanguage('ca'),
           ),
           ListTile(
-            title: const Text("English"),
+            title: Text(context.loc.languageEnglish),
             onTap: () => langProvider.changeLanguage('en'),
           ),
           ListTile(
-            title: const Text("Francés"),
+            title: Text(context.loc.languageFrench),
             onTap: () => langProvider.changeLanguage('fr'),
           ),
           ListTile(
-            title: const Text("Árabe"),
+            title: Text(context.loc.languageArabic),
             onTap: () => langProvider.changeLanguage('ar'),
           ),
         ],

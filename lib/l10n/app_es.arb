@@ -1,5 +1,10 @@
 {
   "@@locale": "es",
+  "languageEnglish": "Inglés",
+  "languageSpanish": "Español",
+  "languageCatalan": "Catalán",
+  "languageFrench": "Francés",
+  "languageArabic": "Árabe",
   "settings": "Configuración",
   "darkMode": "Modo Oscuro",
   "highContrast": "Alto Contraste",
@@ -34,5 +39,7 @@
   "connectionError": "Error de conexión. Revisa tu internet.",
   "pubNotFound": "No se ha podido encontrar esta publicación.",
   "noPublicationsAvailable": "No hay publicaciones disponibles",
-  "viewMore": "Ver más"
+  "viewMore": "Ver más",
+  "close": "Cerrar",
+  "me": "Yo"
 }

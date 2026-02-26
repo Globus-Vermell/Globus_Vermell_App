@@ -1,5 +1,10 @@
 {
   "@@locale": "en",
+  "languageEnglish": "English",
+  "languageSpanish": "Spanish",
+  "languageCatalan": "Catalan",
+  "languageFrench": "French",
+  "languageArabic": "Arabic",
   "settings": "Settings",
   "darkMode": "Dark Mode",
   "highContrast": "High Contrast",
@@ -34,5 +39,7 @@
   "connectionError": "Connection error. Check your internet.",
   "pubNotFound": "Could not find this publication.",
   "noPublicationsAvailable": "No publications available",
-  "viewMore": "View more"
+  "viewMore": "View more",
+  "close": "Close",
+  "me": "Me"
 }
