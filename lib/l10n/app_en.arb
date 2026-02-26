@@ -28,5 +28,11 @@
   "understood": "Got it",
   "stages": "STAGES",
   "thematicArchitecture": "THEMATIC ARCHITECTURE",
-  "neighborhoods": "NEIGHBORHOODS"
+  "neighborhoods": "NEIGHBORHOODS",
+  "themesTitle": "THEMES",
+  "noDescription": "No description available",
+  "connectionError": "Connection error. Check your internet.",
+  "pubNotFound": "Could not find this publication.",
+  "noPublicationsAvailable": "No publications available",
+  "viewMore": "View more"
 }

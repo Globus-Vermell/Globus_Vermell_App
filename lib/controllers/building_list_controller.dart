@@ -59,7 +59,8 @@ class BuildingListController {
       return newBuildings;
     } catch (e) {
       _isLoading = false;
-      return [];
+      _hasMoreData = false;
+      rethrow;
     }
   }
 
@@ -110,7 +111,8 @@ class BuildingListController {
       return gpsBuildings;
     } catch (e) {
       _isLoading = false;
-      return [];
+      _hasMoreData = false;
+      rethrow;
     }
   }
 
@@ -139,7 +141,8 @@ class BuildingListController {
       return filteredBuildings;
     } catch (e) {
       _isLoading = false;
-      return [];
+      _hasMoreData = false;
+      rethrow;
     }
   }
 }

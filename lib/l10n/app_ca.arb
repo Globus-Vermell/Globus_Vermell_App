@@ -28,6 +28,12 @@
   "understood": "Entesos",
   "stages": "ETAPES",
   "thematicArchitecture": "ARQUITECTURA TEMÀTICA",
-  "neighborhoods": "BARRIS"
+  "neighborhoods": "BARRIS",
+  "themesTitle": "TEMES",
+  "noDescription": "Sense descripció disponible",
+  "connectionError": "Error de connexió. Revisa el teu internet.",
+  "pubNotFound": "No s'ha pogut trobar aquesta publicació.",
+  "noPublicationsAvailable": "No hi ha publicacions disponibles",
+  "viewMore": "Veure més"
 
 }

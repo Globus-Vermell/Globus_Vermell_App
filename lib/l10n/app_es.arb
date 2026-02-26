@@ -28,5 +28,11 @@
   "understood": "Entendido",
   "stages": "ETAPAS",
   "thematicArchitecture": "ARQUITECTURA TEMÁTICA",
-  "neighborhoods": "BARRIOS"
+  "neighborhoods": "BARRIOS",
+  "themesTitle": "TEMAS",
+  "noDescription": "Sin descripción disponible",
+  "connectionError": "Error de conexión. Revisa tu internet.",
+  "pubNotFound": "No se ha podido encontrar esta publicación.",
+  "noPublicationsAvailable": "No hay publicaciones disponibles",
+  "viewMore": "Ver más"
 }

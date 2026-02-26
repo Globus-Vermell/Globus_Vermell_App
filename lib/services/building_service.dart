@@ -66,7 +66,7 @@ class BuildingService {
       }
     } catch (e) {
       debugPrint(" Error fetching data: $e");
-      return [];
+      throw Exception('NetworkError');
     }
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/publication_model.dart';
+import '../utils/lang_extensions.dart';
 
 class PublicationDetailScreen extends StatelessWidget {
   final Publication publication;
@@ -62,7 +63,7 @@ class PublicationDetailScreen extends StatelessWidget {
                   children: [
                     // 2. TEMAS
                     if (publication.themes.isNotEmpty) ...[
-                      _buildSectionHeader("TEMES"),
+                      _buildSectionHeader(context.loc.themesTitle),
                       const SizedBox(height: 16),
                       Wrap(
                         spacing: 10,
@@ -80,7 +81,7 @@ class PublicationDetailScreen extends StatelessWidget {
                     ],
 
                     // 3. DESCRIPCIÓN
-                    _buildSectionHeader("DESCRIPCIÓ"),
+                    _buildSectionHeader(context.loc.description),
                     const SizedBox(height: 16),
 
                     (publication.description.isNotEmpty)
@@ -109,7 +110,7 @@ class PublicationDetailScreen extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 12),
                                 Text(
-                                  "Sense descripció disponible",
+                                  context.loc.noDescription,
                                   style: TextStyle(
                                     color: Colors.grey[500],
                                     fontStyle: FontStyle.italic,

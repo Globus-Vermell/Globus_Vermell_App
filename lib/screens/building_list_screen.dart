@@ -23,7 +23,7 @@ class ListaEdificacionesScreen extends StatefulWidget {
 class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
   final BuildingListController _controller = BuildingListController();
   final ScrollController _scrollController = ScrollController();
-  
+
   final MapController _mapController = MapController();
 
   final List<Buildings> _edificios = [];
@@ -57,7 +57,7 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
         return Align(
           alignment: Alignment.topCenter,
           child: Container(
-            margin: const EdgeInsets.only(top: 275, left: 16, right: 16), 
+            margin: const EdgeInsets.only(top: 275, left: 16, right: 16),
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
               color: Colors.white,
@@ -67,14 +67,14 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
                   color: Colors.black.withValues(alpha: 0.1),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
-                )
+                ),
               ],
             ),
             child: Material(
               color: Colors.transparent,
               child: ConstrainedBox(
                 constraints: BoxConstraints(
-                  maxHeight: MediaQuery.of(context).size.height * 0.5, 
+                  maxHeight: MediaQuery.of(context).size.height * 0.5,
                 ),
                 child: ListView.builder(
                   shrinkWrap: true,
@@ -86,7 +86,10 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
                     return ListTile(
                       title: Text(
                         pub.title,
-                        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                       onTap: () {
                         Navigator.pop(context);
@@ -100,13 +103,12 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
                         ),
                         tooltip: 'Veure publicació',
                         onPressed: () {
-                          Navigator.pop(context); 
+                          Navigator.pop(context);
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => PublicationDetailScreen(
-                                publication: pub, 
-                              ),
+                              builder: (context) =>
+                                  PublicationDetailScreen(publication: pub),
                             ),
                           );
                         },
@@ -122,13 +124,10 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
       transitionBuilder: (context, anim1, anim2, child) {
         return SlideTransition(
           position: Tween<Offset>(
-            begin: const Offset(0, -0.1), 
+            begin: const Offset(0, -0.1),
             end: Offset.zero,
           ).animate(CurvedAnimation(parent: anim1, curve: Curves.easeOut)),
-          child: FadeTransition(
-            opacity: anim1,
-            child: child,
-          ),
+          child: FadeTransition(opacity: anim1, child: child),
         );
       },
     );
@@ -136,46 +135,94 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
 
   Future<void> _cargarDatosIniciales() async {
     setState(() => _cargando = true);
-    final iniciales = await _controller.getInitialData();
-    final publicaciones = await _controller.obtenerPublicacionesParaFiltro();
-    if (mounted) {
-      setState(() {
-        _edificios.addAll(iniciales);
-        _publicacionesFiltro = publicaciones;
-        _cargando = false;
-      });
+    try {
+      final iniciales = await _controller.getInitialData();
+      final publicaciones = await _controller.obtenerPublicacionesParaFiltro();
+      if (mounted) {
+        setState(() {
+          _edificios.addAll(iniciales);
+          _publicacionesFiltro = publicaciones;
+          _cargando = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _cargando = false;
+        });
+        if (mounted) {
+          setState(() {
+            _cargando = false;
+          });
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(context.loc.connectionError),
+              backgroundColor: const Color(0xFFFF0009),
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+        }
+      }
     }
   }
 
   Future<void> _filtrarPorPublicacion(int idPublicacion) async {
     setState(() => _cargando = true);
 
-    final filtrados = await _controller.aplicarFiltro(idPublicacion);
+    try{
+      final filtrados = await _controller.aplicarFiltro(idPublicacion);
 
-    if (mounted) {
-      setState(() {
-        _edificios.clear();
-        _edificios.addAll(filtrados);
-        _cargando = false;
-      });
+      if (mounted) {
+        setState(() {
+          _edificios.clear();
+          _edificios.addAll(filtrados);
+          _cargando = false;
+        });
+      }
+    }catch (e){
+      if (mounted) {
+        setState(() {
+          _cargando = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(context.loc.connectionError),
+            backgroundColor: const Color(0xFFFF0009),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
     }
   }
 
   Future<void> _cargarMasEdificios() async {
     setState(() => _cargando = true);
-    final nuevos = await _controller.fetchNextPage();
-
-    if (mounted) {
-      setState(() {
-        _edificios.addAll(nuevos);
-        _cargando = false;
-      });
+    try {
+      final nuevos = await _controller.fetchNextPage();
+      if (mounted) {
+        setState(() {
+          _edificios.addAll(nuevos);
+          _cargando = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _cargando = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(context.loc.connectionError),
+            backgroundColor: const Color(0xFFFF0009),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
     }
   }
 
   Future<void> _usarGPS() async {
     setState(() => _cargando = true);
-
     final edificiosCercanos = await _controller.activarGPS();
 
     if (!mounted) return;
@@ -191,10 +238,7 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
     if (edificiosCercanos.isNotEmpty) {
       final String mensaje = context.loc.locationUpdated;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(mensaje),
-          behavior: SnackBarBehavior.floating,
-        ),
+        SnackBar(content: Text(mensaje), behavior: SnackBarBehavior.floating),
       );
     }
   }
@@ -352,7 +396,7 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
 
             if (result == 'show_map') {
               setState(() => _vistaLista = false);
-              
+
               // Le damos un poquitito de tiempo al mapa para que cargue en pantalla
               Future.delayed(const Duration(milliseconds: 300), () {
                 if (edificio.latitude != 0 && edificio.longitude != 0) {
@@ -430,7 +474,7 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
                     if (result == 'show_map') {
                       setState(() => _vistaLista = false);
                       Future.delayed(const Duration(milliseconds: 300), () {
-                         _mapController.move(
+                        _mapController.move(
                           LatLng(edificio.latitude, edificio.longitude),
                           17.0,
                         );
@@ -586,9 +630,9 @@ class _BuildingCard extends StatelessWidget {
                     ? ClipRRect(
                         borderRadius: BorderRadius.circular(8),
                         child: CachedNetworkImage(
-                          imageUrl:  edificio.images.first,
+                          imageUrl: edificio.images.first,
                           fit: BoxFit.cover,
-                          errorWidget: (context,url, error,) {
+                          errorWidget: (context, url, error) {
                             return Icon(
                               Icons.broken_image,
                               color: Colors.grey[400],

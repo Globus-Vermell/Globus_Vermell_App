@@ -72,9 +72,9 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
       }
       
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('No s\'ha pogut trobar aquesta publicació.'),
-          backgroundColor: Color(0xFFE41E26),
+        SnackBar(
+          content: Text(context.loc.pubNotFound),
+          backgroundColor: const Color(0xFFE41E26),
         ),
       );
     }
@@ -284,7 +284,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                   const SizedBox(height: 16),
 
                   (building.description.isNotEmpty &&
-                          building.description != 'Sense descripció disponible')
+                          building.description != context.loc.noDescription)
                       ? Text(
                           building.description,
                           textAlign: TextAlign.justify,
@@ -310,7 +310,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                               ),
                               const SizedBox(height: 12),
                               Text(
-                                "Sense descripció disponible",
+                                context.loc.noDescription,
                                 style: TextStyle(
                                   color: Colors.grey[500],
                                   fontStyle: FontStyle.italic,

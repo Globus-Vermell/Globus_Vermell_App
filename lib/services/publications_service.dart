@@ -32,7 +32,7 @@ class PublicationService {
       }
     } catch (e) {
       debugPrint("Error fetching publications: $e");
-      return [];
+      throw Exception('NetworkError');
     }
   }
 }

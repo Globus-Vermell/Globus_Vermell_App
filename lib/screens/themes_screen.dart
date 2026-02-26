@@ -177,7 +177,7 @@ class _ThemesScreenState extends State<ThemesScreen> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Text(
-                          'Veure més',
+                          context.loc.viewMore,
                           style: TextStyle(
                             color: Colors.red[400],
                             fontWeight: FontWeight.bold,
@@ -215,7 +215,7 @@ class _ThemesScreenState extends State<ThemesScreen> {
       ),
       child: Center(
         child: Text(
-          'No hi ha publicacions disponibles',
+          context.loc.noPublicationsAvailable,
           style: TextStyle(
             color: Colors.grey[400],
             fontSize: 14,
