@@ -238,16 +238,16 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                     spacing: 10,
                     runSpacing: 10,
                     children: [
-                      if (building.typologyName != null)
+                      if (building.typologyName.isNotEmpty)
                         _buildInfoChip(
                           Icons.category,
-                          building.typologyName!,
+                          building.typologyName,
                           Colors.blue,
                         ),
-                      if (building.protectionName != null)
+                      if (building.protectionName.isNotEmpty)
                         _buildInfoChip(
                           Icons.security,
-                          building.protectionName!,
+                          building.protectionName,
                           Colors.orange,
                         ),
                       _buildInfoChip(

@@ -9,8 +9,8 @@ class Buildings {
   final int idProtection;
   final bool validate;
   final List<String> images;
-  final String? typologyName;
-  final String? protectionName;
+  final String typologyName;
+  final String protectionName;
 
   final double latitude;
   final double longitude;
@@ -33,8 +33,8 @@ class Buildings {
     required this.idProtection,
     required this.validate,
     this.images = const [],
-    this.typologyName,
-    this.protectionName,
+    this.typologyName = '',
+    this.protectionName = '',
     this.latitude = 0.0,
     this.longitude = 0.0,
     this.usos = const [],
@@ -59,14 +59,14 @@ class Buildings {
       }
     }
 
-    String? extractedTypology;
+    String extractedTypology = '';
     if (map['typologies'] != null && map['typologies'] is Map) {
       extractedTypology = map['typologies']['name'];
     } else if (map['typologyName'] != null) {
       extractedTypology = map['typologyName'];
     }
 
-    String? extractedProtection;
+    String extractedProtection = '';
     if (map['protections'] != null && map['protections'] is Map) {
       extractedProtection = map['protections']['level'];
     } else if (map['protectionName'] != null) {
@@ -102,7 +102,7 @@ class Buildings {
     );
   }
 
-  static List<String> _parseList(dynamic input) {
+  static List<String> _parseList(Object? input) {
     if (input == null) return [];
     if (input is! List) return [];
     return input
@@ -116,7 +116,6 @@ class Buildings {
           return '';
         })
         .where((item) => item.isNotEmpty)
-        .toList()
-        .cast<String>();
+        .toList();
   }
 }

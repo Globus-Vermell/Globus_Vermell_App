@@ -97,6 +97,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
             title: const Text("English"),
             onTap: () => langProvider.changeLanguage('en'),
           ),
+          ListTile(
+            title: const Text("Francés"),
+            onTap: () => langProvider.changeLanguage('fr'),
+          ),
+          ListTile(
+            title: const Text("Árabe"),
+            onTap: () => langProvider.changeLanguage('ar'),
+          ),
         ],
       ),
     );
