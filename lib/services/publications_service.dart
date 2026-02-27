@@ -9,12 +9,14 @@ class PublicationService {
   factory PublicationService() => _instance;
   PublicationService._internal();
 
+  http.Client client = http.Client();
+
   static final String _baseUrl = dotenv.env["API_URL"] ?? "Error";
 
   Future<List<Publication>> getPublications() async {
     try {
       final url = Uri.parse('$_baseUrl/publications/api/list');
-      final response = await http.get(url);
+      final response = await client.get(url);
 
       if (response.statusCode == 200) {
         // 1. Decodificamos la caja completa (el JSON)
@@ -27,8 +29,7 @@ class PublicationService {
         // 3. Convertimos cada item de la lista en un objeto Publication
         return listaJson.map((json) => Publication.fromMap(json)).toList();
       } else {
-        debugPrint("Ups! Error del servidor: ${response.statusCode}");
-        return [];
+        throw Exception('Error del servidor: ${response.statusCode}');
       }
     } catch (e) {
       debugPrint("Error fetching publications: $e");

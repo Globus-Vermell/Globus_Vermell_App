@@ -10,8 +10,9 @@ class BuildingService {
   factory BuildingService() => _instance;
   BuildingService._internal();
 
-  static final String _baseUrl = dotenv.env["API_URL"] ?? "Error";
+  http.Client client = http.Client();
 
+  static final String _baseUrl = dotenv.env["API_URL"] ?? "Error";
   // 2. Memoria Caché: Aquí guardaremos los edificios para no perderlos
   List<Buildings> cacheEdificios = [];
   bool primeraPaginaCargada = false; // Para saber si ya hicimos la pre-carga
@@ -28,7 +29,6 @@ class BuildingService {
     }
 
     try {
-      // 1. Primero construimos el TEXTO de la URL (String)
       String urlString = '$_baseUrl/buildings/api/list?page=$page';
 
       if (latitude != null && longitude != null) {
@@ -39,13 +39,10 @@ class BuildingService {
         urlString += '&publication=$publicationId';
       }
 
-
-      // 3. convertimos el texto a URI
       final url = Uri.parse(urlString);
       debugPrint("Llamando a la API: $url");
 
-      // 4.  la llamada
-      final response = await http.get(url);
+      final response = await client.get(url);
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
