@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import '../models/building_model.dart';
@@ -14,9 +16,34 @@ class BuildingListController {
 
   LatLng miUbicacion = const LatLng(0, 0);
   int publicationFiltro = 0;
+  StreamSubscription<Position>? _posicionReal;
 
   bool get hasMoreData => _hasMoreData;
   bool get isLoading => _isLoading;
+
+  Future<void> iniciarSeguimientoGPS(Function(LatLng) enNuevaUbicacion) async {
+    LocationPermission permission = await Geolocator.checkPermission();
+
+    if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
+      return;
+    }
+    _posicionReal?.cancel();
+
+    _posicionReal = Geolocator.getPositionStream(
+      locationSettings: const LocationSettings(
+        accuracy: LocationAccuracy.high,
+        distanceFilter: 10,
+      ),
+    ).listen((Position position) {
+      miUbicacion = LatLng(position.latitude, position.longitude);
+      enNuevaUbicacion(miUbicacion);
+    });
+  }
+
+  //Método de seguro para apagar el seguimiento
+  void detenerSeguimiento() {
+    _posicionReal?.cancel();
+  }
 
   Future<List<Buildings>> getInitialData() async {
     if (_service.primeraPaginaCargada && publicationFiltro == 0) {

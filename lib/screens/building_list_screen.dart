@@ -245,28 +245,55 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
 
   Future<void> _usarGPS() async {
     setState(() => _cargando = true);
-    final edificiosCercanos = await _controller.activarGPS();
 
-    if (!mounted) return;
+    try {
+      final edificiosCercanos = await _controller.activarGPS();
+      if (!mounted) return;
 
-    setState(() {
-      _edificios.clear();
-      _edificios.addAll(edificiosCercanos);
-      _cargando = false;
-    });
-    if (!_vistaLista && _controller.miUbicacion.latitude != 0) {
-      _mapController.move(_controller.miUbicacion, 17.0);
-    }
-    if (edificiosCercanos.isNotEmpty) {
-      final String mensaje = context.loc.locationUpdated;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(mensaje), behavior: SnackBarBehavior.floating),
-      );
+      setState(() {
+        _edificios.clear();
+        _edificios.addAll(edificiosCercanos);
+        _cargando = false;
+      });
+
+      if (!_vistaLista && _controller.miUbicacion.latitude != 0) {
+        _mapController.move(_controller.miUbicacion, 17.0);
+      }
+
+      _controller.iniciarSeguimientoGPS((nuevaUbicacion) {
+        if (mounted) {
+          setState(() {});
+          if (!_vistaLista) {
+            _mapController.move(nuevaUbicacion, _mapController.camera.zoom);
+           }
+        }
+      });
+
+      if (edificiosCercanos.isNotEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(context.loc.locationUpdated),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => _cargando = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(context.loc.connectionError),
+            backgroundColor: const Color(0xFFF61820),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
     }
   }
 
   @override
   void dispose() {
+    _controller.detenerSeguimiento();
     _scrollController.dispose();
     _mapController.dispose();
     super.dispose();
