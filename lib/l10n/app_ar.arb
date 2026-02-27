@@ -1,5 +1,6 @@
 {
   "@@locale": "ar",
+  "actual": "العربية",
   "languageEnglish": "الإنجليزية",
   "languageSpanish": "الإسبانية",
   "languageCatalan": "الكتالونية",
@@ -41,5 +42,6 @@
   "noPublicationsAvailable": "لا توجد منشورات متاحة",
   "viewMore": "عرض المزيد",
   "close": "إغلاق",
-  "me": "أنا"
+  "me": "أنا",
+  "aboutApp": "حول التطبيق"
 }

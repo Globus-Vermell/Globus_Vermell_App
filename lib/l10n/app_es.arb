@@ -1,5 +1,6 @@
 {
   "@@locale": "es",
+  "actual": "Español",
   "languageEnglish": "Inglés",
   "languageSpanish": "Español",
   "languageCatalan": "Catalán",
@@ -41,5 +42,6 @@
   "noPublicationsAvailable": "No hay publicaciones disponibles",
   "viewMore": "Ver más",
   "close": "Cerrar",
-  "me": "Yo"
+  "me": "Yo",
+  "aboutApp": "Acerca de la app"
 }
