@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:globus_vermell_app/utils/lang_extensions.dart';
 

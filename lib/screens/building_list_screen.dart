@@ -3,273 +3,79 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:globus_vermell_app/utils/lang_extensions.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:provider/provider.dart';
 import '../models/building_model.dart';
 import '../controllers/building_list_controller.dart';
-import '../models/publication_model.dart';
 import '../utils/get_distancia.dart';
 import 'building_detail_screen.dart';
 import 'publication_detail_screen.dart';
 
-class ListaEdificacionesScreen extends StatefulWidget {
-  const ListaEdificacionesScreen({super.key});
+class BuildingsListScreen extends StatefulWidget {
+  const BuildingsListScreen({super.key});
 
   @override
-  State<ListaEdificacionesScreen> createState() =>
-      _ListaEdificacionesScreenState();
+  State<BuildingsListScreen> createState() => _BuildingsListScreenState();
 }
 
-class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
-  final BuildingListController _controller = BuildingListController();
+class _BuildingsListScreenState extends State<BuildingsListScreen> {
   final ScrollController _scrollController = ScrollController();
-
   final MapController _mapController = MapController();
 
-  final List<Buildings> _edificios = [];
-  List<Publication> _publicacionesFiltro = [];
-
-  bool _cargando = false;
   bool _vistaLista = false;
 
   @override
   void initState() {
     super.initState();
-    _cargarDatosIniciales();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _cargarDatosIniciales();
+    });
 
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels >=
-          _scrollController.position.maxScrollExtent - 200) {
-        if (!_cargando && _controller.hasMoreData && _vistaLista) {
+      if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
+        final controller = context.read<BuildingListController>();
+        if (!controller.isLoading && controller.hasMoreData && _vistaLista) {
           _cargarMasEdificios();
         }
       }
     });
   }
 
-  void _mostrarMenuPublicaciones() {
-    showGeneralDialog(
-      context: context,
-      barrierDismissible: true,
-      barrierLabel: context.loc.close,
-      transitionDuration: const Duration(milliseconds: 300),
-      pageBuilder: (context, anim1, anim2) {
-        return Align(
-          alignment: Alignment.topCenter,
-          child: Container(
-            margin: const EdgeInsets.only(top: 275, left: 16, right: 16),
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.1),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: Material(
-              color: Colors.transparent,
-              child: Column(
-                mainAxisSize: MainAxisSize.min, 
-                children: [
-                  ConstrainedBox(
-                    constraints: BoxConstraints(
-                      maxHeight: MediaQuery.of(context).size.height * 0.45,
-                    ),
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      padding: EdgeInsets.zero,
-                      itemCount: _publicacionesFiltro.length,
-                      itemBuilder: (context, index) {
-                        final pub = _publicacionesFiltro[index];
-                        return ListTile(
-                          title: Text(
-                            pub.title,
-                            style: const TextStyle(fontSize: 14),
-                          ),
-                          onTap: () {
-                            Navigator.pop(context);
-                            _filtrarPorPublicacion(pub.idPublication);
-                          },
-                          trailing: IconButton(
-                            icon: const Icon(
-                              Icons.info_outline,
-                              color: Color(0xFFE41E26),
-                              size: 20,
-                            ),
-                            tooltip: 'Veure publicació',
-                            onPressed: () {
-                              Navigator.pop(context);
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      PublicationDetailScreen(publication: pub),
-                                ),
-                              );
-                            },
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8.0, right: 4.0),
-                    child: Align(
-                      alignment: Alignment.centerRight, 
-                      child: TextButton(
-                        onPressed: () => Navigator.pop(context),
-                        style: TextButton.styleFrom(
-                          backgroundColor: const Color(0xFFE41E26), 
-                          foregroundColor: Colors.white, 
-                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        ),
-                        child: Text(
-                          context.loc.close, 
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-      transitionBuilder: (context, anim1, anim2, child) {
-        return SlideTransition(
-          position: Tween<Offset>(
-            begin: const Offset(0, -0.1),
-            end: Offset.zero,
-          ).animate(CurvedAnimation(parent: anim1, curve: Curves.easeOut)),
-          child: FadeTransition(opacity: anim1, child: child),
-        );
-      },
-    );
-  }
-
   Future<void> _cargarDatosIniciales() async {
-    setState(() => _cargando = true);
     try {
-      final iniciales = await _controller.getInitialData();
-      final publicaciones = await _controller.obtenerPublicacionesParaFiltro();
-      if (mounted) {
-        setState(() {
-          _edificios.addAll(iniciales);
-          _publicacionesFiltro = publicaciones;
-          _cargando = false;
-        });
-      }
+      await context.read<BuildingListController>().cargarDatosIniciales();
     } catch (e) {
-      if (mounted) {
-        setState(() {
-          _cargando = false;
-        });
-        if (mounted) {
-          setState(() {
-            _cargando = false;
-          });
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(context.loc.connectionError),
-              backgroundColor: const Color(0xFFFF0009),
-              behavior: SnackBarBehavior.floating,
-            ),
-          );
-        }
-      }
+      if (mounted) _mostrarErrorRed();
     }
   }
 
   Future<void> _filtrarPorPublicacion(int idPublicacion) async {
-    setState(() => _cargando = true);
-
-    try{
-      final filtrados = await _controller.aplicarFiltro(idPublicacion);
-
-      if (mounted) {
-        setState(() {
-          _edificios.clear();
-          _edificios.addAll(filtrados);
-          _cargando = false;
-        });
-      }
-    }catch (e){
-      if (mounted) {
-        setState(() {
-          _cargando = false;
-        });
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(context.loc.connectionError),
-            backgroundColor: const Color(0xFFFF0009),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-      }
+    try {
+      await context.read<BuildingListController>().aplicarFiltro(idPublicacion);
+    } catch (e) {
+      if (mounted) _mostrarErrorRed();
     }
   }
 
   Future<void> _cargarMasEdificios() async {
-    setState(() => _cargando = true);
     try {
-      final nuevos = await _controller.fetchNextPage();
-      if (mounted) {
-        setState(() {
-          _edificios.addAll(nuevos);
-          _cargando = false;
-        });
-      }
+      await context.read<BuildingListController>().fetchNextPage();
     } catch (e) {
-      if (mounted) {
-        setState(() {
-          _cargando = false;
-        });
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(context.loc.connectionError),
-            backgroundColor: const Color(0xFFFF0009),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-      }
+      if (mounted) _mostrarErrorRed();
     }
   }
 
   Future<void> _usarGPS() async {
-    setState(() => _cargando = true);
-
+    final controller = context.read<BuildingListController>();
     try {
-      final edificiosCercanos = await _controller.activarGPS();
+      await controller.activarGPS();
       if (!mounted) return;
 
-      setState(() {
-        _edificios.clear();
-        _edificios.addAll(edificiosCercanos);
-        _cargando = false;
-      });
-
-      if (!_vistaLista && _controller.miUbicacion.latitude != 0) {
-        _mapController.move(_controller.miUbicacion, 17.0);
+      if (!_vistaLista && controller.location.latitude != 0) {
+        _mapController.move(controller.location, 17.0);
       }
 
-      _controller.iniciarSeguimientoGPS((nuevaUbicacion) {
-        if (mounted) {
-          setState(() {});
-          if (!_vistaLista) {
-            _mapController.move(nuevaUbicacion, _mapController.camera.zoom);
-           }
-        }
-      });
-
-      if (edificiosCercanos.isNotEmpty) {
+      if (controller.buildings.isNotEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(context.loc.locationUpdated),
@@ -278,22 +84,23 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
         );
       }
     } catch (e) {
-      if (mounted) {
-        setState(() => _cargando = false);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(context.loc.connectionError),
-            backgroundColor: const Color(0xFFF61820),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-      }
+      if (mounted) _mostrarErrorRed();
     }
+  }
+
+  void _mostrarErrorRed() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(context.loc.connectionError),
+        backgroundColor: const Color(0xFFE41E26),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
   }
 
   @override
   void dispose() {
-    _controller.detenerSeguimiento();
+    context.read<BuildingListController>().detenerSeguimiento();
     _scrollController.dispose();
     _mapController.dispose();
     super.dispose();
@@ -301,30 +108,26 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final controller = context.watch<BuildingListController>();
+
     return Scaffold(
       appBar: AppBar(
-        title: Column(
+        title: const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
-              'Globus Vermell',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
+            Text('Globus Vermell', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _cargando ? null : _usarGPS,
+        onPressed: controller.isLoading ? null : _usarGPS,
         backgroundColor: const Color(0xFFE41E26),
-        child: _cargando
+        child: controller.isLoading
             ? const Padding(
-                padding: EdgeInsets.all(12.0),
-                child: CircularProgressIndicator(
-                  color: Colors.white,
-                  strokeWidth: 2,
-                ),
-              )
+          padding: EdgeInsets.all(12.0),
+          child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+        )
             : const Icon(Icons.my_location, color: Colors.white),
       ),
       body: Column(
@@ -354,16 +157,13 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 8.0,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: Row(
               children: [
                 Expanded(
                   child: _buildFiltro(
                     texto: context.loc.all,
-                    isSelected: _controller.publicationFiltro == 0,
+                    isSelected: controller.publicationFilter == 0,
                     onTap: () => _filtrarPorPublicacion(0),
                   ),
                 ),
@@ -373,8 +173,8 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
                   child: _buildFiltro(
                     texto: context.loc.publications,
                     icono: Icons.keyboard_arrow_down_rounded,
-                    isSelected: _controller.publicationFiltro != 0,
-                    onTap: _mostrarMenuPublicaciones,
+                    isSelected: controller.publicationFilter != 0,
+                    onTap: () => _mostrarMenuPublicaciones(controller),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -395,64 +195,128 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
             child: Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                '${_edificios.length} ${context.loc.buildingsByDistance}',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey[700],
-                  fontWeight: FontWeight.w500,
-                ),
+                '${controller.buildings.length} ${context.loc.buildingsByDistance}',
+                style: TextStyle(fontSize: 14, color: Colors.grey[700], fontWeight: FontWeight.w500),
               ),
             ),
           ),
           const SizedBox(height: 12),
-          Expanded(child: _vistaLista ? _construirLista() : _construirMapa()),
+          Expanded(child: _vistaLista ? _construirLista(controller) : _construirMapa(controller)),
         ],
       ),
     );
   }
 
-  Widget _construirLista() {
-    if (_edificios.isEmpty && _cargando) {
+  void _mostrarMenuPublicaciones(BuildingListController controller) {
+    showGeneralDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: context.loc.close,
+      transitionDuration: const Duration(milliseconds: 300),
+      pageBuilder: (context, anim1, anim2) {
+        return Align(
+          alignment: Alignment.topCenter,
+          child: Container(
+            margin: const EdgeInsets.only(top: 275, left: 16, right: 16),
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 10, offset: const Offset(0, 4))],
+            ),
+            child: Material(
+              color: Colors.transparent,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ConstrainedBox(
+                    constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.45),
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      padding: EdgeInsets.zero,
+                      itemCount: controller.publicationsFilter.length,
+                      itemBuilder: (context, index) {
+                        final pub = controller.publicationsFilter[index];
+                        return ListTile(
+                          title: Text(pub.title, style: const TextStyle(fontSize: 14)),
+                          onTap: () {
+                            Navigator.pop(context);
+                            _filtrarPorPublicacion(pub.idPublication);
+                          },
+                          trailing: IconButton(
+                            icon: const Icon(Icons.info_outline, color: Color(0xFFE41E26), size: 20),
+                            onPressed: () {
+                              Navigator.pop(context);
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => PublicationDetailScreen(publication: pub)));
+                            },
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0, right: 4.0),
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        style: TextButton.styleFrom(
+                          backgroundColor: const Color(0xFFE41E26),
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                        ),
+                        child: Text(context.loc.close, style: const TextStyle(fontWeight: FontWeight.bold)),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+      transitionBuilder: (context, anim1, anim2, child) {
+        return SlideTransition(
+          position: Tween<Offset>(begin: const Offset(0, -0.1), end: Offset.zero)
+              .animate(CurvedAnimation(parent: anim1, curve: Curves.easeOut)),
+          child: FadeTransition(opacity: anim1, child: child),
+        );
+      },
+    );
+  }
+
+  Widget _construirLista(BuildingListController controller) {
+    if (controller.buildings.isEmpty && controller.isLoading) {
       return const Center(child: CircularProgressIndicator());
     }
     return ListView.builder(
       controller: _scrollController,
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      itemCount: _edificios.length + (_controller.hasMoreData ? 1 : 0),
+      itemCount: controller.buildings.length + (controller.hasMoreData ? 1 : 0),
       itemBuilder: (context, index) {
-        if (index == _edificios.length) {
-          return const Padding(
-            padding: EdgeInsets.all(20.0),
-            child: Center(child: CircularProgressIndicator()),
-          );
+        if (index == controller.buildings.length) {
+          return const Padding(padding: EdgeInsets.all(20.0), child: Center(child: CircularProgressIndicator()));
         }
 
-        final edificio = _edificios[index];
+        final edificio = controller.buildings[index];
 
         return _BuildingCard(
           edificio: edificio,
-          miUbicacion: _controller.miUbicacion,
+          miUbicacion: controller.location,
           onTap: () async {
             final result = await Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => BuildingDetailScreen(
-                  building: edificio,
-                  miUbicacion: _controller.miUbicacion,
-                ),
+                builder: (context) => BuildingDetailScreen(building: edificio, miUbicacion: controller.location),
               ),
             );
 
             if (result == 'show_map') {
               setState(() => _vistaLista = false);
-
-              // Le damos un poquitito de tiempo al mapa para que cargue en pantalla
               Future.delayed(const Duration(milliseconds: 300), () {
                 if (edificio.latitude != 0 && edificio.longitude != 0) {
-                  _mapController.move(
-                    LatLng(edificio.latitude, edificio.longitude),
-                    17.0,
-                  );
+                  _mapController.move(LatLng(edificio.latitude, edificio.longitude), 17.0);
                 }
               });
             }
@@ -462,12 +326,11 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
     );
   }
 
-  Widget _construirMapa() {
-    LatLng centro = _controller.miUbicacion;
+  Widget _construirMapa(BuildingListController controller) {
+    LatLng centro = controller.location;
     if (centro.latitude == 0 && centro.longitude == 0) {
-      //El centro del mapa será el edificio más cercano o en su defecto el centro de Barcelona.
-      centro = _edificios.isNotEmpty && _edificios.first.latitude != 0
-          ? LatLng(_edificios.first.latitude, _edificios.first.longitude)
+      centro = controller.buildings.isNotEmpty && controller.buildings.first.latitude != 0
+          ? LatLng(controller.buildings.first.latitude, controller.buildings.first.longitude)
           : const LatLng(41.3879, 2.16992);
     }
 
@@ -481,25 +344,19 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
         ),
         MarkerLayer(
           markers: [
-            if (_controller.miUbicacion.latitude != 0)
+            if (controller.location.latitude != 0)
               Marker(
-                point: _controller.miUbicacion,
+                point: controller.location,
                 width: 60,
                 height: 60,
-                child:  Column(
+                child: Column(
                   children: [
-                    Icon(Icons.person_pin_circle, color: Colors.blue, size: 40),
-                    Text(
-                      context.loc.me,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blue,
-                      ),
-                    ),
+                    const Icon(Icons.person_pin_circle, color: Colors.blue, size: 40),
+                    Text(context.loc.me, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.blue)),
                   ],
                 ),
               ),
-            ..._edificios.map((edificio) {
+            ...controller.buildings.map((edificio) {
               if (edificio.latitude == 0 && edificio.longitude == 0) {
                 return const Marker(point: LatLng(0, 0), child: SizedBox());
               }
@@ -513,28 +370,18 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
                     final result = await Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => BuildingDetailScreen(
-                          building: edificio,
-                          miUbicacion: _controller.miUbicacion,
-                        ),
+                        builder: (context) => BuildingDetailScreen(building: edificio, miUbicacion: controller.location),
                       ),
                     );
 
                     if (result == 'show_map') {
                       setState(() => _vistaLista = false);
                       Future.delayed(const Duration(milliseconds: 300), () {
-                        _mapController.move(
-                          LatLng(edificio.latitude, edificio.longitude),
-                          17.0,
-                        );
+                        _mapController.move(LatLng(edificio.latitude, edificio.longitude), 17.0);
                       });
                     }
                   },
-                  child: const Icon(
-                    Icons.location_on,
-                    color: Color(0xFFE41E26),
-                    size: 40,
-                  ),
+                  child: const Icon(Icons.location_on, color: Color(0xFFE41E26), size: 40),
                 ),
               );
             }),
@@ -544,12 +391,7 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
     );
   }
 
-  Widget _buildFiltro({
-    required String texto,
-    IconData? icono,
-    required bool isSelected,
-    required VoidCallback onTap,
-  }) {
+  Widget _buildFiltro({required String texto, IconData? icono, required bool isSelected, required VoidCallback onTap}) {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(30),
@@ -558,31 +400,16 @@ class _ListaEdificacionesScreenState extends State<ListaEdificacionesScreen> {
         decoration: BoxDecoration(
           color: isSelected ? Colors.primaries[0] : Colors.white,
           borderRadius: BorderRadius.circular(30),
-          border: Border.all(
-            color: isSelected
-                ? Colors.primaries[0]
-                : Colors.grey.withValues(alpha: 0.3),
-          ),
+          border: Border.all(color: isSelected ? Colors.primaries[0] : Colors.grey.withValues(alpha: 0.3)),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             if (icono != null) ...[
-              Icon(
-                icono,
-                size: 16,
-                color: isSelected ? Colors.white : Colors.black87,
-              ),
+              Icon(icono, size: 16, color: isSelected ? Colors.white : Colors.black87),
               const SizedBox(width: 6),
             ],
-            Text(
-              texto,
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-                color: isSelected ? Colors.white : Colors.black87,
-              ),
-            ),
+            Text(texto, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: isSelected ? Colors.white : Colors.black87)),
           ],
         ),
       ),
@@ -640,8 +467,8 @@ class _ToggleButton extends StatelessWidget {
   }
 }
 
-class _BuildingCard extends StatelessWidget {
-  final Buildings edificio;
+class _BuildingCard extends StatefulWidget {
+  final Building edificio;
   final VoidCallback onTap;
   final LatLng? miUbicacion;
 
@@ -652,8 +479,13 @@ class _BuildingCard extends StatelessWidget {
   });
 
   @override
+  State<_BuildingCard> createState() => _BuildingCardState();
+}
+
+class _BuildingCardState extends State<_BuildingCard> {
+  @override
   Widget build(BuildContext context) {
-    String distancia = getDistancia(miUbicacion, edificio);
+    String distancia = getDistancia(widget.miUbicacion, widget.edificio);
 
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
@@ -661,7 +493,7 @@ class _BuildingCard extends StatelessWidget {
       shadowColor: Colors.black.withValues(alpha: 0.1),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: InkWell(
-        onTap: onTap,
+        onTap: widget.onTap,
         borderRadius: BorderRadius.circular(12),
         child: Padding(
           padding: const EdgeInsets.all(12.0),
@@ -675,36 +507,36 @@ class _BuildingCard extends StatelessWidget {
                   color: Colors.grey[200],
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: (edificio.images.isNotEmpty)
+                child: (widget.edificio.images.isNotEmpty)
                     ? ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: CachedNetworkImage(
-                          imageUrl: edificio.images.first,
-                          fit: BoxFit.cover,
-                          errorWidget: (context, url, error) {
-                            return Icon(
-                              Icons.broken_image,
-                              color: Colors.grey[400],
-                            );
-                          },
-                          placeholder: (context, url) {
-                            return const Center(
-                              child: SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      )
-                    : Icon(
-                        Icons.image_outlined,
+                  borderRadius: BorderRadius.circular(8),
+                  child: CachedNetworkImage(
+                    imageUrl: widget.edificio.images.first,
+                    fit: BoxFit.cover,
+                    errorWidget: (context, url, error) {
+                      return Icon(
+                        Icons.broken_image,
                         color: Colors.grey[400],
-                        size: 40,
-                      ),
+                      );
+                    },
+                    placeholder: (context, url) {
+                      return const Center(
+                        child: SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                )
+                    : Icon(
+                  Icons.image_outlined,
+                  color: Colors.grey[400],
+                  size: 40,
+                ),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -712,7 +544,7 @@ class _BuildingCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      edificio.name,
+                      widget.edificio.name,
                       style: const TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.bold,
@@ -723,7 +555,7 @@ class _BuildingCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      edificio.location,
+                      widget.edificio.location,
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.grey[700],
@@ -743,18 +575,18 @@ class _BuildingCard extends StatelessWidget {
                         const SizedBox(width: 4),
                         Expanded(
                           child: Text(
-                            (edificio.publications.isNotEmpty)
-                                ? edificio.publications.first
+                            (widget.edificio.publications.isNotEmpty)
+                                ? widget.edificio.publications.first
                                 : context.loc.noPublication,
                             style: TextStyle(
                               fontSize: 13,
-                              color: (edificio.publications.isNotEmpty)
+                              color: (widget.edificio.publications.isNotEmpty)
                                   ? const Color.fromARGB(255, 0, 0, 0)
                                   : Colors.grey[700],
-                              fontWeight: (edificio.publications.isNotEmpty)
+                              fontWeight: (widget.edificio.publications.isNotEmpty)
                                   ? FontWeight.bold
                                   : FontWeight.normal,
-                              fontStyle: (edificio.publications.isNotEmpty)
+                              fontStyle: (widget.edificio.publications.isNotEmpty)
                                   ? FontStyle.normal
                                   : FontStyle.italic,
                             ),

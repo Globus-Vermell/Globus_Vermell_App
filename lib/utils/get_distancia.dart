@@ -4,7 +4,7 @@ import '../models/building_model.dart';
 
 String getDistancia(
     LatLng? ubicacion,
-    Buildings edificio,
+    Building edificio,
     ){
   String distancia = '0.6 Km';
 

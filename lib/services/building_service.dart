@@ -14,10 +14,10 @@ class BuildingService {
 
   static final String _baseUrl = dotenv.env["API_URL"] ?? "Error";
   // 2. Memoria Caché: Aquí guardaremos los edificios para no perderlos
-  List<Buildings> cacheEdificios = [];
+  List<Building> cacheEdificios = [];
   bool primeraPaginaCargada = false; // Para saber si ya hicimos la pre-carga
 
-  Future<List<Buildings>> getBuildings({
+  Future<List<Building>> getBuildings({
     int page = 1,
     bool forceRefresh = false,
     double? latitude,
@@ -29,7 +29,7 @@ class BuildingService {
     }
 
     try {
-      String urlString = '$_baseUrl/buildings/api/list?page=$page';
+      String urlString = '$_baseUrl/buildings/api/list?page=$page&limit=100';
 
       if (latitude != null && longitude != null) {
         urlString += '&lat=$latitude&long=$longitude';
@@ -49,7 +49,7 @@ class BuildingService {
         final List<dynamic> listaJson = data['buildings'];
 
         final nuevosEdificios = listaJson.map((mapa) {
-          return Buildings.fromMap(mapa);
+          return Building.fromMap(mapa);
         }).toList();
 
         if (page == 1) {

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:globus_vermell_app/screens/settings_screen.dart';
+import 'package:provider/provider.dart';
+import '../controllers/building_list_controller.dart';
 import '../utils/lang_extensions.dart';
 import 'building_list_screen.dart';
 import 'themes_screen.dart';
@@ -20,7 +22,10 @@ class BottomBarState extends State<BottomBar> {
   }
 
   final List<Widget> _widgetOptions = <Widget>[
-    const ListaEdificacionesScreen(),
+    ChangeNotifierProvider(
+      create: (_) => BuildingListController(),
+      child: const BuildingsListScreen(),
+    ),
     const ThemesScreen(),
     const SettingsScreen(),
   ];
@@ -28,7 +33,10 @@ class BottomBarState extends State<BottomBar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _widgetOptions[_selectedIndex],
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: _widgetOptions,
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.map), label: context.loc.map,),

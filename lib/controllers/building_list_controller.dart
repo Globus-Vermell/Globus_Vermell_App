@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import '../models/building_model.dart';
@@ -7,169 +7,170 @@ import '../models/publication_model.dart';
 import '../services/building_service.dart';
 import '../services/publications_service.dart';
 
-class BuildingListController {
+class BuildingListController extends ChangeNotifier {
   final BuildingService _service = BuildingService();
 
+  List<Building> buildings = [];
+  List<Publication> publicationsFilter = [];
+  bool isLoading = false;
+  int publicationFilter = 0;
+  LatLng location = const LatLng(0, 0);
+  bool hasMoreData = true;
   int _currentPage = 1;
-  bool _hasMoreData = true;
-  bool _isLoading = false;
+  StreamSubscription<Position>? _realPosition;
 
-  LatLng miUbicacion = const LatLng(0, 0);
-  int publicationFiltro = 0;
-  StreamSubscription<Position>? _posicionReal;
+  Future<void> cargarDatosIniciales() async {
+    isLoading = true;
+    notifyListeners();
 
-  bool get hasMoreData => _hasMoreData;
-  bool get isLoading => _isLoading;
-
-  Future<void> iniciarSeguimientoGPS(Function(LatLng) enNuevaUbicacion) async {
-    LocationPermission permission = await Geolocator.checkPermission();
-
-    if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
-      return;
-    }
-    _posicionReal?.cancel();
-
-    _posicionReal = Geolocator.getPositionStream(
-      locationSettings: const LocationSettings(
-        accuracy: LocationAccuracy.high,
-        distanceFilter: 10,
-      ),
-    ).listen((Position position) {
-      miUbicacion = LatLng(position.latitude, position.longitude);
-      enNuevaUbicacion(miUbicacion);
-    });
-  }
-
-  //Método de seguro para apagar el seguimiento
-  void detenerSeguimiento() {
-    _posicionReal?.cancel();
-  }
-
-  Future<List<Buildings>> getInitialData() async {
-    if (_service.primeraPaginaCargada && publicationFiltro == 0) {
-      _currentPage = 2;
-      if (_service.cacheEdificios.isEmpty) {
-        _hasMoreData = false;
-      }
-      return _service.cacheEdificios;
-    } else {
-      return await fetchNextPage();
-    }
-  }
-
-  Future<List<Publication>> obtenerPublicacionesParaFiltro() async {
     try {
-      return await PublicationService().getPublications();
+      publicationsFilter = await PublicationService().getPublications();
+
+      if (_service.primeraPaginaCargada && publicationFilter == 0) {
+        _currentPage = 2;
+        buildings = List.from(_service.cacheEdificios);
+        if (buildings.isEmpty) hasMoreData = false;
+      } else {
+        final newBuildings = await _service.getBuildings(
+          page: _currentPage,
+          publicationId: publicationFilter == 0 ? null : publicationFilter,
+        );
+        if (newBuildings.isEmpty) {
+          hasMoreData = false;
+        } else {
+          _currentPage++;
+          buildings.addAll(newBuildings);
+        }
+      }
     } catch (e) {
-      return [];
+      rethrow;
+    } finally {
+      isLoading = false;
+      notifyListeners();
     }
   }
 
-  Future<List<Buildings>> fetchNextPage() async {
-    if (_isLoading || !_hasMoreData) return [];
+  Future<void> fetchNextPage() async {
+    if (isLoading || !hasMoreData) return;
 
-    _isLoading = true;
+    isLoading = true;
+    notifyListeners();
 
     try {
       final newBuildings = await _service.getBuildings(
         page: _currentPage,
-        publicationId: publicationFiltro == 0 ? null : publicationFiltro,
+        publicationId: publicationFilter == 0 ? null : publicationFilter,
       );
 
       if (newBuildings.isEmpty) {
-        _hasMoreData = false;
+        hasMoreData = false;
       } else {
         _currentPage++;
+        buildings.addAll(newBuildings);
       }
-
-      _isLoading = false;
-      return newBuildings;
     } catch (e) {
-      _isLoading = false;
-      _hasMoreData = false;
+      hasMoreData = false;
       rethrow;
+    } finally {
+      isLoading = false;
+      notifyListeners();
     }
   }
 
-  Future<List<Buildings>> activarGPS() async {
-    _isLoading = true;
-
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        _isLoading = false;
-        return [];
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      _isLoading = false;
-      return [];
-    }
-
-    try {
-      Position position = await Geolocator.getCurrentPosition(
-        locationSettings: const LocationSettings(
-          accuracy: LocationAccuracy.high,
-        ),
-      );
-
-      miUbicacion = LatLng(position.latitude, position.longitude);
-
-      _currentPage = 1;
-      _hasMoreData = true;
-
-      final gpsBuildings = await _service.getBuildings(
-        page: 1,
-        latitude: position.latitude,
-        longitude: position.longitude,
-        publicationId: publicationFiltro == 0 ? null : publicationFiltro,
-        forceRefresh: true,
-      );
-
-      if (gpsBuildings.isNotEmpty) {
-        _currentPage++;
-      } else {
-        _hasMoreData = false;
-      }
-
-      _isLoading = false;
-      return gpsBuildings;
-    } catch (e) {
-      _isLoading = false;
-      _hasMoreData = false;
-      rethrow;
-    }
-  }
-
-  Future<List<Buildings>> aplicarFiltro(int? idPublicacion) async {
-    _isLoading = true;
-    publicationFiltro = idPublicacion ?? 0;
+  Future<void> aplicarFiltro(int idPublicacion) async {
+    isLoading = true;
+    publicationFilter = idPublicacion;
     _currentPage = 1;
-    _hasMoreData = true;
+    hasMoreData = true;
+    buildings.clear();
+    notifyListeners();
 
     try {
       final filteredBuildings = await _service.getBuildings(
         page: 1,
-        publicationId: publicationFiltro == 0 ? null : publicationFiltro,
-        latitude: miUbicacion.latitude == 0.0 ? null : miUbicacion.latitude,
-        longitude: miUbicacion.longitude == 0.0 ? null : miUbicacion.longitude,
+        publicationId: publicationFilter == 0 ? null : publicationFilter,
+        latitude: location.latitude == 0.0 ? null : location.latitude,
+        longitude: location.longitude == 0.0 ? null : location.longitude,
         forceRefresh: true,
       );
 
       if (filteredBuildings.isNotEmpty) {
         _currentPage++;
+        buildings.addAll(filteredBuildings);
       } else {
-        _hasMoreData = false;
+        hasMoreData = false;
+      }
+    } catch (e) {
+      hasMoreData = false;
+      rethrow;
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> activarGPS() async {
+    isLoading = true;
+    notifyListeners();
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
+        isLoading = false;
+        notifyListeners();
+        return;
+      }
+    }
+
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+        locationSettings: const LocationSettings(accuracy: LocationAccuracy.high),
+      );
+
+      location = LatLng(position.latitude, position.longitude);
+      _currentPage = 1;
+      hasMoreData = true;
+      buildings.clear();
+
+      final gpsBuildings = await _service.getBuildings(
+        page: 1,
+        latitude: position.latitude,
+        longitude: position.longitude,
+        publicationId: publicationFilter == 0 ? null : publicationFilter,
+        forceRefresh: true,
+      );
+
+      if (gpsBuildings.isNotEmpty) {
+        _currentPage++;
+        buildings.addAll(gpsBuildings);
+      } else {
+        hasMoreData = false;
       }
 
-      _isLoading = false;
-      return filteredBuildings;
+      iniciarSeguimientoGPS();
     } catch (e) {
-      _isLoading = false;
-      _hasMoreData = false;
+      hasMoreData = false;
       rethrow;
+    } finally {
+      isLoading = false;
+      notifyListeners();
     }
+  }
+
+  void iniciarSeguimientoGPS() async {
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) return;
+
+    _realPosition?.cancel();
+    _realPosition = Geolocator.getPositionStream(
+      locationSettings: const LocationSettings(accuracy: LocationAccuracy.high, distanceFilter: 10),
+    ).listen((Position position) {
+      location = LatLng(position.latitude, position.longitude);
+      notifyListeners();
+    });
+  }
+
+  void detenerSeguimiento() {
+    _realPosition?.cancel();
   }
 }

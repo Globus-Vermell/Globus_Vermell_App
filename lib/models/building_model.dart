@@ -1,4 +1,4 @@
-class Buildings {
+class Building {
   final int idBuilding;
   final String name;
   final String location;
@@ -20,9 +20,9 @@ class Buildings {
   final List<String> prizes;
   final List<String> publications;
 
-  final List<String> usos;
+  final List<String> uses;
 
-  Buildings({
+  Building({
     required this.idBuilding,
     required this.name,
     required this.location,
@@ -37,14 +37,14 @@ class Buildings {
     this.protectionName = '',
     this.latitude = 0.0,
     this.longitude = 0.0,
-    this.usos = const [],
+    this.uses = const [],
     this.architects = const [],
     this.reforms = const [],
     this.prizes = const [],
     this.publications = const [],
   });
 
-  factory Buildings.fromMap(Map<String, dynamic> map) {
+  factory Building.fromMap(Map<String, dynamic> map) {
     List<String> extractedImages = [];
     if (map['building_images'] != null) {
       if (map['building_images'] is List) {
@@ -73,7 +73,7 @@ class Buildings {
       extractedProtection = map['protectionName'];
     }
 
-    return Buildings(
+    return Building(
       idBuilding: map['id_building'] ?? 0,
       name: map['name'] ?? 'Sin nombre',
       location: map['location'] ?? 'Sin ubicación',
@@ -85,7 +85,7 @@ class Buildings {
       validate: map['validated'] ?? false,
       images: extractedImages,
       typologyName: extractedTypology,
-      usos: _parseList(map['usos']),
+      uses: _parseList(map['usos']),
       protectionName: extractedProtection,
 
       latitude: (map['latitude'] != null)

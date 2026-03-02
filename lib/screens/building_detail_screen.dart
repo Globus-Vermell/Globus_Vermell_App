@@ -9,7 +9,7 @@ import '../utils/lang_extensions.dart';
 import 'publication_detail_screen.dart';
 
 class BuildingDetailScreen extends StatefulWidget {
-  final Buildings building;
+  final Building building;
   final LatLng? miUbicacion;
 
   const BuildingDetailScreen({
@@ -390,7 +390,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
 
                   const SizedBox(height: 16),
 
-                  if (building.usos.isNotEmpty)
+                  if (building.uses.isNotEmpty)
                     Theme(
                       data: Theme.of(
                         context,
@@ -422,7 +422,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                             Icons.domain_rounded,
                             color: Color(0xFFE41E26),
                           ),
-                          children: building.usos.map((uso) {
+                          children: building.uses.map((uso) {
                             return Padding(
                               padding: const EdgeInsets.only(
                                 bottom: 12,
@@ -518,7 +518,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
     );
   }
 
-  Widget _buildSliverAppBar(Buildings building, String distanciaPorDefecto) {
+  Widget _buildSliverAppBar(Building building, String distanciaPorDefecto) {
     return SliverAppBar(
       expandedHeight: 320.0,
       pinned: true,

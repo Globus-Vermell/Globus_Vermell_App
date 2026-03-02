@@ -72,7 +72,7 @@ void main() {
       );
       final result = await service.getBuildings(page: 1);
 
-      expect(result, isA<List<Buildings>>());
+      expect(result, isA<List<Building>>());
       expect(result.length, 2, reason: 'Debe haber dos edificios');
       expect(result.first.name,
           'Edificio de Prueba',

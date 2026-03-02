@@ -29,13 +29,25 @@ class _ThemesScreenState extends State<ThemesScreen> {
   }
 
   Future<void> _loadData() async {
-    final data = await _controller.getOrganizedPublications();
-
-    if (mounted) {
-      setState(() {
-        _organizedData = data;
-        _isLoading = false;
-      });
+    try {
+      final data = await _controller.getOrganizedPublications();
+      if (mounted) {
+        setState(() {
+          _organizedData = data;
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => _isLoading = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(context.loc.connectionError),
+            backgroundColor: const Color(0xFFFF0009),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
     }
   }
 

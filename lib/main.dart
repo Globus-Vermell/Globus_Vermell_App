@@ -7,6 +7,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:globus_vermell_app/l10n/app_localizations.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 

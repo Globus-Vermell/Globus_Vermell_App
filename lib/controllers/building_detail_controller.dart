@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/building_model.dart';
 
 class BuildingDetailController {
-  final Buildings building;
+  final Building building;
 
   // Estado para saber qué imagen del carrusel estamos viendo
   final ValueNotifier<int> currentImageIndex = ValueNotifier(0);

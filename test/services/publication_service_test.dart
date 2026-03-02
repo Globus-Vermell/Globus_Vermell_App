@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter_test/flutter_test.dart';
+import 'package:globus_vermell_app/models/publication_model.dart';
 import 'package:globus_vermell_app/services/publications_service.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:http/http.dart' as http;
@@ -34,7 +37,38 @@ void main() {
         throwsA(isA<Exception>()),
       );
     });
-    //Test de su correcto funcionamiento del servidor.
+    test('Debe retornar una lista de Publications cuando la API devuelve un Response 200', () async {
+      final mockResponse = {
+        'publications': [
+          {
+            'id_publication': 1,
+            'title': 'Publicació de Prueba',
+            'description': 'Una descripción',
+            'themes': ['Tema 1', 'Tema 2'],
+            'publication_edition': '2023'
+          },
+          {
+            'id_publication': 2,
+            'title': 'Publicació de Prueba 2',
+            'description': 'Una descripción',
+            'themes': ['Tema 1', 'Tema 2'],
+            'publication_edition': '2025'
+          }
+        ]
+      };
 
+      when(() => mockHttpClient.get(any())).thenAnswer(
+            (_) async => http.Response(jsonEncode(mockResponse), 200),
+      );
+      final result = await service.getPublications();
+
+      expect(result, isA<List<Publication>>());
+      expect(result.length, 2, reason: 'Debe haber dos edificios');
+      expect(result.first.title,
+          'Publicació de Prueba',
+          reason: 'La primera publicació debe llamarse Publicació de Prueba');
+      expect(result.last.idPublication, 2,
+          reason: 'El último edificio debe tener el ID 2');
+    });
   });
 }
