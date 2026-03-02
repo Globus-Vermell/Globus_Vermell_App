@@ -1,20 +1,19 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import '../models/building_model.dart';
-import '../utils/get_distancia.dart';
+import '../utils/get_distance.dart';
 import '../utils/lang_extensions.dart';
 
 class BuildingCard extends StatefulWidget {
-  final Building edificio;
+  final Building building;
   final VoidCallback onTap;
-  final LatLng? miUbicacion;
+  final LatLng? location;
 
   const BuildingCard({super.key,
-    required this.edificio,
+    required this.building,
     required this.onTap,
-    required this.miUbicacion,
+    required this.location,
   });
 
   @override
@@ -24,7 +23,7 @@ class BuildingCard extends StatefulWidget {
 class _BuildingCardState extends State<BuildingCard> {
   @override
   Widget build(BuildContext context) {
-    String distancia = getDistancia(widget.miUbicacion, widget.edificio);
+    String distance = getDistance(widget.location, widget.building);
 
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
@@ -46,11 +45,11 @@ class _BuildingCardState extends State<BuildingCard> {
                   color: Colors.grey[200],
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: (widget.edificio.images.isNotEmpty)
+                child: (widget.building.images.isNotEmpty)
                     ? ClipRRect(
                   borderRadius: BorderRadius.circular(8),
                   child: CachedNetworkImage(
-                    imageUrl: widget.edificio.images.first,
+                    imageUrl: widget.building.images.first,
                     fit: BoxFit.cover,
                     errorWidget: (context, url, error) {
                       return Icon(
@@ -83,7 +82,7 @@ class _BuildingCardState extends State<BuildingCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      widget.edificio.name,
+                      widget.building.name,
                       style: const TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.bold,
@@ -94,7 +93,7 @@ class _BuildingCardState extends State<BuildingCard> {
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      widget.edificio.location,
+                      widget.building.location,
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.grey[700],
@@ -114,18 +113,18 @@ class _BuildingCardState extends State<BuildingCard> {
                         const SizedBox(width: 4),
                         Expanded(
                           child: Text(
-                            (widget.edificio.publications.isNotEmpty)
-                                ? widget.edificio.publications.first
+                            (widget.building.publications.isNotEmpty)
+                                ? widget.building.publications.first
                                 : context.loc.noPublication,
                             style: TextStyle(
                               fontSize: 13,
-                              color: (widget.edificio.publications.isNotEmpty)
+                              color: (widget.building.publications.isNotEmpty)
                                   ? const Color.fromARGB(255, 0, 0, 0)
                                   : Colors.grey[700],
-                              fontWeight: (widget.edificio.publications.isNotEmpty)
+                              fontWeight: (widget.building.publications.isNotEmpty)
                                   ? FontWeight.bold
                                   : FontWeight.normal,
-                              fontStyle: (widget.edificio.publications.isNotEmpty)
+                              fontStyle: (widget.building.publications.isNotEmpty)
                                   ? FontStyle.normal
                                   : FontStyle.italic,
                             ),
@@ -141,7 +140,7 @@ class _BuildingCardState extends State<BuildingCard> {
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          distancia,
+                          distance,
                           style: TextStyle(
                             fontSize: 13,
                             color: Colors.grey[700],

@@ -100,7 +100,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
               trailing: const Icon(Icons.chevron_right, color: Colors.grey),
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => hola()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => AboutAppScreen()));
               },
             ),
           ],

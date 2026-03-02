@@ -37,7 +37,7 @@ dcm:
     source-lines-of-code: 50        # Límite de líneas de código fuente por método.
 
   metrics-exclude:
-    - test/**
+    - test/**/*.dart
     - lib/**/*.g.dart               # Excluye archivos autogenerados (ej. json_serializable).
     - lib/**/*.freezed.dart         # Excluye archivos generados por freezed.
 

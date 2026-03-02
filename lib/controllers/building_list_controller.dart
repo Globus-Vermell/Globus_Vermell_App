@@ -26,9 +26,9 @@ class BuildingListController extends ChangeNotifier {
     try {
       publicationsFilter = await PublicationService().getPublications();
 
-      if (_service.primeraPaginaCargada && publicationFilter == 0) {
+      if (_service.firstPageLoading && publicationFilter == 0) {
         _currentPage = 2;
-        buildings = List.from(_service.cacheEdificios);
+        buildings = List.from(_service.buildingsCache);
         if (buildings.isEmpty) hasMoreData = false;
       } else {
         final newBuildings = await _service.getBuildings(

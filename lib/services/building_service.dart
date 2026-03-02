@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import '../models/building_model.dart';
@@ -14,8 +15,8 @@ class BuildingService {
 
   static final String _baseUrl = dotenv.env["API_URL"] ?? "Error";
   // 2. Memoria Caché: Aquí guardaremos los edificios para no perderlos
-  List<Building> cacheEdificios = [];
-  bool primeraPaginaCargada = false; // Para saber si ya hicimos la pre-carga
+  List<Building> buildingsCache = [];
+  bool firstPageLoading = false; // Para saber si ya hicimos la pre-carga
 
   Future<List<Building>> getBuildings({
     int page = 1,
@@ -24,8 +25,8 @@ class BuildingService {
     double? longitude,
     int? publicationId,
   }) async {
-    if (page == 1 && primeraPaginaCargada && !forceRefresh && publicationId == null)  {
-      return cacheEdificios;
+    if (page == 1 && firstPageLoading && !forceRefresh && publicationId == null)  {
+      return buildingsCache;
     }
 
     try {
@@ -45,16 +46,10 @@ class BuildingService {
       final response = await client.get(url);
 
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        final List<dynamic> listaJson = data['buildings'];
-
-        final nuevosEdificios = listaJson.map((mapa) {
-          return Building.fromMap(mapa);
-        }).toList();
-
+        final List<Building> nuevosEdificios = await compute(_parseBuildings, response.body);
         if (page == 1) {
-          cacheEdificios = nuevosEdificios;
-          primeraPaginaCargada = true;
+          buildingsCache = nuevosEdificios;
+          firstPageLoading = true;
         }
 
         return nuevosEdificios;
@@ -66,4 +61,10 @@ class BuildingService {
       throw Exception('NetworkError');
     }
   }
+}
+
+List<Building> _parseBuildings(String responseBody) {
+  final data = jsonDecode(responseBody);
+  final List<dynamic> listaJson = data['buildings'];
+  return listaJson.map((mapa) => Building.fromMap(mapa)).toList();
 }

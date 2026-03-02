@@ -24,7 +24,7 @@ void main() {
     service = BuildingService();
     //Le introducimos el cliente falso que hemos creado en el test para confirmar que el error funciona.
     service.client = mockHttpClient;
-    service.primeraPaginaCargada = false;
+    service.firstPageLoading = false;
   });
 
   group('BuildingService Tests -', () {

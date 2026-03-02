@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:globus_vermell_app/utils/get_distancia.dart';
+import 'package:globus_vermell_app/utils/get_distance.dart';
 import 'package:latlong2/latlong.dart';
 import '../models/building_model.dart';
 import '../controllers/building_detail_controller.dart';
@@ -137,7 +137,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
     final building = widget.building;
     final ubicacion = widget.miUbicacion;
 
-    String distanciaPorDefecto = getDistancia(ubicacion, building);
+    String distanciaPorDefecto = getDistance(ubicacion, building);
 
     return Scaffold(
       backgroundColor: Colors.white,

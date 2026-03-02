@@ -31,7 +31,8 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
     });
 
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
+      if (_scrollController.position.pixels >=
+          _scrollController.position.maxScrollExtent - 200) {
         final controller = context.read<BuildingListController>();
         if (!controller.isLoading && controller.hasMoreData && _vistaLista) {
           _cargarMasEdificios();
@@ -107,27 +108,35 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final controller = context.watch<BuildingListController>();
-
     return Scaffold(
       appBar: AppBar(
         title: const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('Globus Vermell', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            Text(
+              'Globus Vermell',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: controller.isLoading ? null : _usarGPS,
-        backgroundColor: const Color(0xFFE41E26),
-        child: controller.isLoading
-            ? const Padding(
-          padding: EdgeInsets.all(12.0),
-          child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
-        )
-            : const Icon(Icons.my_location, color: Colors.white),
+      floatingActionButton: Consumer<BuildingListController>(
+        builder: (context, controller, child) {
+          return FloatingActionButton(
+            onPressed: controller.isLoading ? null : _usarGPS,
+            backgroundColor: const Color(0xFFE41E26),
+            child: controller.isLoading
+                ? const Padding(
+                    padding: EdgeInsets.all(12.0),
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                      strokeWidth: 2,
+                    ),
+                  )
+                : const Icon(Icons.my_location, color: Colors.white),
+          );
+        },
       ),
       body: Column(
         children: [
@@ -155,58 +164,76 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: _buildFiltro(
-                    texto: context.loc.all,
-                    isSelected: controller.publicationFilter == 0,
-                    onTap: () => _filtrarPorPublicacion(0),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  flex: 2,
-                  child: _buildFiltro(
-                    texto: context.loc.publications,
-                    icono: Icons.keyboard_arrow_down_rounded,
-                    isSelected: controller.publicationFilter != 0,
-                    onTap: () => _mostrarMenuPublicaciones(controller),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  flex: 2,
-                  child: _buildFiltro(
-                    texto: context.loc.nearby,
-                    icono: Icons.location_on_outlined,
-                    isSelected: false,
-                    onTap: _usarGPS,
-                  ),
-                ),
-              ],
+          Expanded(
+            child: Consumer<BuildingListController>(
+              builder: (context, controller, child) {
+                return Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: _buildFilter(
+                              texto: context.loc.all,
+                              isSelected: controller.publicationFilter == 0,
+                              onTap: () => _filtrarPorPublicacion(0),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            flex: 2,
+                            child: _buildFilter(
+                              texto: context.loc.publications,
+                              icono: Icons.keyboard_arrow_down_rounded,
+                              isSelected: controller.publicationFilter != 0,
+                              onTap: () => _showPublicationsMenu(controller),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            flex: 2,
+                            child: _buildFilter(
+                              texto: context.loc.nearby,
+                              icono: Icons.location_on_outlined,
+                              isSelected: false,
+                              onTap: _usarGPS,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          '${controller.buildings.length} ${context.loc.buildingsByDistance}',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey[700],
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Expanded(
+                      child: _vistaLista
+                          ? _buildList(controller)
+                          : _buildMap(controller),
+                    ),
+                  ],
+                );
+              },
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                '${controller.buildings.length} ${context.loc.buildingsByDistance}',
-                style: TextStyle(fontSize: 14, color: Colors.grey[700], fontWeight: FontWeight.w500),
-              ),
-            ),
-          ),
-          const SizedBox(height: 12),
-          Expanded(child: _vistaLista ? _construirLista(controller) : _construirMapa(controller)),
         ],
       ),
     );
   }
 
-  void _mostrarMenuPublicaciones(BuildingListController controller) {
+  void _showPublicationsMenu(BuildingListController controller) {
     showGeneralDialog(
       context: context,
       barrierDismissible: true,
@@ -221,7 +248,13 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(12),
-              boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.1), blurRadius: 10, offset: const Offset(0, 4))],
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.1),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
             ),
             child: Material(
               color: Colors.transparent,
@@ -229,7 +262,9 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   ConstrainedBox(
-                    constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.45),
+                    constraints: BoxConstraints(
+                      maxHeight: MediaQuery.of(context).size.height * 0.45,
+                    ),
                     child: ListView.builder(
                       shrinkWrap: true,
                       padding: EdgeInsets.zero,
@@ -237,16 +272,29 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                       itemBuilder: (context, index) {
                         final pub = controller.publicationsFilter[index];
                         return ListTile(
-                          title: Text(pub.title, style: const TextStyle(fontSize: 14)),
+                          title: Text(
+                            pub.title,
+                            style: const TextStyle(fontSize: 14),
+                          ),
                           onTap: () {
                             Navigator.pop(context);
                             _filtrarPorPublicacion(pub.idPublication);
                           },
                           trailing: IconButton(
-                            icon: const Icon(Icons.info_outline, color: Color(0xFFE41E26), size: 20),
+                            icon: const Icon(
+                              Icons.info_outline,
+                              color: Color(0xFFE41E26),
+                              size: 20,
+                            ),
                             onPressed: () {
                               Navigator.pop(context);
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => PublicationDetailScreen(publication: pub)));
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      PublicationDetailScreen(publication: pub),
+                                ),
+                              );
                             },
                           ),
                         );
@@ -262,10 +310,18 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                         style: TextButton.styleFrom(
                           backgroundColor: const Color(0xFFE41E26),
                           foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 8,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
                         ),
-                        child: Text(context.loc.close, style: const TextStyle(fontWeight: FontWeight.bold)),
+                        child: Text(
+                          context.loc.close,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
                   ),
@@ -277,15 +333,17 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
       },
       transitionBuilder: (context, anim1, anim2, child) {
         return SlideTransition(
-          position: Tween<Offset>(begin: const Offset(0, -0.1), end: Offset.zero)
-              .animate(CurvedAnimation(parent: anim1, curve: Curves.easeOut)),
+          position: Tween<Offset>(
+            begin: const Offset(0, -0.1),
+            end: Offset.zero,
+          ).animate(CurvedAnimation(parent: anim1, curve: Curves.easeOut)),
           child: FadeTransition(opacity: anim1, child: child),
         );
       },
     );
   }
 
-  Widget _construirLista(BuildingListController controller) {
+  Widget _buildList(BuildingListController controller) {
     if (controller.buildings.isEmpty && controller.isLoading) {
       return const Center(child: CircularProgressIndicator());
     }
@@ -295,19 +353,25 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
       itemCount: controller.buildings.length + (controller.hasMoreData ? 1 : 0),
       itemBuilder: (context, index) {
         if (index == controller.buildings.length) {
-          return const Padding(padding: EdgeInsets.all(20.0), child: Center(child: CircularProgressIndicator()));
+          return const Padding(
+            padding: EdgeInsets.all(20.0),
+            child: Center(child: CircularProgressIndicator()),
+          );
         }
 
         final edificio = controller.buildings[index];
 
         return BuildingCard(
-          edificio: edificio,
-          miUbicacion: controller.location,
+          building: edificio,
+          location: controller.location,
           onTap: () async {
             final result = await Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => BuildingDetailScreen(building: edificio, miUbicacion: controller.location),
+                builder: (context) => BuildingDetailScreen(
+                  building: edificio,
+                  miUbicacion: controller.location,
+                ),
               ),
             );
 
@@ -315,7 +379,10 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
               setState(() => _vistaLista = false);
               Future.delayed(const Duration(milliseconds: 300), () {
                 if (edificio.latitude != 0 && edificio.longitude != 0) {
-                  _mapController.move(LatLng(edificio.latitude, edificio.longitude), 17.0);
+                  _mapController.move(
+                    LatLng(edificio.latitude, edificio.longitude),
+                    17.0,
+                  );
                 }
               });
             }
@@ -325,11 +392,16 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
     );
   }
 
-  Widget _construirMapa(BuildingListController controller) {
+  Widget _buildMap(BuildingListController controller) {
     LatLng centro = controller.location;
     if (centro.latitude == 0 && centro.longitude == 0) {
-      centro = controller.buildings.isNotEmpty && controller.buildings.first.latitude != 0
-          ? LatLng(controller.buildings.first.latitude, controller.buildings.first.longitude)
+      centro =
+          controller.buildings.isNotEmpty &&
+              controller.buildings.first.latitude != 0
+          ? LatLng(
+              controller.buildings.first.latitude,
+              controller.buildings.first.longitude,
+            )
           : const LatLng(41.3879, 2.16992);
     }
 
@@ -350,8 +422,18 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                 height: 60,
                 child: Column(
                   children: [
-                    const Icon(Icons.person_pin_circle, color: Colors.blue, size: 40),
-                    Text(context.loc.me, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.blue)),
+                    const Icon(
+                      Icons.person_pin_circle,
+                      color: Colors.blue,
+                      size: 40,
+                    ),
+                    Text(
+                      context.loc.me,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -369,18 +451,28 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                     final result = await Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => BuildingDetailScreen(building: edificio, miUbicacion: controller.location),
+                        builder: (context) => BuildingDetailScreen(
+                          building: edificio,
+                          miUbicacion: controller.location,
+                        ),
                       ),
                     );
 
                     if (result == 'show_map') {
                       setState(() => _vistaLista = false);
                       Future.delayed(const Duration(milliseconds: 300), () {
-                        _mapController.move(LatLng(edificio.latitude, edificio.longitude), 17.0);
+                        _mapController.move(
+                          LatLng(edificio.latitude, edificio.longitude),
+                          17.0,
+                        );
                       });
                     }
                   },
-                  child: const Icon(Icons.location_on, color: Color(0xFFE41E26), size: 40),
+                  child: const Icon(
+                    Icons.location_on,
+                    color: Color(0xFFE41E26),
+                    size: 40,
+                  ),
                 ),
               );
             }),
@@ -390,7 +482,12 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
     );
   }
 
-  Widget _buildFiltro({required String texto, IconData? icono, required bool isSelected, required VoidCallback onTap}) {
+  Widget _buildFilter({
+    required String texto,
+    IconData? icono,
+    required bool isSelected,
+    required VoidCallback onTap,
+  }) {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(30),
@@ -399,16 +496,31 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
         decoration: BoxDecoration(
           color: isSelected ? Colors.primaries[0] : Colors.white,
           borderRadius: BorderRadius.circular(30),
-          border: Border.all(color: isSelected ? Colors.primaries[0] : Colors.grey.withValues(alpha: 0.3)),
+          border: Border.all(
+            color: isSelected
+                ? Colors.primaries[0]
+                : Colors.grey.withValues(alpha: 0.3),
+          ),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             if (icono != null) ...[
-              Icon(icono, size: 16, color: isSelected ? Colors.white : Colors.black87),
+              Icon(
+                icono,
+                size: 16,
+                color: isSelected ? Colors.white : Colors.black87,
+              ),
               const SizedBox(width: 6),
             ],
-            Text(texto, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, color: isSelected ? Colors.white : Colors.black87)),
+            Text(
+              texto,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: isSelected ? Colors.white : Colors.black87,
+              ),
+            ),
           ],
         ),
       ),

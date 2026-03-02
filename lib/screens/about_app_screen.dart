@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:globus_vermell_app/utils/lang_extensions.dart';
 
-class hola extends StatelessWidget {
-  const hola({super.key});
+class AboutAppScreen extends StatelessWidget {
+  const AboutAppScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

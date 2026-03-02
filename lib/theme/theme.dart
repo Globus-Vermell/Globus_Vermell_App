@@ -54,7 +54,7 @@ final ThemeData lightMode = ThemeData(
   appBarTheme: bar.copyWith(
     backgroundColor: Colors.red,
   ),
-  textTheme: texto,
+  textTheme: text,
 );
 
 final ThemeData highContrastLightMode = ThemeData(
@@ -108,7 +108,7 @@ final ThemeData highContrastLightMode = ThemeData(
   ),
   useMaterial3: true,
   appBarTheme: bar,
-  textTheme: texto,
+  textTheme: text,
 );
 
 final ThemeData darkMode = ThemeData(
@@ -162,7 +162,7 @@ final ThemeData darkMode = ThemeData(
   ),
   useMaterial3: true,
   appBarTheme: bar,
-  textTheme: texto,
+  textTheme: text,
 );
 
 final ThemeData highContrastDarkMode = ThemeData(
@@ -216,9 +216,8 @@ final ThemeData highContrastDarkMode = ThemeData(
   ),
   useMaterial3: true,
   appBarTheme: bar,
-  textTheme: texto,
+  textTheme: text,
 );
-//Falta aprender
 
 final AppBarTheme bar = AppBarTheme(
   centerTitle: true,
@@ -229,6 +228,6 @@ final AppBarTheme bar = AppBarTheme(
   ),
 );
 
-final TextTheme texto = GoogleFonts.montserratTextTheme();
+final TextTheme text = GoogleFonts.montserratTextTheme();
 
 
