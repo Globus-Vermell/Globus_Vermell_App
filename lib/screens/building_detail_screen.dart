@@ -49,16 +49,11 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
     );
 
     try {
-      final publications = await PublicationService().getPublications();
-      
-      if (!mounted) return;
-      
-      Navigator.pop(context);
 
-      final publication = publications.firstWhere(
-        (p) => p.title.trim().toLowerCase() == title.trim().toLowerCase(),
-        orElse: () => throw Exception('Publicació no trobada'),
-      );
+      final publication = await _controller.getPublicationByTitle(title);
+
+      if (!mounted) return;
+      Navigator.pop(context);
 
       Navigator.push(
         context,
@@ -68,11 +63,10 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
       );
     } catch (e) {
       if (!mounted) return;
-      
       if (Navigator.canPop(context)) {
         Navigator.pop(context);
       }
-      
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(context.loc.pubNotFound),
