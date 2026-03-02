@@ -4,7 +4,6 @@ import 'package:globus_vermell_app/utils/get_distance.dart';
 import 'package:latlong2/latlong.dart';
 import '../models/building_model.dart';
 import '../controllers/building_detail_controller.dart';
-import '../services/publications_service.dart';
 import '../utils/lang_extensions.dart';
 import '../widgets/info_chip.dart';
 import '../widgets/section_header.dart';
