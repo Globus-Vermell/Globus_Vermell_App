@@ -132,5 +132,4 @@ class PublicationDetailScreen extends StatelessWidget {
       ),
     );
   }
-
 }
