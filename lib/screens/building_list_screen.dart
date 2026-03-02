@@ -20,58 +20,58 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
   final ScrollController _scrollController = ScrollController();
   final MapController _mapController = MapController();
 
-  bool _vistaLista = false;
+  bool _listView = false;
 
   @override
   void initState() {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _cargarDatosIniciales();
+      _initialData();
     });
 
     _scrollController.addListener(() {
       if (_scrollController.position.pixels >=
           _scrollController.position.maxScrollExtent - 200) {
         final controller = context.read<BuildingListController>();
-        if (!controller.isLoading && controller.hasMoreData && _vistaLista) {
-          _cargarMasEdificios();
+        if (!controller.isLoading && controller.hasMoreData && _listView) {
+          _moreBuildings();
         }
       }
     });
   }
 
-  Future<void> _cargarDatosIniciales() async {
+  Future<void> _initialData() async {
     try {
-      await context.read<BuildingListController>().cargarDatosIniciales();
+      await context.read<BuildingListController>().initialData();
     } catch (e) {
-      if (mounted) _mostrarErrorRed();
+      if (mounted) _errorNetwork();
     }
   }
 
-  Future<void> _filtrarPorPublicacion(int idPublicacion) async {
+  Future<void> _filterByPublication(int idPublicacion) async {
     try {
-      await context.read<BuildingListController>().aplicarFiltro(idPublicacion);
+      await context.read<BuildingListController>().applyFilter(idPublicacion);
     } catch (e) {
-      if (mounted) _mostrarErrorRed();
+      if (mounted) _errorNetwork();
     }
   }
 
-  Future<void> _cargarMasEdificios() async {
+  Future<void> _moreBuildings() async {
     try {
       await context.read<BuildingListController>().fetchNextPage();
     } catch (e) {
-      if (mounted) _mostrarErrorRed();
+      if (mounted) _errorNetwork();
     }
   }
 
-  Future<void> _usarGPS() async {
+  Future<void> _useGPS() async {
     final controller = context.read<BuildingListController>();
     try {
-      await controller.activarGPS();
+      await controller.activateGPS();
       if (!mounted) return;
 
-      if (!_vistaLista && controller.location.latitude != 0) {
+      if (!_listView && controller.location.latitude != 0) {
         _mapController.move(controller.location, 17.0);
       }
 
@@ -84,11 +84,11 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
         );
       }
     } catch (e) {
-      if (mounted) _mostrarErrorRed();
+      if (mounted) _errorNetwork();
     }
   }
 
-  void _mostrarErrorRed() {
+  void _errorNetwork() {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(context.loc.connectionError),
@@ -100,7 +100,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
 
   @override
   void dispose() {
-    context.read<BuildingListController>().detenerSeguimiento();
+    context.read<BuildingListController>().stopTracking();
     _scrollController.dispose();
     _mapController.dispose();
     super.dispose();
@@ -124,7 +124,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
       floatingActionButton: Consumer<BuildingListController>(
         builder: (context, controller, child) {
           return FloatingActionButton(
-            onPressed: controller.isLoading ? null : _usarGPS,
+            onPressed: controller.isLoading ? null : _useGPS,
             backgroundColor: const Color(0xFFE41E26),
             child: controller.isLoading
                 ? const Padding(
@@ -148,8 +148,8 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                   child: ToggleButton(
                     icon: Icons.location_on_outlined,
                     text: context.loc.map,
-                    isSelected: !_vistaLista,
-                    onTap: () => setState(() => _vistaLista = false),
+                    isSelected: !_listView,
+                    onTap: () => setState(() => _listView = false),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -157,8 +157,8 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                   child: ToggleButton(
                     icon: Icons.format_list_bulleted,
                     text: context.loc.list,
-                    isSelected: _vistaLista,
-                    onTap: () => setState(() => _vistaLista = true),
+                    isSelected: _listView,
+                    onTap: () => setState(() => _listView = true),
                   ),
                 ),
               ],
@@ -177,7 +177,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                             child: _buildFilter(
                               texto: context.loc.all,
                               isSelected: controller.publicationFilter == 0,
-                              onTap: () => _filtrarPorPublicacion(0),
+                              onTap: () => _filterByPublication(0),
                             ),
                           ),
                           const SizedBox(width: 8),
@@ -197,7 +197,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                               texto: context.loc.nearby,
                               icono: Icons.location_on_outlined,
                               isSelected: false,
-                              onTap: _usarGPS,
+                              onTap: _useGPS,
                             ),
                           ),
                         ],
@@ -219,7 +219,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                     ),
                     const SizedBox(height: 12),
                     Expanded(
-                      child: _vistaLista
+                      child: _listView
                           ? _buildList(controller)
                           : _buildMap(controller),
                     ),
@@ -278,7 +278,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                           ),
                           onTap: () {
                             Navigator.pop(context);
-                            _filtrarPorPublicacion(pub.idPublication);
+                            _filterByPublication(pub.idPublication);
                           },
                           trailing: IconButton(
                             icon: const Icon(
@@ -370,13 +370,13 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
               MaterialPageRoute(
                 builder: (context) => BuildingDetailScreen(
                   building: edificio,
-                  miUbicacion: controller.location,
+                  location: controller.location,
                 ),
               ),
             );
 
             if (result == 'show_map') {
-              setState(() => _vistaLista = false);
+              setState(() => _listView = false);
               Future.delayed(const Duration(milliseconds: 300), () {
                 if (edificio.latitude != 0 && edificio.longitude != 0) {
                   _mapController.move(
@@ -453,13 +453,13 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                       MaterialPageRoute(
                         builder: (context) => BuildingDetailScreen(
                           building: edificio,
-                          miUbicacion: controller.location,
+                          location: controller.location,
                         ),
                       ),
                     );
 
                     if (result == 'show_map') {
-                      setState(() => _vistaLista = false);
+                      setState(() => _listView = false);
                       Future.delayed(const Duration(milliseconds: 300), () {
                         _mapController.move(
                           LatLng(edificio.latitude, edificio.longitude),

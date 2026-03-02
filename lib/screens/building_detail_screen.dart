@@ -6,16 +6,18 @@ import '../models/building_model.dart';
 import '../controllers/building_detail_controller.dart';
 import '../services/publications_service.dart';
 import '../utils/lang_extensions.dart';
+import '../widgets/info_chip.dart';
+import '../widgets/section_header.dart';
 import 'publication_detail_screen.dart';
 
 class BuildingDetailScreen extends StatefulWidget {
   final Building building;
-  final LatLng? miUbicacion;
+  final LatLng? location;
 
   const BuildingDetailScreen({
     super.key,
     required this.building,
-    this.miUbicacion,
+    this.location,
   });
 
   @override
@@ -135,9 +137,9 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final building = widget.building;
-    final ubicacion = widget.miUbicacion;
+    final location = widget.location;
 
-    String distanciaPorDefecto = getDistance(ubicacion, building);
+    String distanciaPorDefecto = getDistance(location, building);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -228,8 +230,8 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                   Divider(color: Colors.grey[200], thickness: 1),
                   const SizedBox(height: 32),
 
-                  _buildSectionHeader(
-                    context.loc.techSheet,
+                  SectionHeader(
+                    title: context.loc.techSheet,
                     onInfo: () => _showLegend(context),
                   ),
                   const SizedBox(height: 16),
@@ -239,40 +241,40 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                     runSpacing: 10,
                     children: [
                       if (building.typologyName.isNotEmpty)
-                        _buildInfoChip(
-                          Icons.category,
-                          building.typologyName,
-                          Colors.blue,
+                        InfoChip(
+                          icon: Icons.category,
+                          label: building.typologyName,
+                          color: Colors.blue,
                         ),
                       if (building.protectionName.isNotEmpty)
-                        _buildInfoChip(
-                          Icons.security,
-                          building.protectionName,
-                          Colors.orange,
+                        InfoChip(
+                          icon: Icons.security,
+                          label: building.protectionName,
+                          color: Colors.orange,
                         ),
-                      _buildInfoChip(
-                        Icons.calendar_today,
-                        '${building.constructionYear}',
-                        Colors.purple,
+                      InfoChip(
+                        icon: Icons.calendar_today,
+                        label: '${building.constructionYear}',
+                        color: Colors.purple,
                       ),
                       if (building.surfaceArea > 0)
-                        _buildInfoChip(
-                          Icons.square_foot,
-                          '${building.surfaceArea} m²',
-                          Colors.green,
+                        InfoChip(
+                          icon: Icons.square_foot,
+                          label: '${building.surfaceArea} m²',
+                          color: Colors.green,
                         ),
                       ...building.reforms.map(
-                        (ref) => _buildInfoChip(
-                          Icons.construction,
-                          ref,
-                          Colors.brown,
+                        (ref) => InfoChip(
+                          icon: Icons.construction,
+                          label: ref,
+                          color: Colors.brown,
                         ),
                       ),
                       ...building.prizes.map(
-                        (premio) => _buildInfoChip(
-                          Icons.emoji_events,
-                          premio,
-                          Colors.amber,
+                        (premio) => InfoChip(
+                          icon: Icons.emoji_events,
+                          label: premio,
+                          color: Colors.amber,
                         ),
                       ),
                     ],
@@ -280,7 +282,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
 
                   const SizedBox(height: 40),
 
-                  _buildSectionHeader(context.loc.description),
+                  SectionHeader(title: context.loc.description),
                   const SizedBox(height: 16),
 
                   (building.description.isNotEmpty &&
@@ -477,47 +479,6 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
     );
   }
 
-
-  Widget _buildSectionHeader(String title, {VoidCallback? onInfo}) {
-    return Row(
-      children: [
-        Container(
-          width: 4,
-          height: 18,
-          decoration: BoxDecoration(
-            color: const Color(0xFFE41E26),
-            borderRadius: BorderRadius.circular(2),
-          ),
-        ),
-        const SizedBox(width: 8),
-        Text(
-          title,
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 1.0,
-            color: Colors.black54,
-          ),
-        ),
-        if (onInfo != null) ...[
-          const Spacer(),
-          InkWell(
-            onTap: onInfo,
-            borderRadius: BorderRadius.circular(20),
-            child: Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Icon(
-                Icons.info_outline_rounded,
-                size: 20,
-                color: Colors.grey[400],
-              ),
-            ),
-          ),
-        ],
-      ],
-    );
-  }
-
   Widget _buildSliverAppBar(Building building, String distanciaPorDefecto) {
     return SliverAppBar(
       expandedHeight: 320.0,
@@ -674,35 +635,6 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildInfoChip(IconData icon, String label, Color color) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(30),
-        border: Border.all(color: color.withValues(alpha: 0.2)),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 16, color: color.withValues(alpha: 0.8)),
-          const SizedBox(width: 8),
-          Flexible(
-            child: Text(
-              label,
-              style: TextStyle(
-                color: color.withValues(alpha: 0.9),
-                fontWeight: FontWeight.w600,
-                fontSize: 13,
-              ),
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

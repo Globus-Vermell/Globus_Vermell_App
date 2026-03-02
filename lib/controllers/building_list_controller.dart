@@ -19,7 +19,7 @@ class BuildingListController extends ChangeNotifier {
   int _currentPage = 1;
   StreamSubscription<Position>? _realPosition;
 
-  Future<void> cargarDatosIniciales() async {
+  Future<void> initialData() async {
     isLoading = true;
     notifyListeners();
 
@@ -77,7 +77,7 @@ class BuildingListController extends ChangeNotifier {
     }
   }
 
-  Future<void> aplicarFiltro(int idPublicacion) async {
+  Future<void> applyFilter(int idPublicacion) async {
     isLoading = true;
     publicationFilter = idPublicacion;
     _currentPage = 1;
@@ -109,7 +109,7 @@ class BuildingListController extends ChangeNotifier {
     }
   }
 
-  Future<void> activarGPS() async {
+  Future<void> activateGPS() async {
     isLoading = true;
     notifyListeners();
     LocationPermission permission = await Geolocator.checkPermission();
@@ -147,7 +147,7 @@ class BuildingListController extends ChangeNotifier {
         hasMoreData = false;
       }
 
-      iniciarSeguimientoGPS();
+      startGPSTracking();
     } catch (e) {
       hasMoreData = false;
       rethrow;
@@ -157,7 +157,7 @@ class BuildingListController extends ChangeNotifier {
     }
   }
 
-  void iniciarSeguimientoGPS() async {
+  void startGPSTracking() async {
     LocationPermission permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) return;
 
@@ -170,7 +170,7 @@ class BuildingListController extends ChangeNotifier {
     });
   }
 
-  void detenerSeguimiento() {
+  void stopTracking() {
     _realPosition?.cancel();
   }
 }
