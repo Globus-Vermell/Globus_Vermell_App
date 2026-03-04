@@ -15,8 +15,9 @@ Future<void> main() async {
 
   const url = String.fromEnvironment('SUPABASE_URL', defaultValue: '');
   const anonKey = String.fromEnvironment('SUPABASE_ANON_KEY', defaultValue: '');
+
   if (url.isEmpty || anonKey.isEmpty) {
-    throw Exception('Faltan Credenciales de SupaBase');
+    throw Exception('Faltan Credenciales de Supabase');
   }
 
   await Supabase.initialize(url: url, anonKey: anonKey);
