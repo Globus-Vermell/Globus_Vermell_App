@@ -33,15 +33,21 @@ class BottomBarState extends State<BottomBar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: _widgetOptions,
-      ),
+      body: IndexedStack(index: _selectedIndex, children: _widgetOptions),
       bottomNavigationBar: BottomNavigationBar(
         items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.map), label: context.loc.map,),
-           BottomNavigationBarItem(icon: Icon(Icons.menu_book), label: context.loc.publications,),
-          BottomNavigationBarItem(icon: const Icon(Icons.settings), label: context.loc.settings,),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.map),
+            label: context.loc.map,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.menu_book),
+            label: context.loc.publications,
+          ),
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.settings),
+            label: context.loc.settings,
+          ),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.red,

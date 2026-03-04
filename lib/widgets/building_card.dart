@@ -10,7 +10,8 @@ class BuildingCard extends StatefulWidget {
   final VoidCallback onTap;
   final LatLng? location;
 
-  const BuildingCard({super.key,
+  const BuildingCard({
+    super.key,
     required this.building,
     required this.onTap,
     required this.location,
@@ -21,10 +22,9 @@ class BuildingCard extends StatefulWidget {
 }
 
 class _BuildingCardState extends State<BuildingCard> {
+  late String distance = getDistance(widget.location, widget.building);
   @override
   Widget build(BuildContext context) {
-    String distance = getDistance(widget.location, widget.building);
-
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       elevation: 2,
@@ -47,34 +47,34 @@ class _BuildingCardState extends State<BuildingCard> {
                 ),
                 child: (widget.building.images.isNotEmpty)
                     ? ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: CachedNetworkImage(
-                    imageUrl: widget.building.images.first,
-                    fit: BoxFit.cover,
-                    errorWidget: (context, url, error) {
-                      return Icon(
-                        Icons.broken_image,
-                        color: Colors.grey[400],
-                      );
-                    },
-                    placeholder: (context, url) {
-                      return const Center(
-                        child: SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                          ),
+                        borderRadius: BorderRadius.circular(8),
+                        child: CachedNetworkImage(
+                          imageUrl: widget.building.images.first,
+                          fit: BoxFit.cover,
+                          errorWidget: (context, url, error) {
+                            return Icon(
+                              Icons.broken_image,
+                              color: Colors.grey[400],
+                            );
+                          },
+                          placeholder: (context, url) {
+                            return const Center(
+                              child: SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              ),
+                            );
+                          },
                         ),
-                      );
-                    },
-                  ),
-                )
+                      )
                     : Icon(
-                  Icons.image_outlined,
-                  color: Colors.grey[400],
-                  size: 40,
-                ),
+                        Icons.image_outlined,
+                        color: Colors.grey[400],
+                        size: 40,
+                      ),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -121,10 +121,12 @@ class _BuildingCardState extends State<BuildingCard> {
                               color: (widget.building.publications.isNotEmpty)
                                   ? const Color.fromARGB(255, 0, 0, 0)
                                   : Colors.grey[700],
-                              fontWeight: (widget.building.publications.isNotEmpty)
+                              fontWeight:
+                                  (widget.building.publications.isNotEmpty)
                                   ? FontWeight.bold
                                   : FontWeight.normal,
-                              fontStyle: (widget.building.publications.isNotEmpty)
+                              fontStyle:
+                                  (widget.building.publications.isNotEmpty)
                                   ? FontStyle.normal
                                   : FontStyle.italic,
                             ),

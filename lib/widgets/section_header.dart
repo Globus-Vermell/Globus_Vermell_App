@@ -4,11 +4,7 @@ class SectionHeader extends StatelessWidget {
   final String title;
   final VoidCallback? onInfo;
 
-  const SectionHeader({
-    super.key,
-    required this.title,
-    this.onInfo,
-  });
+  const SectionHeader({super.key, required this.title, this.onInfo});
 
   @override
   Widget build(BuildContext context) {

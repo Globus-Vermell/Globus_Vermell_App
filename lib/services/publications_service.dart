@@ -10,7 +10,10 @@ class PublicationService {
 
   http.Client client = http.Client();
 
-  static const String _baseUrl = String.fromEnvironment('API_URL', defaultValue: 'Error');
+  static const String _baseUrl = String.fromEnvironment(
+    'API_URL',
+    defaultValue: 'Error',
+  );
 
   Future<List<Publication>> getPublications() async {
     try {
@@ -18,7 +21,10 @@ class PublicationService {
       final response = await client.get(url);
 
       if (response.statusCode == 200) {
-        final List<Publication> publications = await compute(_parsePublication, response.body);
+        final List<Publication> publications = await compute(
+          _parsePublication,
+          response.body,
+        );
         return publications;
       } else {
         throw Exception('Error del servidor: ${response.statusCode}');
@@ -32,6 +38,8 @@ class PublicationService {
 
 List<Publication> _parsePublication(String responseBody) {
   final data = jsonDecode(responseBody);
-  final List<Map<String, dynamic>> listaJson = List<Map<String, dynamic>>.from(data['publications'] ?? []);
+  final List<Map<String, dynamic>> listaJson = List<Map<String, dynamic>>.from(
+    data['publications'] ?? [],
+  );
   return listaJson.map((mapa) => Publication.fromMap(mapa)).toList();
 }

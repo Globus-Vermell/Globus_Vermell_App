@@ -41,32 +41,21 @@ class AboutAppScreen extends StatelessWidget {
             const Text(
               'Globus Vermell',
               style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w800,
-                  color: Colors.black87
+                fontSize: 24,
+                fontWeight: FontWeight.w800,
+                color: Colors.black87,
               ),
             ),
             const SizedBox(height: 8),
-            Text(
-              context.loc.appSubtitle,
-              textAlign: TextAlign.center,
-            ),
+            Text(context.loc.appSubtitle, textAlign: TextAlign.center),
             const SizedBox(height: 8),
-            Text(
-              "${context.loc.appVersion} 1.0.0",
-            ),
+            Text("${context.loc.appVersion} 1.0.0"),
 
             const SizedBox(height: 20),
-            Text(
-              context.loc.appDescription1,
-              textAlign: TextAlign.justify,
-            ),
+            Text(context.loc.appDescription1, textAlign: TextAlign.justify),
             const SizedBox(height: 20),
-            Text(
-              context.loc.appDescription2,
-              textAlign: TextAlign.justify,
-            ),
-            const SizedBox(height: 20,),
+            Text(context.loc.appDescription2, textAlign: TextAlign.justify),
+            const SizedBox(height: 20),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
@@ -78,14 +67,17 @@ class AboutAppScreen extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFE41E21),
                   foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 12,
+                  ),
                   elevation: 4,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
-                )
+                ),
               ),
-            )
+            ),
           ],
         ),
       ),

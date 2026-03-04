@@ -24,11 +24,7 @@ class EmptyCard extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            icon,
-            size: 40,
-            color: Colors.grey[300],
-          ),
+          Icon(icon, size: 40, color: Colors.grey[300]),
           const SizedBox(height: 12),
           Text(
             message,

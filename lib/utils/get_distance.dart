@@ -2,10 +2,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import '../models/building_model.dart';
 
-String getDistance(
-    LatLng? location,
-    Building building,
-    ){
+String getDistance(LatLng? location, Building building) {
   String distance = '0.6 Km';
 
   if (location != null && location.latitude != 0 && building.latitude != 0) {

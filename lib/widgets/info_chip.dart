@@ -24,11 +24,7 @@ class InfoChip extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-              icon,
-              size: 16,
-              color: color.withValues(alpha: 0.8)
-          ),
+          Icon(icon, size: 16, color: color.withValues(alpha: 0.8)),
           const SizedBox(width: 8),
           Flexible(
             child: Text(

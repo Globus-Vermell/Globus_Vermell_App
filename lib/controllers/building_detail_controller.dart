@@ -15,7 +15,7 @@ class BuildingDetailController {
     currentImageIndex.value = index;
   }
 
-  Future<void> openMap()  {
+  Future<void> openMap() {
     return Future.value();
   }
 
@@ -28,7 +28,7 @@ class BuildingDetailController {
     final publications = await PublicationService().getPublications();
 
     return publications.firstWhere(
-          (p) => p.title.trim().toLowerCase() == title.trim().toLowerCase(),
+      (p) => p.title.trim().toLowerCase() == title.trim().toLowerCase(),
       orElse: () => throw Exception('Publicació no trobada'),
     );
   }

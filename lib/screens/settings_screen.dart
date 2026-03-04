@@ -117,11 +117,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 style: const TextStyle(fontWeight: FontWeight.w500),
               ),
               trailing: const Icon(Icons.chevron_right, color: Colors.grey),
-              onTap: () =>
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => AboutAppScreen()),
-                ),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AboutAppScreen()),
+              ),
             ),
           ],
         ),

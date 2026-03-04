@@ -51,9 +51,7 @@ final ThemeData lightMode = ThemeData(
     surfaceContainerHighest: Color(0xfff1dfdc),
   ),
   useMaterial3: true,
-  appBarTheme: bar.copyWith(
-    backgroundColor: Colors.red,
-  ),
+  appBarTheme: bar.copyWith(backgroundColor: Colors.red),
   textTheme: text,
 );
 
@@ -229,5 +227,3 @@ final AppBarTheme bar = AppBarTheme(
 );
 
 final TextTheme text = GoogleFonts.montserratTextTheme();
-
-

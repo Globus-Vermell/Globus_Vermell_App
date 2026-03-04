@@ -115,7 +115,8 @@ class BuildingListController extends ChangeNotifier {
     LocationPermission permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
+      if (permission == LocationPermission.denied ||
+          permission == LocationPermission.deniedForever) {
         isLoading = false;
         notifyListeners();
         return;
@@ -124,7 +125,9 @@ class BuildingListController extends ChangeNotifier {
 
     try {
       Position position = await Geolocator.getCurrentPosition(
-        locationSettings: const LocationSettings(accuracy: LocationAccuracy.high),
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.high,
+        ),
       );
 
       location = LatLng(position.latitude, position.longitude);
@@ -159,15 +162,21 @@ class BuildingListController extends ChangeNotifier {
 
   void startGPSTracking() async {
     LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) return;
+    if (permission == LocationPermission.denied ||
+        permission == LocationPermission.deniedForever)
+      return;
 
     _realPosition?.cancel();
-    _realPosition = Geolocator.getPositionStream(
-      locationSettings: const LocationSettings(accuracy: LocationAccuracy.high, distanceFilter: 10),
-    ).listen((Position position) {
-      location = LatLng(position.latitude, position.longitude);
-      notifyListeners();
-    });
+    _realPosition =
+        Geolocator.getPositionStream(
+          locationSettings: const LocationSettings(
+            accuracy: LocationAccuracy.high,
+            distanceFilter: 10,
+          ),
+        ).listen((Position position) {
+          location = LatLng(position.latitude, position.longitude);
+          notifyListeners();
+        });
   }
 
   void stopTracking() {

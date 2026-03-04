@@ -11,7 +11,10 @@ class BuildingService {
 
   http.Client client = http.Client();
 
-  static const String _baseUrl = String.fromEnvironment('API_URL', defaultValue: 'Error');
+  static const String _baseUrl = String.fromEnvironment(
+    'API_URL',
+    defaultValue: 'Error',
+  );
   // 2. Memoria Caché: Aquí guardaremos los edificios para no perderlos
   List<Building> buildingsCache = [];
   bool firstPageLoading = false; // Para saber si ya hicimos la pre-carga
@@ -23,7 +26,10 @@ class BuildingService {
     double? longitude,
     int? publicationId,
   }) async {
-    if (page == 1 && firstPageLoading && !forceRefresh && publicationId == null)  {
+    if (page == 1 &&
+        firstPageLoading &&
+        !forceRefresh &&
+        publicationId == null) {
       return buildingsCache;
     }
 
@@ -44,7 +50,10 @@ class BuildingService {
       final response = await client.get(url);
 
       if (response.statusCode == 200) {
-        final List<Building> nuevosEdificios = await compute(_parseBuildings, response.body);
+        final List<Building> nuevosEdificios = await compute(
+          _parseBuildings,
+          response.body,
+        );
         if (page == 1) {
           buildingsCache = nuevosEdificios;
           firstPageLoading = true;
@@ -63,6 +72,8 @@ class BuildingService {
 
 List<Building> _parseBuildings(String responseBody) {
   final data = jsonDecode(responseBody);
-  final List<Map<String, dynamic>> listaJson = List<Map<String, dynamic>>.from(data['buildings'] ?? []);
+  final List<Map<String, dynamic>> listaJson = List<Map<String, dynamic>>.from(
+    data['buildings'] ?? [],
+  );
   return listaJson.map((mapa) => Building.fromMap(mapa)).toList();
 }

@@ -81,7 +81,10 @@ class _ThemesScreenState extends State<ThemesScreen> {
                 ),
                 const SizedBox(height: 32),
 
-                _buildSectionHeader(context.loc.neighborhoods, Icons.location_city),
+                _buildSectionHeader(
+                  context.loc.neighborhoods,
+                  Icons.location_city,
+                ),
                 const SizedBox(height: 12),
                 _buildPublicationList(_organizedData['barris'] ?? []),
                 const SizedBox(height: 40),
@@ -139,10 +142,8 @@ class _ThemesScreenState extends State<ThemesScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => PublicationDetailScreen(
-                      publication:
-                          item, 
-                    ),
+                    builder: (context) =>
+                        PublicationDetailScreen(publication: item),
                   ),
                 );
               },
@@ -237,6 +238,4 @@ class _ThemesScreenState extends State<ThemesScreen> {
       ),
     );
   }
-
-
 }

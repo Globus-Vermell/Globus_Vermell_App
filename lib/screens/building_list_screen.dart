@@ -107,7 +107,10 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
     super.dispose();
   }
 
-  Future<void> _navegarADetalle(Building edificio, BuildingListController controller) async {
+  Future<void> _navegarADetalle(
+    Building edificio,
+    BuildingListController controller,
+  ) async {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
@@ -124,7 +127,10 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
       setState(() => _listView = false);
       Future.delayed(const Duration(milliseconds: 300), () {
         if (edificio.latitude != 0 && edificio.longitude != 0) {
-          _mapController.move(LatLng(edificio.latitude, edificio.longitude), 17.0);
+          _mapController.move(
+            LatLng(edificio.latitude, edificio.longitude),
+            17.0,
+          );
         }
       });
     }
@@ -148,7 +154,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
       floatingActionButton: Consumer<BuildingListController>(
         builder: (context, controller, child) {
           return FloatingActionButton(
-            onPressed: () => controller.isLoading ? null : _useGPS,
+            onPressed: () => controller.isLoading ? null : _useGPS(),
             backgroundColor: const Color(0xFFE41E26),
             child: controller.isLoading
                 ? const Padding(
@@ -194,14 +200,19 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                 return Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0,
+                        vertical: 8.0,
+                      ),
                       child: Row(
                         children: [
                           Expanded(
                             child: _buildFilter(
                               texto: context.loc.all,
                               isSelected: controller.publicationFilter == 0,
-                              onTap: () { _filterByPublication(0);},
+                              onTap: () {
+                                _filterByPublication(0);
+                              },
                             ),
                           ),
                           const SizedBox(width: 8),
@@ -211,7 +222,9 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                               texto: context.loc.publications,
                               icono: Icons.keyboard_arrow_down_rounded,
                               isSelected: controller.publicationFilter != 0,
-                              onTap: () { _showPublicationsMenu(controller);},
+                              onTap: () {
+                                _showPublicationsMenu(controller);
+                              },
                             ),
                           ),
                           const SizedBox(width: 8),
@@ -221,7 +234,9 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                               texto: context.loc.nearby,
                               icono: Icons.location_on_outlined,
                               isSelected: false,
-                              onTap: () { _useGPS;},
+                              onTap: () {
+                                _useGPS();
+                              },
                             ),
                           ),
                         ],

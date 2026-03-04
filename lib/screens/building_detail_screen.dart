@@ -49,7 +49,6 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
     );
 
     try {
-
       final publication = await _controller.getPublicationByTitle(title);
 
       if (!mounted) return;
@@ -58,7 +57,8 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => PublicationDetailScreen(publication: publication),
+          builder: (context) =>
+              PublicationDetailScreen(publication: publication),
         ),
       );
     } catch (e) {
@@ -82,7 +82,10 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
       builder: (context) => AlertDialog(
         backgroundColor: Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: Text(context.loc.iconsLegend, style: const TextStyle(color: Color(0xFFE41E26)),),
+        title: Text(
+          context.loc.iconsLegend,
+          style: const TextStyle(color: Color(0xFFE41E26)),
+        ),
         content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -93,9 +96,17 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                 const Color(0xFFE41E26),
               ),
               const SizedBox(height: 12),
-              _buildLegendItem(Icons.category, context.loc.typology, Colors.blue),
+              _buildLegendItem(
+                Icons.category,
+                context.loc.typology,
+                Colors.blue,
+              ),
               const SizedBox(height: 12),
-              _buildLegendItem(Icons.security, context.loc.protection, Colors.orange),
+              _buildLegendItem(
+                Icons.security,
+                context.loc.protection,
+                Colors.orange,
+              ),
               const SizedBox(height: 12),
               _buildLegendItem(
                 Icons.calendar_today,
@@ -103,11 +114,23 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                 Colors.purple,
               ),
               const SizedBox(height: 12),
-              _buildLegendItem(Icons.square_foot, context.loc.surface, Colors.green),
+              _buildLegendItem(
+                Icons.square_foot,
+                context.loc.surface,
+                Colors.green,
+              ),
               const SizedBox(height: 12),
-              _buildLegendItem(Icons.construction, context.loc.renovation, Colors.brown),
+              _buildLegendItem(
+                Icons.construction,
+                context.loc.renovation,
+                Colors.brown,
+              ),
               const SizedBox(height: 12),
-              _buildLegendItem(Icons.emoji_events, context.loc.award, Colors.amber),
+              _buildLegendItem(
+                Icons.emoji_events,
+                context.loc.award,
+                Colors.amber,
+              ),
               const SizedBox(height: 12),
             ],
           ),
@@ -186,14 +209,17 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                   if (building.publications.isNotEmpty)
                     InkWell(
                       borderRadius: BorderRadius.circular(50),
-                      onTap: () => _openPublication(building.publications.first),
+                      onTap: () =>
+                          _openPublication(building.publications.first),
                       child: Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 14,
                           vertical: 8,
                         ),
                         decoration: BoxDecoration(
-                          color: const Color(0xFFE41E26).withValues(alpha: 0.08),
+                          color: const Color(
+                            0xFFE41E26,
+                          ).withValues(alpha: 0.08),
                           borderRadius: BorderRadius.circular(50),
                         ),
                         child: Row(
@@ -290,7 +316,10 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                             height: 1.6,
                           ),
                         )
-                      : EmptyCard(icon: Icons.description_outlined, message: context.loc.noDescription),
+                      : EmptyCard(
+                          icon: Icons.description_outlined,
+                          message: context.loc.noDescription,
+                        ),
 
                   const SizedBox(height: 40),
 
@@ -505,7 +534,10 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [Colors.transparent, Colors.black.withValues(alpha: 0.5)],
+                    colors: [
+                      Colors.transparent,
+                      Colors.black.withValues(alpha: 0.5),
+                    ],
                   ),
                 ),
               ),
@@ -524,7 +556,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                         (i) => AnimatedContainer(
                           duration: const Duration(milliseconds: 300),
                           margin: const EdgeInsets.symmetric(horizontal: 4),
-                          width: i == index ? 20 : 8, 
+                          width: i == index ? 20 : 8,
                           height: 8,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(4),

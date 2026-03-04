@@ -6,7 +6,8 @@ class ToggleButton extends StatelessWidget {
   final bool isSelected;
   final VoidCallback onTap;
 
-  const ToggleButton({super.key,
+  const ToggleButton({
+    super.key,
     required this.icon,
     required this.text,
     required this.isSelected,

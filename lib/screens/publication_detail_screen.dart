@@ -23,10 +23,7 @@ class PublicationDetailScreen extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 24.0,
-            vertical: 24.0,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -72,11 +69,13 @@ class PublicationDetailScreen extends StatelessWidget {
                         runSpacing: 10,
                         children: publication.themes
                             .split(',')
-                            .map((tema) => InfoChip(
-                                  icon: Icons.label_important_rounded,
-                                  label: tema.trim(),
-                                  color: const Color(0xFFE41E26),
-                                ))
+                            .map(
+                              (tema) => InfoChip(
+                                icon: Icons.label_important_rounded,
+                                label: tema.trim(),
+                                color: const Color(0xFFE41E26),
+                              ),
+                            )
                             .toList(),
                       ),
                       const SizedBox(height: 40),
@@ -121,8 +120,8 @@ class PublicationDetailScreen extends StatelessWidget {
                               ],
                             ),
                           ),
-                    
-                    const SizedBox(height: 100), 
+
+                    const SizedBox(height: 100),
                   ],
                 ),
               ),
