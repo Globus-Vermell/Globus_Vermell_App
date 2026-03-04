@@ -19,7 +19,7 @@
             "program": "lib/main.dart",
             "toolArgs": [
                 "--dart-define-from-file",
-                "${workspaceFolder}/.env"
+                ".env"
             ]
         }
     ]
