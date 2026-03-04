@@ -163,8 +163,9 @@ class BuildingListController extends ChangeNotifier {
   void startGPSTracking() async {
     LocationPermission permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied ||
-        permission == LocationPermission.deniedForever)
+        permission == LocationPermission.deniedForever) {
       return;
+    }
 
     _realPosition?.cancel();
     _realPosition =
