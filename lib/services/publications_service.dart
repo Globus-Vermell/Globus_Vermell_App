@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import '../models/publication_model.dart';
 
@@ -11,7 +10,7 @@ class PublicationService {
 
   http.Client client = http.Client();
 
-  static final String _baseUrl = dotenv.env["API_URL"] ?? "Error";
+  static const String _baseUrl = String.fromEnvironment('API_URL', defaultValue: 'Error');
 
   Future<List<Publication>> getPublications() async {
     try {
@@ -33,6 +32,6 @@ class PublicationService {
 
 List<Publication> _parsePublication(String responseBody) {
   final data = jsonDecode(responseBody);
-  final List<dynamic> listaJson = data['publications'];
+  final List<Map<String, dynamic>> listaJson = List<Map<String, dynamic>>.from(data['publications'] ?? []);
   return listaJson.map((mapa) => Publication.fromMap(mapa)).toList();
 }

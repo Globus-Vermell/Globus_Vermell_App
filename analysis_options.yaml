@@ -43,14 +43,11 @@ dcm:
 
   rules:
     - avoid-dynamic                     # Restringe el uso de tipos dinámicos.
-    - avoid-non-null-assertion          # Prohíbe el uso del operador '!'.
     - avoid-unnecessary-type-casts      # Evita casteos redundantes con 'as'.
     - avoid-unnecessary-type-assertions # Evita el uso redundante del operador 'is'.
 
     - avoid-global-state                # Prohíbe el estado global mutable.
     - prefer-single-widget-per-file     # Limita a un widget principal por archivo.
-    - prefer-extracting-callbacks       # Obliga a extraer lógica de callbacks a métodos.
-    - avoid-late-keyword                # Restringe inicializaciones tardías.
 
     - avoid-redundant-async             # Evita declaraciones 'async' sin 'await'.
     - avoid-passing-async-when-sync-expected

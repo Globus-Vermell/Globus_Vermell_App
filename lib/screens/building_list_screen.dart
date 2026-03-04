@@ -4,6 +4,7 @@ import 'package:globus_vermell_app/utils/lang_extensions.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import '../controllers/building_list_controller.dart';
+import '../models/building_model.dart';
 import '../widgets/building_card.dart';
 import '../widgets/toggle_button.dart';
 import 'building_detail_screen.dart';
@@ -106,6 +107,29 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
     super.dispose();
   }
 
+  Future<void> _navegarADetalle(Building edificio, BuildingListController controller) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BuildingDetailScreen(
+          building: edificio,
+          location: controller.location,
+        ),
+      ),
+    );
+
+    if (!mounted) return;
+
+    if (result == 'show_map') {
+      setState(() => _listView = false);
+      Future.delayed(const Duration(milliseconds: 300), () {
+        if (edificio.latitude != 0 && edificio.longitude != 0) {
+          _mapController.move(LatLng(edificio.latitude, edificio.longitude), 17.0);
+        }
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -124,7 +148,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
       floatingActionButton: Consumer<BuildingListController>(
         builder: (context, controller, child) {
           return FloatingActionButton(
-            onPressed: controller.isLoading ? null : _useGPS,
+            onPressed: () => controller.isLoading ? null : _useGPS,
             backgroundColor: const Color(0xFFE41E26),
             child: controller.isLoading
                 ? const Padding(
@@ -177,7 +201,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                             child: _buildFilter(
                               texto: context.loc.all,
                               isSelected: controller.publicationFilter == 0,
-                              onTap: () => _filterByPublication(0),
+                              onTap: () { _filterByPublication(0);},
                             ),
                           ),
                           const SizedBox(width: 8),
@@ -187,7 +211,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                               texto: context.loc.publications,
                               icono: Icons.keyboard_arrow_down_rounded,
                               isSelected: controller.publicationFilter != 0,
-                              onTap: () => _showPublicationsMenu(controller),
+                              onTap: () { _showPublicationsMenu(controller);},
                             ),
                           ),
                           const SizedBox(width: 8),
@@ -197,7 +221,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                               texto: context.loc.nearby,
                               icono: Icons.location_on_outlined,
                               isSelected: false,
-                              onTap: _useGPS,
+                              onTap: () { _useGPS;},
                             ),
                           ),
                         ],
@@ -358,35 +382,11 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
             child: Center(child: CircularProgressIndicator()),
           );
         }
-
         final edificio = controller.buildings[index];
-
         return BuildingCard(
           building: edificio,
           location: controller.location,
-          onTap: () async {
-            final result = await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => BuildingDetailScreen(
-                  building: edificio,
-                  location: controller.location,
-                ),
-              ),
-            );
-
-            if (result == 'show_map') {
-              setState(() => _listView = false);
-              Future.delayed(const Duration(milliseconds: 300), () {
-                if (edificio.latitude != 0 && edificio.longitude != 0) {
-                  _mapController.move(
-                    LatLng(edificio.latitude, edificio.longitude),
-                    17.0,
-                  );
-                }
-              });
-            }
-          },
+          onTap: () => _navegarADetalle(edificio, controller),
         );
       },
     );
@@ -447,27 +447,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                 width: 50,
                 height: 50,
                 child: GestureDetector(
-                  onTap: () async {
-                    final result = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => BuildingDetailScreen(
-                          building: edificio,
-                          location: controller.location,
-                        ),
-                      ),
-                    );
-
-                    if (result == 'show_map') {
-                      setState(() => _listView = false);
-                      Future.delayed(const Duration(milliseconds: 300), () {
-                        _mapController.move(
-                          LatLng(edificio.latitude, edificio.longitude),
-                          17.0,
-                        );
-                      });
-                    }
-                  },
+                  onTap: () => _navegarADetalle(edificio, controller),
                   child: const Icon(
                     Icons.location_on,
                     color: Color(0xFFE41E26),

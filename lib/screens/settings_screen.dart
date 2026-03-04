@@ -13,7 +13,6 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-
   void _mostrarOpcionesDeIdioma(BuildContext context) {
     final langProvider = context.read<LanguageProvider>();
     showModalBottomSheet(
@@ -40,10 +39,30 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
-                        _buildOpcionIdioma(context, context.loc.languageCatalan, 'ca', langProvider),
-                        _buildOpcionIdioma(context, context.loc.languageSpanish, 'es', langProvider),
-                        _buildOpcionIdioma(context, context.loc.languageEnglish, 'en', langProvider),
-                        _buildOpcionIdioma(context, context.loc.languageArabic, 'ar', langProvider),
+                        _buildOpcionIdioma(
+                          context,
+                          context.loc.languageCatalan,
+                          'ca',
+                          langProvider,
+                        ),
+                        _buildOpcionIdioma(
+                          context,
+                          context.loc.languageSpanish,
+                          'es',
+                          langProvider,
+                        ),
+                        _buildOpcionIdioma(
+                          context,
+                          context.loc.languageEnglish,
+                          'en',
+                          langProvider,
+                        ),
+                        _buildOpcionIdioma(
+                          context,
+                          context.loc.languageArabic,
+                          'ar',
+                          langProvider,
+                        ),
                       ],
                     ),
                   ),
@@ -55,7 +74,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
       },
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -99,9 +117,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 style: const TextStyle(fontWeight: FontWeight.w500),
               ),
               trailing: const Icon(Icons.chevron_right, color: Colors.grey),
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => AboutAppScreen()));
-              },
+              onTap: () =>
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AboutAppScreen()),
+                ),
             ),
           ],
         ),
@@ -116,9 +136,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }) {
     return ListTile(
       title: Text(titulo, style: const TextStyle(fontWeight: FontWeight.w500)),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       onTap: null,
       contentPadding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 5),
       trailing: Switch(
@@ -132,9 +150,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   Widget _buildDesplegable(BuildContext context) {
     return ListTile(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       contentPadding: const EdgeInsets.symmetric(
         horizontal: 5.0,
         vertical: 5.0,
@@ -153,7 +169,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  Widget _buildOpcionIdioma(BuildContext context, String nombre, String codigo, LanguageProvider provider) {
+  Widget _buildOpcionIdioma(
+    BuildContext context,
+    String nombre,
+    String codigo,
+    LanguageProvider provider,
+  ) {
     return ListTile(
       title: Text(nombre),
       contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),

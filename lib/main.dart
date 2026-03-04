@@ -13,10 +13,13 @@ Future<void> main() async {
 
   await dotenv.load(fileName: ".env");
 
-  await Supabase.initialize(
-    url: dotenv.env['SUPABASE_URL'] ?? '',
-    anonKey: dotenv.env['SUPABASE_ANON_KEY'] ?? '',
-  );
+  const url = String.fromEnvironment('SUPABASE_URL', defaultValue: '');
+  const anonKey = String.fromEnvironment('SUPABASE_ANON_KEY', defaultValue: '');
+  if (url.isEmpty || anonKey.isEmpty) {
+    throw Exception('Faltan Credenciales de SupaBase');
+  }
+
+  await Supabase.initialize(url: url, anonKey: anonKey);
   runApp(
     MultiProvider(
       providers: [

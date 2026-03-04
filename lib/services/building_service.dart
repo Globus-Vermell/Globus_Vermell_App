@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import '../models/building_model.dart';
 
@@ -12,7 +11,7 @@ class BuildingService {
 
   http.Client client = http.Client();
 
-  static final String _baseUrl = dotenv.env["API_URL"] ?? "Error";
+  static const String _baseUrl = String.fromEnvironment('API_URL', defaultValue: 'Error');
   // 2. Memoria Caché: Aquí guardaremos los edificios para no perderlos
   List<Building> buildingsCache = [];
   bool firstPageLoading = false; // Para saber si ya hicimos la pre-carga
@@ -64,6 +63,6 @@ class BuildingService {
 
 List<Building> _parseBuildings(String responseBody) {
   final data = jsonDecode(responseBody);
-  final List<dynamic> listaJson = data['buildings'];
+  final List<Map<String, dynamic>> listaJson = List<Map<String, dynamic>>.from(data['buildings'] ?? []);
   return listaJson.map((mapa) => Building.fromMap(mapa)).toList();
 }

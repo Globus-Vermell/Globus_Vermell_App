@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:globus_vermell_app/utils/get_distance.dart';
+import 'package:globus_vermell_app/widgets/empty_card.dart';
 import 'package:latlong2/latlong.dart';
 import '../models/building_model.dart';
 import '../controllers/building_detail_controller.dart';
@@ -289,31 +290,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                             height: 1.6,
                           ),
                         )
-                      : Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(24),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[50],
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: Column(
-                            children: [
-                              Icon(
-                                Icons.description_outlined,
-                                size: 40,
-                                color: Colors.grey[300],
-                              ),
-                              const SizedBox(height: 12),
-                              Text(
-                                context.loc.noDescription,
-                                style: TextStyle(
-                                  color: Colors.grey[500],
-                                  fontStyle: FontStyle.italic,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                      : EmptyCard(icon: Icons.description_outlined, message: context.loc.noDescription),
 
                   const SizedBox(height: 40),
 
