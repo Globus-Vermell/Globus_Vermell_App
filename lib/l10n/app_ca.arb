@@ -45,5 +45,10 @@
   "me": "Jo",
   "aboutApp": "Sobre l'app",
   "pencil": "lla",
-  "pencile": "pis"
+  "pencile": "pis",
+  "appSubtitle": "Guia d'arquitectura de Barcelona",
+  "appVersion": "Versió ",
+  "appDescription1": "Descobreix les joies arquitectòniques més emblemàtiques de Barcelona. Des del modernisme de Gaudí fins a les obres contemporànies més innovadores.",
+  "appDescription2": "Aquesta aplicació et permet explorar edificacions icòniques, llegir publicacions sobre l'arquitectura catalana i trobar les teves ubicacions favorites al mapa.",
+  "viewTutorial": "Veure tutorial"
 }

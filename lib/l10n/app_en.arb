@@ -45,5 +45,10 @@
   "me": "Me",
   "aboutApp": "About the app",
   "pencil": "pen",
-  "pencile": "cil"
+  "pencile": "cil",
+  "appSubtitle": "Barcelona Architecture Guide",
+  "appVersion": "Version ",
+  "appDescription1": "Discover Barcelona's most emblematic architectural gems. From Gaudí's modernism to the most innovative contemporary works.",
+  "appDescription2": "This app allows you to explore iconic buildings, read publications about Catalan architecture, and find your favorite locations on the map.",
+  "viewTutorial": "View tutorial"
 }
