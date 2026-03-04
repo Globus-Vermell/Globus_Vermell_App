@@ -6,6 +6,7 @@
             "request": "launch",
             "type": "dart",
             "flutterMode": "debug",
+            "program": "lib/main.dart",
             "toolArgs": [
                 "--dart-define-from-file",
                 ".env"
@@ -16,6 +17,7 @@
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile",
+            "program": "lib/main.dart",
             "toolArgs": [
                 "--dart-define-from-file",
                 ".env"
