@@ -6,10 +6,9 @@
             "request": "launch",
             "type": "dart",
             "flutterMode": "debug",
-            "program": "lib/main.dart",
             "toolArgs": [
                 "--dart-define-from-file",
-                "${workspaceFolder}/.env"
+                ".env"
             ]
         },
         {
