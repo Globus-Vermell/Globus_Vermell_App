@@ -9,7 +9,7 @@
             "program": "lib/main.dart",
             "toolArgs": [
                 "--dart-define-from-file",
-                ".env"
+                "${workspaceFolder}/.env"
             ]
         },
         {
@@ -20,7 +20,7 @@
             "program": "lib/main.dart",
             "toolArgs": [
                 "--dart-define-from-file",
-                ".env"
+                "${workspaceFolder}/.env"
             ]
         }
     ]
