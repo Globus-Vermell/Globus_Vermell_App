@@ -78,9 +78,34 @@ class AboutAppScreen extends StatelessWidget {
                 ),
               ),
             ),
+            const SizedBox(height: 20),
+            Divider(color: Colors.grey[300], thickness: 1),
+            buildInfoRow("version", "1.0.0"),
+            buildInfoRow("autor", "ITB"),
+            const SizedBox(height: 40),
+            Text(
+              "Desemvolupat amb ❤️ desde Barcelona per a Barcelona.",
+              textAlign: TextAlign.center,
+            ),
           ],
         ),
       ),
     );
   }
+}
+
+Widget buildInfoRow(String label, String value) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 1.0),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(label, style: TextStyle(fontSize: 16)),
+        Text(
+          value,
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+        ),
+      ],
+    ),
+  );
 }

@@ -63,6 +63,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           'ar',
                           langProvider,
                         ),
+                        _buildOpcionIdioma(
+                          context,
+                          context.loc.languageFrench,
+                          'fr',
+                          langProvider,
+                        ),
                       ],
                     ),
                   ),

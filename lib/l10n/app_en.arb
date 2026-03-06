@@ -14,7 +14,7 @@
   "publications": "Publications",
   "list": "List",
   "all": "All",
-  "nearby": "Nearby",
+  "nearby": "Upcoming",
   "buildingsByDistance": "Buildings ordered by distance",
   "locationUpdated": "Location updated!",
   "noPublication": "No publication",
@@ -45,8 +45,9 @@
   "me": "Me",
   "aboutApp": "About the app",
   "appSubtitle": "Barcelona Architecture Guide",
-  "appVersion": "Version ",
+  "appVersion": "Version",
   "appDescription1": "Discover Barcelona's most emblematic architectural gems. From Gaudí's modernism to the most innovative contemporary works.",
   "appDescription2": "This app allows you to explore iconic buildings, read publications about Catalan architecture, and find your favorite locations on the map.",
-  "viewTutorial": "View tutorial"
+  "viewTutorial": "View tutorial",
+  "developedWith": "Developed with ❤️ from Barcelona for Barcelona."
 }

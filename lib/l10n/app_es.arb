@@ -45,8 +45,9 @@
   "me": "Yo",
   "aboutApp": "Acerca de la app",
   "appSubtitle": "Guía de arquitectura de Barcelona",
-  "appVersion": "Versión ",
+  "appVersion": "Versión",
   "appDescription1": "Descubre las joyas arquitectónicas más emblemáticas de Barcelona. Desde el modernismo de Gaudí hasta las obras contemporáneas más innovadoras.",
   "appDescription2": "Esta aplicación te permite explorar edificaciones icónicas, leer publicaciones sobre la arquitectura catalana y encontrar tus ubicaciones favoritas en el mapa.",
-  "viewTutorial": "Ver tutorial"
+  "viewTutorial": "Ver tutorial",
+  "developedWith": "Desarrollado con ❤️ desde Barcelona para Barcelona."
 }
