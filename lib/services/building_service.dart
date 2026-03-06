@@ -43,10 +43,8 @@ class BuildingService {
       if (publicationId != null) {
         urlString += '&publication=$publicationId';
       }
-
       final url = Uri.parse(urlString);
       debugPrint("Llamando a la API: $url");
-
       final response = await client.get(url);
 
       if (response.statusCode == 200) {
