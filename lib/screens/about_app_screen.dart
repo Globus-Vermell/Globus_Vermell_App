@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:globus_vermell_app/utils/lang_extensions.dart';
+import 'onboarding_screen.dart';
 
 class AboutAppScreen extends StatelessWidget {
   const AboutAppScreen({super.key});
@@ -60,7 +61,13 @@ class AboutAppScreen extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton.icon(
                 onPressed: () {
-                  // TODO: Ir a la pantalla de tutorial
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          const OnboardingScreen(fromSettings: true),
+                    ),
+                  );
                 },
                 icon: const Icon(Icons.menu_book),
                 label: Text(context.loc.viewTutorial),

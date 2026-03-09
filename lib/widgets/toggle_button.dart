@@ -35,12 +35,17 @@ class ToggleButton extends StatelessWidget {
                 size: 20,
               ),
               const SizedBox(width: 8),
-              Text(
-                text,
-                style: TextStyle(
-                  color: isSelected ? Colors.white : Colors.grey[700],
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
+              //Hacemos flexible el texto para evitar romper la pantalla traduciendo
+              Flexible(
+                child: Text(
+                  text,
+                  style: TextStyle(
+                    color: isSelected ? Colors.white : Colors.grey[700],
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
                 ),
               ),
             ],

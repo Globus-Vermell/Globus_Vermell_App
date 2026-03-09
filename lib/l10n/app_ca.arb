@@ -49,5 +49,15 @@
   "appDescription1": "Descobreix les joies arquitectòniques més emblemàtiques de Barcelona. Des del modernisme de Gaudí fins a les obres contemporànies més innovadores.",
   "appDescription2": "Aquesta aplicació et permet explorar edificacions icòniques, llegir publicacions sobre l'arquitectura catalana i trobar les teves ubicacions favorites al mapa.",
   "viewTutorial": "Veure tutorial",
-  "developedWith": "Desenvolupat amb ❤️ des de Barcelona per a Barcelona."
+  "developedWith": "Desenvolupat amb ❤️ des de Barcelona per a Barcelona.",
+  "skip": "Saltar",
+  "back": "Enrere",
+  "next": "Següent",
+  "start": "Començar",
+  "onboardingTitle1": "Descobreix l'arquitectura\nde Barcelona",
+  "onboardingDesc1": "Explora les joies arquitectòniques més emblemàtiques de la ciutat. Des del modernisme de Gaudí fins a les obres contemporànies més innovadores.",
+  "onboardingTitle2": "Troba joies ocultes",
+  "onboardingDesc2": "Utilitza els filtres superiors per descobrir edificacions per barri, època o estil arquitectònic. Navega pel mapa i troba les teves favorites.",
+  "onboardingTitle3": "Explora cada detall",
+  "onboardingDesc3": "Fes clic als marcadors del mapa per veure informació completa, història, horaris i com arribar a cada edificació."
 }

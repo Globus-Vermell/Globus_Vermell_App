@@ -508,12 +508,16 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
               ),
               const SizedBox(width: 6),
             ],
-            Text(
-              texto,
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-                color: isSelected ? Colors.white : Colors.black87,
+            Flexible(
+              child: Text(
+                texto,
+                style: TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: isSelected ? Colors.white : Colors.black87,
+                ),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
               ),
             ),
           ],

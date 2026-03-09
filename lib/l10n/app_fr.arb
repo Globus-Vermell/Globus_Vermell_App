@@ -1,5 +1,6 @@
 {
   "@@locale": "fr",
+  "actual": "Français",
   "settings": "Paramètres",
   "darkMode": "Mode Sombre",
   "highContrast": "Contraste Élevé",
@@ -48,5 +49,15 @@
   "appDescription1": "Découvrez les joyaux architecturaux les plus emblématiques de Barcelone. Du modernisme de Gaudí aux œuvres contemporaines les plus innovantes.",
   "appDescription2": "Cette application vous permet d'explorer des bâtiments emblématiques, de lire des publications sur l'architecture catalane et de trouver vos lieux préférés sur la carte.",
   "viewTutorial": "Voir le tutoriel",
-  "developedWith": "Développé avec ❤️ depuis Barcelone pour Barcelone."
+  "developedWith": "Développé avec ❤️ depuis Barcelone pour Barcelone.",
+  "skip": "Passer",
+  "back": "Retour",
+  "next": "Suivant",
+  "start": "Commencer",
+  "onboardingTitle1": "Découvrez l'architecture\nde Barcelone",
+  "onboardingDesc1": "Explorez les joyaux architecturaux les plus emblématiques de la ville. Du modernisme de Gaudí aux œuvres contemporaines les plus innovantes.",
+  "onboardingTitle2": "Trouvez des trésors cachés",
+  "onboardingDesc2": "Utilisez les filtres supérieurs pour découvrir des bâtiments par quartier, époque ou style architectural. Naviguez sur la carte et trouvez vos favoris.",
+  "onboardingTitle3": "Explorez chaque détail",
+  "onboardingDesc3": "Cliquez sur les marqueurs de la carte pour voir les informations complètes, l'histoire, les horaires et comment se rendre à chaque édifice."
 }

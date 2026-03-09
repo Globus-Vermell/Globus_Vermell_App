@@ -49,5 +49,15 @@
   "appDescription1": "Discover Barcelona's most emblematic architectural gems. From Gaudí's modernism to the most innovative contemporary works.",
   "appDescription2": "This app allows you to explore iconic buildings, read publications about Catalan architecture, and find your favorite locations on the map.",
   "viewTutorial": "View tutorial",
-  "developedWith": "Developed with ❤️ from Barcelona for Barcelona."
+  "developedWith": "Developed with ❤️ from Barcelona for Barcelona.",
+  "skip": "Skip",
+  "back": "Back",
+  "next": "Next",
+  "start": "Start",
+  "onboardingTitle1": "Discover Barcelona's\nArchitecture",
+  "onboardingDesc1": "Explore the city's most emblematic architectural gems. From Gaudí's modernism to the most innovative contemporary works.",
+  "onboardingTitle2": "Find hidden gems",
+  "onboardingDesc2": "Use the top filters to discover buildings by neighborhood, era, or architectural style. Browse the map and find your favorites.",
+  "onboardingTitle3": "Explore every detail",
+  "onboardingDesc3": "Click on the map markers to view complete information, history, opening hours, and how to get to each building."
 }
