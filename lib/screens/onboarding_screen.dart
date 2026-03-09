@@ -79,7 +79,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             Align(
               alignment: Alignment.topRight,
               child: TextButton(
-                onPressed: () => _finishOnboarding,
+                onPressed: () => _finishOnboarding(),
                 style: TextButton.styleFrom(
                   foregroundColor: Theme.of(
                     context,
