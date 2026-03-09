@@ -226,4 +226,12 @@ final AppBarTheme bar = AppBarTheme(
   ),
 );
 
-final TextTheme text = GoogleFonts.montserratTextTheme();
+final TextTheme text = GoogleFonts.montserratTextTheme().apply(
+  fontFamily: GoogleFonts.montserrat().fontFamily,
+  fontFamilyFallback: [
+    'Apple Color Emoji',
+    'Noto Color Emoji',
+    'Segoe UI Emoji',
+    'Roboto',
+  ],
+);
