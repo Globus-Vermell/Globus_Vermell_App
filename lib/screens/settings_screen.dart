@@ -30,9 +30,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
               children: [
                 Text(
                   context.loc.language,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
+                    color : Theme.of(context).colorScheme.onSurface
                   ),
                 ),
                 const SizedBox(height: 10),
