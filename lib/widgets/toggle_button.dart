@@ -36,8 +36,7 @@ class ToggleButton extends StatelessWidget {
             children: [
               Icon(
                 icon,
-                // Pedacito 4: Color blanco si está activo, gris inteligente si no
-                color: isSelected ? Colors.white : colores.onSurfaceVariant,
+                color: isSelected ? colores.onPrimary : colores.onSurfaceVariant,
                 size: 20,
               ),
               const SizedBox(width: 8),
@@ -46,8 +45,7 @@ class ToggleButton extends StatelessWidget {
                 child: Text(
                   text,
                   style: TextStyle(
-                    // Pedacito 4: Color blanco si está activo, gris inteligente si no
-                    color: isSelected ? Colors.white : colores.onSurfaceVariant,
+                    color: isSelected ? colores.onPrimary : colores.onSurfaceVariant,
                     fontWeight: FontWeight.w600,
                     fontSize: 16,
                   ),

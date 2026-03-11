@@ -68,7 +68,7 @@ class AppThemes {
       foregroundColor: Colors.white,
     ),
     colorScheme: const ColorScheme.highContrastLight(
-      primary: Color(0xff511a13),         
+      primary: Color.fromARGB(255, 0, 0, 0),         
       onPrimary: Colors.white,
       surface: Colors.white,
       onSurface: Colors.black,            
