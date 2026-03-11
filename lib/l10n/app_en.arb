@@ -9,6 +9,7 @@
   "settings": "Settings",
   "darkMode": "Dark Mode",
   "highContrast": "High Contrast",
+  "blindMode": "Color-blindness",
   "language": "Language",
   "map": "Map",
   "publications": "Publications",

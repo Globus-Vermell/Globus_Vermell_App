@@ -12,12 +12,12 @@ class PublicationDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_rounded, color: Colors.black87),
+          icon: Icon(Icons.arrow_back_rounded, color: Theme.of(context).colorScheme.onSurface),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -30,11 +30,11 @@ class PublicationDetailScreen extends StatelessWidget {
               Text(
                 publication.title,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 34,
                   fontWeight: FontWeight.w900,
                   height: 1.2,
-                  color: Colors.black87,
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
               ),
               const SizedBox(height: 16),
@@ -42,16 +42,16 @@ class PublicationDetailScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(
+                  Icon(
                     Icons.bookmark_outline_rounded,
-                    color: Colors.grey,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
                     size: 18,
                   ),
                   const SizedBox(width: 6),
                 ],
               ),
               const SizedBox(height: 24),
-              Divider(color: Colors.grey[200], thickness: 1),
+              Divider(color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2), thickness: 1),
               const SizedBox(height: 32),
 
               // Contenedor para volver a alinear el resto de la información a la izquierda
@@ -73,7 +73,7 @@ class PublicationDetailScreen extends StatelessWidget {
                               (tema) => InfoChip(
                                 icon: Icons.label_important_rounded,
                                 label: tema.trim(),
-                                color: const Color(0xFFE41E26),
+                                color: Theme.of(context).colorScheme.primary,
                               ),
                             )
                             .toList(),
@@ -91,7 +91,7 @@ class PublicationDetailScreen extends StatelessWidget {
                             textAlign: TextAlign.justify,
                             style: TextStyle(
                               fontSize: 16,
-                              color: Colors.grey[800],
+                              color: Theme.of(context).colorScheme.onSurfaceVariant,
                               height: 1.6,
                             ),
                           )
@@ -99,7 +99,7 @@ class PublicationDetailScreen extends StatelessWidget {
                             width: double.infinity,
                             padding: const EdgeInsets.all(24),
                             decoration: BoxDecoration(
-                              color: Colors.grey[50],
+                              color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.05),
                               borderRadius: BorderRadius.circular(16),
                             ),
                             child: Column(
@@ -107,13 +107,13 @@ class PublicationDetailScreen extends StatelessWidget {
                                 Icon(
                                   Icons.description_outlined,
                                   size: 40,
-                                  color: Colors.grey[300],
+                                  color: Theme.of(context).colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
                                 ),
                                 const SizedBox(height: 12),
                                 Text(
                                   context.loc.noDescription,
                                   style: TextStyle(
-                                    color: Colors.grey[500],
+                                    color: Theme.of(context).colorScheme.onSurfaceVariant,
                                     fontStyle: FontStyle.italic,
                                   ),
                                 ),

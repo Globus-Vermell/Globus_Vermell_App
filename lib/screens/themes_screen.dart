@@ -43,7 +43,7 @@ class _ThemesScreenState extends State<ThemesScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(context.loc.connectionError),
-            backgroundColor: const Color(0xFFFF0009),
+            backgroundColor: Theme.of(context).colorScheme.primary,
             behavior: SnackBarBehavior.floating,
           ),
         );
@@ -61,8 +61,9 @@ class _ThemesScreenState extends State<ThemesScreen> {
           children: [Text(context.loc.publications)],
         ),
       ),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator(color: Colors.red))
+          ? Center(child: CircularProgressIndicator(color: Theme.of(context).colorScheme.primary))
           : ListView(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
               children: [
@@ -96,12 +97,12 @@ class _ThemesScreenState extends State<ThemesScreen> {
   Widget _buildSectionHeader(String title, IconData icon) {
     return Row(
       children: [
-        Icon(icon, size: 18, color: Colors.grey[600]),
+        Icon(icon, size: 18, color: Theme.of(context).colorScheme.onSurfaceVariant),
         const SizedBox(width: 8),
         Text(
           title,
           style: TextStyle(
-            color: Colors.grey[800],
+            color: Theme.of(context).colorScheme.onSurface,
             fontSize: 14,
             fontWeight: FontWeight.bold,
             letterSpacing: 1.1,
@@ -123,12 +124,12 @@ class _ThemesScreenState extends State<ThemesScreen> {
         final item = items[index];
         return Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: Colors.grey.withValues(alpha: 0.1)),
+            border: Border.all(color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2)),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.04),
+                color: Theme.of(context).colorScheme.shadow.withValues(alpha: 0.04),
                 blurRadius: 12,
                 offset: const Offset(0, 4),
               ),
@@ -158,10 +159,10 @@ class _ThemesScreenState extends State<ThemesScreen> {
                         Expanded(
                           child: Text(
                             item.title,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 17,
-                              color: Color(0xFF2D3436),
+                              color: Theme.of(context).colorScheme.onSurface,
                             ),
                           ),
                         ),
@@ -180,7 +181,7 @@ class _ThemesScreenState extends State<ThemesScreen> {
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
-                        color: Colors.grey[600],
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                         fontSize: 14,
                         height: 1.4,
                       ),
@@ -192,7 +193,7 @@ class _ThemesScreenState extends State<ThemesScreen> {
                         Text(
                           context.loc.viewMore,
                           style: TextStyle(
-                            color: Colors.red[400],
+                            color: Theme.of(context).colorScheme.primary,
                             fontWeight: FontWeight.bold,
                             fontSize: 13,
                           ),
@@ -200,7 +201,7 @@ class _ThemesScreenState extends State<ThemesScreen> {
                         Icon(
                           Icons.chevron_right,
                           size: 18,
-                          color: Colors.red[400],
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                       ],
                     ),
@@ -219,10 +220,10 @@ class _ThemesScreenState extends State<ThemesScreen> {
       width: double.infinity,
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.5),
+        color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: Colors.grey.withValues(alpha: 0.1),
+          color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.1),
           style: BorderStyle.none,
         ),
       ),
@@ -230,7 +231,7 @@ class _ThemesScreenState extends State<ThemesScreen> {
         child: Text(
           context.loc.noPublicationsAvailable,
           style: TextStyle(
-            color: Colors.grey[400],
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
             fontSize: 14,
             fontStyle: FontStyle.italic,
           ),

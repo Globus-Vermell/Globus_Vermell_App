@@ -17,6 +17,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final langProvider = context.read<LanguageProvider>();
     showModalBottomSheet(
       context: context,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
       ),
@@ -84,6 +85,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(title: Text(context.loc.settings)),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8),
@@ -98,7 +100,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 context.read<ThemeProvider>().toggleHighContrast();
               },
             ),
-            Divider(color: Colors.grey[400], thickness: 1),
+            Divider(
+              color: Theme.of(
+                context,
+              ).colorScheme.outline.withValues(alpha: 0.3),
+              thickness: 1,
+            ),
             _buildSwitch(
               titulo: context.loc.darkMode,
               valor: context.watch<ThemeProvider>().isDarkMode,
@@ -106,9 +113,33 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 context.read<ThemeProvider>().toggleTheme();
               },
             ),
-            Divider(color: Colors.grey[400], thickness: 1),
+            Divider(
+              color: Theme.of(
+                context,
+              ).colorScheme.outline.withValues(alpha: 0.3),
+              thickness: 1,
+            ),
+            _buildSwitch(
+              titulo:
+                  context.loc.blindMode, 
+              valor: context.watch<ThemeProvider>().isColorBlind,
+              onChanged: (val) {
+                context.read<ThemeProvider>().toggleColorBlind();
+              },
+            ),
+            Divider(
+              color: Theme.of(
+                context,
+              ).colorScheme.outline.withValues(alpha: 0.3),
+              thickness: 1,
+            ),
             _buildDesplegable(context),
-            Divider(color: Colors.grey[400], thickness: 1),
+            Divider(
+              color: Theme.of(
+                context,
+              ).colorScheme.outline.withValues(alpha: 0.3),
+              thickness: 1,
+            ),
             ListTile(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
@@ -122,7 +153,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 context.loc.aboutApp,
                 style: const TextStyle(fontWeight: FontWeight.w500),
               ),
-              trailing: const Icon(Icons.chevron_right, color: Colors.grey),
+              trailing: Icon(
+                Icons.chevron_right,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
               onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => AboutAppScreen()),
@@ -147,7 +181,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       trailing: Switch(
         value: valor,
         onChanged: onChanged,
-        activeThumbColor: Colors.redAccent,
+        activeThumbColor: Theme.of(context).colorScheme.primary,
         overlayColor: WidgetStateProperty.all(Colors.transparent),
       ),
     );
@@ -167,9 +201,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
       subtitle: Text(
         context.loc.actual,
-        style: const TextStyle(color: Colors.grey),
+        style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
       ),
-      trailing: const Icon(Icons.keyboard_arrow_down, color: Colors.grey),
+      trailing: Icon(
+        Icons.keyboard_arrow_down,
+        color: Theme.of(context).colorScheme.onSurfaceVariant,
+      ),
       onTap: () => _mostrarOpcionesDeIdioma(context),
     );
   }

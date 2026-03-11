@@ -1,237 +1,97 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-final ThemeData lightMode = ThemeData(
-  colorScheme: ColorScheme.light(
-    brightness: Brightness.light,
-    primary: Color(0xff904b40),
-    surfaceTint: Color(0xff904b40),
-    onPrimary: Color(0xffffffff),
-    primaryContainer: Color(0xffffdad4),
-    onPrimaryContainer: Color(0xff73342a),
-    secondary: Color(0xff775651),
-    onSecondary: Color(0xffffffff),
-    secondaryContainer: Color(0xffffdad4),
-    onSecondaryContainer: Color(0xff5d3f3b),
-    tertiary: Color(0xff705c2e),
-    onTertiary: Color(0xffffffff),
-    tertiaryContainer: Color(0xfffbdfa6),
-    onTertiaryContainer: Color(0xff564419),
-    error: Color(0xffba1a1a),
-    onError: Color(0xffffffff),
-    errorContainer: Color(0xffffdad6),
-    onErrorContainer: Color(0xff93000a),
-    surface: Color(0xfffbfbfb),
-    onSurface: Color(0xff231918),
-    onSurfaceVariant: Color(0xff534341),
-    outline: Color(0xff857370),
-    outlineVariant: Color(0xffd8c2be),
-    shadow: Color(0xff000000),
-    scrim: Color(0xff000000),
-    inverseSurface: Color(0xff392e2c),
-    inversePrimary: Color(0xffffb4a8),
-    primaryFixed: Color(0xffffdad4),
-    onPrimaryFixed: Color(0xff3a0905),
-    primaryFixedDim: Color(0xffffb4a8),
-    onPrimaryFixedVariant: Color(0xff73342a),
-    secondaryFixed: Color(0xffffdad4),
-    onSecondaryFixed: Color(0xff2c1512),
-    secondaryFixedDim: Color(0xffe7bdb6),
-    onSecondaryFixedVariant: Color(0xff5d3f3b),
-    tertiaryFixed: Color(0xfffbdfa6),
-    onTertiaryFixed: Color(0xff251a00),
-    tertiaryFixedDim: Color(0xffdec48c),
-    onTertiaryFixedVariant: Color(0xff564419),
-    surfaceDim: Color(0xffe8d6d3),
-    surfaceBright: Color(0xfffff8f6),
-    surfaceContainerLowest: Color(0xffffffff),
-    surfaceContainerLow: Color(0xffffffff),
-    surfaceContainer: Color(0xfffceae7),
-    surfaceContainerHigh: Color(0xfff7e4e1),
-    surfaceContainerHighest: Color(0xfff1dfdc),
-  ),
-  useMaterial3: true,
-  appBarTheme: bar.copyWith(backgroundColor: Colors.red),
-  textTheme: text,
-);
+class AppThemes {
+  // --- CONFIGURACIÓN DE TEXTO ---
+  static final TextTheme _textTheme = GoogleFonts.montserratTextTheme();
 
-final ThemeData highContrastLightMode = ThemeData(
-  colorScheme: ColorScheme.highContrastLight(
-    brightness: Brightness.light,
-    primary: Color(0xff511a13),
-    surfaceTint: Color(0x00ff9040),
-    onPrimary: Color(0xffffffff),
-    primaryContainer: Color(0xff76362d),
-    onPrimaryContainer: Color(0xffffffff),
-    secondary: Color(0xff3f2521),
-    onSecondary: Color(0xffffffff),
-    secondaryContainer: Color(0xff60423d),
-    onSecondaryContainer: Color(0xffffffff),
-    tertiary: Color(0xff392a01),
-    onTertiary: Color(0xffffffff),
-    tertiaryContainer: Color(0xff59471b),
-    onTertiaryContainer: Color(0xffffffff),
-    error: Color(0xff600004),
-    onError: Color(0xffffffff),
-    errorContainer: Color(0xff98000a),
-    onErrorContainer: Color(0xffffffff),
-    surface: Color(0xfffff8f6),
-    onSurface: Color(0xff000000),
-    onSurfaceVariant: Color(0xff000000),
-    outline: Color(0xff372927),
-    outlineVariant: Color(0xff554643),
-    shadow: Color(0xff000000),
-    scrim: Color(0xff000000),
-    inverseSurface: Color(0xff392e2c),
-    inversePrimary: Color(0xffffb4a8),
-    primaryFixed: Color(0xff76362d),
-    onPrimaryFixed: Color(0xffffffff),
-    primaryFixedDim: Color(0xff592018),
-    onPrimaryFixedVariant: Color(0xffffffff),
-    secondaryFixed: Color(0xff60423d),
-    onSecondaryFixed: Color(0xffffffff),
-    secondaryFixedDim: Color(0xff472c27),
-    onSecondaryFixedVariant: Color(0xffffffff),
-    tertiaryFixed: Color(0xff59471b),
-    onTertiaryFixed: Color(0xffffffff),
-    tertiaryFixedDim: Color(0xff403006),
-    onTertiaryFixedVariant: Color(0xffffffff),
-    surfaceDim: Color(0xffc6b5b2),
-    surfaceBright: Color(0xfffff8f6),
-    surfaceContainerLowest: Color(0xffffffff),
-    surfaceContainerLow: Color(0xffffedea),
-    surfaceContainer: Color(0xfff1dfdc),
-    surfaceContainerHigh: Color(0xffe2d1ce),
-    surfaceContainerHighest: Color(0xffd4c3c0),
-  ),
-  useMaterial3: true,
-  appBarTheme: bar,
-  textTheme: text,
-);
+  static final AppBarTheme _appBarTheme = AppBarTheme(
+    centerTitle: true,
+    elevation: 0,
+    titleTextStyle: GoogleFonts.montserrat(
+      fontSize: 18,
+      fontWeight: FontWeight.bold,
+    ),
+  );
 
-final ThemeData darkMode = ThemeData(
-  colorScheme: ColorScheme.dark(
-    brightness: Brightness.dark,
-    primary: Color(0xffffb4a8),
-    surfaceTint: Color(0xffffb4a8),
-    onPrimary: Color(0xff561e16),
-    primaryContainer: Color(0xff73342a),
-    onPrimaryContainer: Color(0xffffdad4),
-    secondary: Color(0xffe7bdb6),
-    onSecondary: Color(0xff442925),
-    secondaryContainer: Color(0xff5d3f3b),
-    onSecondaryContainer: Color(0xffffdad4),
-    tertiary: Color(0xffdec48c),
-    onTertiary: Color(0xff3e2e04),
-    tertiaryContainer: Color(0xff564419),
-    onTertiaryContainer: Color(0xfffbdfa6),
-    error: Color(0xffffb4ab),
-    onError: Color(0xff690005),
-    errorContainer: Color(0xff93000a),
-    onErrorContainer: Color(0xffffdad6),
-    surface: Color(0xff1a1110),
-    onSurface: Color(0xfff1dfdc),
-    onSurfaceVariant: Color(0xffd8c2be),
-    outline: Color(0xffa08c89),
-    outlineVariant: Color(0xff534341),
-    shadow: Color(0xff000000),
-    scrim: Color(0xff000000),
-    inverseSurface: Color(0xfff1dfdc),
-    inversePrimary: Color(0xff904b40),
-    primaryFixed: Color(0xffffdad4),
-    onPrimaryFixed: Color(0xff3a0905),
-    primaryFixedDim: Color(0xffffb4a8),
-    onPrimaryFixedVariant: Color(0xff73342a),
-    secondaryFixed: Color(0xffffdad4),
-    onSecondaryFixed: Color(0xff2c1512),
-    secondaryFixedDim: Color(0xffe7bdb6),
-    onSecondaryFixedVariant: Color(0xff5d3f3b),
-    tertiaryFixed: Color(0xfffbdfa6),
-    onTertiaryFixed: Color(0xff251a00),
-    tertiaryFixedDim: Color(0xffdec48c),
-    onTertiaryFixedVariant: Color(0xff564419),
-    surfaceDim: Color(0xff1a1110),
-    surfaceBright: Color(0xff423735),
-    surfaceContainerLowest: Color(0xff140c0b),
-    surfaceContainerLow: Color(0xfff32d18),
-    surfaceContainer: Color(0xff271d1c),
-    surfaceContainerHigh: Color(0xff322826),
-    surfaceContainerHighest: Color(0xff3d3230),
-  ),
-  useMaterial3: true,
-  appBarTheme: bar,
-  textTheme: text,
-);
+  // --- 1. MODO CLARO (Estándar) ---
+  static final ThemeData lightMode = ThemeData(
+    useMaterial3: true,
+    textTheme: _textTheme,
+    appBarTheme: _appBarTheme.copyWith(
+      backgroundColor: const Color.fromARGB(255, 230, 39, 39),
+      foregroundColor: const Color.fromARGB(255, 242, 242, 242),
+    ),
+    dividerTheme: const DividerThemeData(color: Color(0xffd8c2be)),
+    colorScheme: const ColorScheme.light(
+      primary: Color.fromARGB(255, 230, 39, 39),         // Tu rojo corporativo
+      onPrimary: Colors.white,
+      secondary: Color(0xff775651),       // Iconos y elementos secundarios
+      onSecondary: Colors.white,
+      surface: Color(0xfffbfbfb),         // Fondos
+      onSurface: Color(0xff231918),       // Texto principal
+      onSurfaceVariant: Color(0xff534341), // Texto gris oscuro (el que pedías)
+      outline: Color(0xff857370),          // Bordes de tarjetas
+      error: Color(0xffba1a1a),
+    ),
+  );
 
-final ThemeData highContrastDarkMode = ThemeData(
-  colorScheme: ColorScheme.highContrastDark(
-    brightness: Brightness.dark,
-    primary: Color(0xffffece9),
-    surfaceTint: Color(0xffffb4a8),
-    onPrimary: Color(0xff000000),
-    primaryContainer: Color(0xffffaea1),
-    onPrimaryContainer: Color(0xff220000),
-    secondary: Color(0xffffece9),
-    onSecondary: Color(0xff000000),
-    secondaryContainer: Color(0xffe3b9b2),
-    onSecondaryContainer: Color(0xff190604),
-    tertiary: Color(0xffffeed0),
-    onTertiary: Color(0xff000000),
-    tertiaryContainer: Color(0xffdac089),
-    onTertiaryContainer: Color(0xff110a00),
-    error: Color(0xffffece9),
-    onError: Color(0xff000000),
-    errorContainer: Color(0xffffaea4),
-    onErrorContainer: Color(0xff220001),
-    surface: Color(0xff1a1110),
-    onSurface: Color(0xffffffff),
-    onSurfaceVariant: Color(0xffffffff),
-    outline: Color(0xffffece9),
-    outlineVariant: Color(0xffd4beba),
-    shadow: Color(0xff000000),
-    scrim: Color(0xff000000),
-    inverseSurface: Color(0xfff1dfdc),
-    inversePrimary: Color(0xff74352c),
-    primaryFixed: Color(0xffffdad4),
-    onPrimaryFixed: Color(0xff000000),
-    primaryFixedDim: Color(0xffffb4a8),
-    onPrimaryFixedVariant: Color(0xff2c0101),
-    secondaryFixed: Color(0xffffdad4),
-    onSecondaryFixed: Color(0xff000000),
-    secondaryFixedDim: Color(0xffe7bdb6),
-    onSecondaryFixedVariant: Color(0xff200b08),
-    tertiaryFixed: Color(0xfffbdfa6),
-    onTertiaryFixed: Color(0xff000000),
-    tertiaryFixedDim: Color(0xffdec48c),
-    onTertiaryFixedVariant: Color(0xff181000),
-    surfaceDim: Color(0xff1a1110),
-    surfaceBright: Color(0xff5a4d4b),
-    surfaceContainerLowest: Color(0xff000000),
-    surfaceContainerLow: Color(0xff271d1c),
-    surfaceContainer: Color(0xff392e2c),
-    surfaceContainerHigh: Color(0xff443937),
-    surfaceContainerHighest: Color(0xff504442),
-  ),
-  useMaterial3: true,
-  appBarTheme: bar,
-  textTheme: text,
-);
+  // --- 2. MODO OSCURO ---
+  static final ThemeData darkMode = ThemeData(
+    useMaterial3: true,
+    textTheme: _textTheme,
+    appBarTheme: _appBarTheme.copyWith(
+      backgroundColor: const Color(0xff1a1110),
+      foregroundColor: const Color(0xffffb4a8),
+    ),
+    dividerTheme: const DividerThemeData(color: Color(0xff534341)),
+    colorScheme: const ColorScheme.dark(
+      primary: Color(0xffffb4a8),         // Coral suave para no cansar la vista
+      onPrimary: Color(0xff561e16),
+      secondary: Color(0xffe7bdb6),
+      onSecondary: Color(0xff442925),
+      surface: Color(0xff1a1110),         // Fondo oscuro
+      onSurface: Color(0xfff1dfdc),       // Texto claro
+      onSurfaceVariant: Color(0xffd8c2be), // Gris claro para modo oscuro
+      outline: Color(0xffa08c89),
+      error: Color(0xffffb4ab),
+    ),
+  );
 
-final AppBarTheme bar = AppBarTheme(
-  centerTitle: true,
-  elevation: 0,
-  titleTextStyle: GoogleFonts.montserrat(
-    fontSize: 18,
-    fontWeight: FontWeight.bold,
-  ),
-);
+  // --- 3. ALTO CONTRASTE ---
+  static final ThemeData highContrastMode = ThemeData(
+    useMaterial3: true,
+    textTheme: _textTheme,
+    appBarTheme: _appBarTheme.copyWith(
+      backgroundColor: Colors.black,
+      foregroundColor: Colors.white,
+    ),
+    colorScheme: const ColorScheme.highContrastLight(
+      primary: Color(0xff511a13),         // Rojo muy oscuro
+      onPrimary: Colors.white,
+      surface: Colors.white,
+      onSurface: Colors.black,            // Negro puro para lectura fácil
+      onSurfaceVariant: Colors.black,
+      outline: Colors.black,
+    ),
+  );
 
-final TextTheme text = GoogleFonts.montserratTextTheme().apply(
-  fontFamily: GoogleFonts.montserrat().fontFamily,
-  fontFamilyFallback: [
-    'Apple Color Emoji',
-    'Noto Color Emoji',
-    'Segoe UI Emoji',
-    'Roboto',
-  ],
-);
+  // --- 4. MODO DALTONISMO (Protanopia/Deuteranopia) ---
+  static final ThemeData colorBlindMode = ThemeData(
+    useMaterial3: true,
+    textTheme: _textTheme,
+    appBarTheme: _appBarTheme.copyWith(
+      backgroundColor: const Color(0xff005faf), // Azul cobalto (seguro para daltónicos)
+      foregroundColor: Colors.white,
+    ),
+    colorScheme: const ColorScheme.light(
+      primary: Color(0xff005faf),
+      onPrimary: Colors.white,
+      secondary: Color(0xff004a87),
+      surface: Color(0xfff0f7ff),
+      onSurface: Color(0xff001d33),
+      onSurfaceVariant: Color(0xff40474f),
+      outline: Color(0xff70777f),
+    ),
+  );
+}
