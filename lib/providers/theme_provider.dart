@@ -12,12 +12,12 @@ class ThemeProvider with ChangeNotifier {
 
   ThemeData get themeData {
     // Si el modo alto contraste esta activo, tiene prioridad absoluta
-    if(_isHighContrast) {
+    if (_isHighContrast) {
       return AppThemes.highContrastMode;
     }
 
-    // Modo daltonismo 
-    if(_isColorBlind) {
+    // Modo daltonismo
+    if (_isColorBlind) {
       return AppThemes.colorBlindMode;
     }
 
@@ -38,7 +38,7 @@ class ThemeProvider with ChangeNotifier {
   void toggleHighContrast() {
     _isHighContrast = !_isHighContrast;
     if (_isHighContrast) {
-      _isColorBlind = false; 
+      _isColorBlind = false;
     }
     notifyListeners();
   }
@@ -46,7 +46,7 @@ class ThemeProvider with ChangeNotifier {
   void toggleColorBlind() {
     _isColorBlind = !_isColorBlind;
     if (_isColorBlind) {
-      _isHighContrast = false; 
+      _isHighContrast = false;
       _isDark = false; // Nuestro modo daltonismo está hecho sobre base clarita
     }
     notifyListeners();

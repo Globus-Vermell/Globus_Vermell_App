@@ -24,14 +24,14 @@ class AppThemes {
     ),
     dividerTheme: const DividerThemeData(color: Color(0xffd8c2be)),
     colorScheme: const ColorScheme.light(
-      primary: Color.fromARGB(255, 230, 39, 39),         // Tu rojo corporativo
+      primary: Color.fromARGB(255, 230, 39, 39), // Tu rojo corporativo
       onPrimary: Colors.white,
-      secondary: Color(0xff775651),       // Iconos y elementos secundarios
+      secondary: Color(0xff775651), // Iconos y elementos secundarios
       onSecondary: Colors.white,
-      surface: Color(0xfffbfbfb),         // Fondos
-      onSurface: Color(0xff231918),       // Texto principal
+      surface: Color(0xfffbfbfb), // Fondos
+      onSurface: Color(0xff231918), // Texto principal
       onSurfaceVariant: Color(0xff534341), // Texto gris oscuro (el que pedías)
-      outline: Color(0xff857370),          // Bordes de tarjetas
+      outline: Color(0xff857370), // Bordes de tarjetas
       error: Color(0xffba1a1a),
     ),
   );
@@ -46,12 +46,12 @@ class AppThemes {
     ),
     dividerTheme: const DividerThemeData(color: Color(0xff534341)),
     colorScheme: const ColorScheme.dark(
-      primary: Color(0xffffb4a8),         // Coral suave para no cansar la vista
+      primary: Color(0xffffb4a8), // Coral suave para no cansar la vista
       onPrimary: Color(0xff561e16),
       secondary: Color(0xffe7bdb6),
       onSecondary: Color(0xff442925),
-      surface: Color.fromARGB(255, 53, 53, 53),         // Fondo oscuro
-      onSurface: Color(0xfff1dfdc),       // Texto claro
+      surface: Color.fromARGB(255, 53, 53, 53), // Fondo oscuro
+      onSurface: Color(0xfff1dfdc), // Texto claro
       onSurfaceVariant: Color(0xffd8c2be), // Gris claro para modo oscuro
       outline: Color(0xffa08c89),
       error: Color(0xffffb4ab),
@@ -67,10 +67,10 @@ class AppThemes {
       foregroundColor: Colors.white,
     ),
     colorScheme: const ColorScheme.highContrastLight(
-      primary: Color(0xff511a13),         // Rojo muy oscuro
+      primary: Color(0xff511a13), // Rojo muy oscuro
       onPrimary: Colors.white,
       surface: Colors.white,
-      onSurface: Colors.black,            // Negro puro para lectura fácil
+      onSurface: Colors.black, // Negro puro para lectura fácil
       onSurfaceVariant: Colors.black,
       outline: Colors.black,
     ),
@@ -81,7 +81,9 @@ class AppThemes {
     useMaterial3: true,
     textTheme: _textTheme,
     appBarTheme: _appBarTheme.copyWith(
-      backgroundColor: const Color(0xff005faf), // Azul cobalto (seguro para daltónicos)
+      backgroundColor: const Color(
+        0xff005faf,
+      ), // Azul cobalto (seguro para daltónicos)
       foregroundColor: Colors.white,
     ),
     colorScheme: const ColorScheme.light(

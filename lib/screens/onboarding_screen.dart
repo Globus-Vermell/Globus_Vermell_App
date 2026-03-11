@@ -121,9 +121,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           child: Icon(
                             _pages[index]['icon'],
                             size: 48,
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.primary,
+                            color: Theme.of(context).colorScheme.primary,
                           ),
                         ),
                         const SizedBox(height: 40),
@@ -133,14 +131,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           style: TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
-                            color : Theme.of(context).colorScheme.onSurface
+                            color: Theme.of(context).colorScheme.onSurface,
                           ),
                         ),
                         const SizedBox(height: 20),
                         Text(
                           _pages[index]['description'],
                           textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.onSurface,),
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
                         ),
                         const SizedBox(height: 40),
                       ],
@@ -161,7 +162,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   decoration: BoxDecoration(
                     color: _currentPage == index
                         ? Theme.of(context).colorScheme.primary
-                        : Theme.of(context).colorScheme.outline.withValues(alpha: 0.3),
+                        : Theme.of(
+                            context,
+                          ).colorScheme.outline.withValues(alpha: 0.3),
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
@@ -222,7 +225,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 15,
-                              color : Theme.of(context).colorScheme.surface,
+                              color: Theme.of(context).colorScheme.surface,
                             ),
                           ),
                           if (_currentPage < _pages.length - 1) ...[

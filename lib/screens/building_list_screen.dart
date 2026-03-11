@@ -168,7 +168,10 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                       strokeWidth: 2,
                     ),
                   )
-                : Icon(Icons.my_location, color: colores.onPrimary), // Pedacito 1
+                : Icon(
+                    Icons.my_location,
+                    color: colores.onPrimary,
+                  ), // Pedacito 1
           );
         },
       ),
@@ -280,7 +283,10 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
   }
 
   // Modificado para recibir los colores
-  void _showPublicationsMenu(BuildingListController controller, ColorScheme colores) {
+  void _showPublicationsMenu(
+    BuildingListController controller,
+    ColorScheme colores,
+  ) {
     showGeneralDialog(
       context: context,
       barrierDismissible: true,
@@ -321,7 +327,10 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                         return ListTile(
                           title: Text(
                             pub.title,
-                            style: TextStyle(fontSize: 14, color: colores.onSurface), // Pedacito 4
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: colores.onSurface,
+                            ), // Pedacito 4
                           ),
                           onTap: () {
                             Navigator.pop(context);
@@ -402,15 +411,20 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
         if (index == controller.buildings.length) {
           return Padding(
             padding: const EdgeInsets.all(20.0),
-            child: Center(child: CircularProgressIndicator(color: colores.primary)),
+            child: Center(
+              child: CircularProgressIndicator(color: colores.primary),
+            ),
           );
         }
         final edificio = controller.buildings[index];
         return BuildingCard(
-        building: edificio,
-        location: controller.location,
-        onTap: () => _navegarADetalle(edificio, controller), // ¡Le devolvemos su función para que se pueda tocar, uwu! ✨
-      );
+          building: edificio,
+          location: controller.location,
+          onTap: () => _navegarADetalle(
+            edificio,
+            controller,
+          ), // ¡Le devolvemos su función para que se pueda tocar, uwu! ✨
+        );
       },
     );
   }
@@ -447,7 +461,8 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                   children: [
                     const Icon(
                       Icons.person_pin_circle,
-                      color: Colors.blue, // Universalmente el GPS propio es azul, lo dejamos así ✨
+                      color: Colors
+                          .blue, // Universalmente el GPS propio es azul, lo dejamos así ✨
                       size: 40,
                     ),
                     Text(
@@ -513,7 +528,9 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
               Icon(
                 icono,
                 size: 16,
-                color: isSelected ? colores.onPrimary : colores.onSurface, // Pedacito 2
+                color: isSelected
+                    ? colores.onPrimary
+                    : colores.onSurface, // Pedacito 2
               ),
               const SizedBox(width: 6),
             ],
@@ -523,7 +540,9 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                 style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
-                  color: isSelected ? colores.onPrimary : colores.onSurface, // Pedacito 2
+                  color: isSelected
+                      ? colores.onPrimary
+                      : colores.onSurface, // Pedacito 2
                 ),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,

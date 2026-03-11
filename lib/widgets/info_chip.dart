@@ -17,20 +17,20 @@ class InfoChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1), 
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(30),
         border: Border.all(color: color.withValues(alpha: 0.2)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 16, color: color), 
+          Icon(icon, size: 16, color: color),
           const SizedBox(width: 8),
           Flexible(
             child: Text(
               label,
               style: TextStyle(
-                color: color, 
+                color: color,
                 fontWeight: FontWeight.w600,
                 fontSize: 13,
               ),

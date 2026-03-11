@@ -27,8 +27,8 @@ class EmptyCard extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(
-            icon, 
-            size: 40, 
+            icon,
+            size: 40,
             color: colores.onSurfaceVariant.withValues(alpha: 0.5),
           ),
           const SizedBox(height: 12),
@@ -36,7 +36,7 @@ class EmptyCard extends StatelessWidget {
             message,
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: colores.onSurfaceVariant, 
+              color: colores.onSurfaceVariant,
               fontStyle: FontStyle.italic,
             ),
           ),

@@ -17,7 +17,10 @@ class PublicationDetailScreen extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.surface,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_rounded, color: Theme.of(context).colorScheme.onSurface),
+          icon: Icon(
+            Icons.arrow_back_rounded,
+            color: Theme.of(context).colorScheme.onSurface,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -51,7 +54,12 @@ class PublicationDetailScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 24),
-              Divider(color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2), thickness: 1),
+              Divider(
+                color: Theme.of(
+                  context,
+                ).colorScheme.outline.withValues(alpha: 0.2),
+                thickness: 1,
+              ),
               const SizedBox(height: 32),
 
               // Contenedor para volver a alinear el resto de la información a la izquierda
@@ -99,7 +107,9 @@ class PublicationDetailScreen extends StatelessWidget {
                             width: double.infinity,
                             padding: const EdgeInsets.all(24),
                             decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.05),
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.outline.withValues(alpha: 0.05),
                               borderRadius: BorderRadius.circular(16),
                             ),
                             child: Column(
@@ -107,13 +117,18 @@ class PublicationDetailScreen extends StatelessWidget {
                                 Icon(
                                   Icons.description_outlined,
                                   size: 40,
-                                  color: Theme.of(context).colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurfaceVariant
+                                      .withValues(alpha: 0.5),
                                 ),
                                 const SizedBox(height: 12),
                                 Text(
                                   context.loc.noDescription,
                                   style: TextStyle(
-                                    color: Theme.of(context).colorScheme.onSurface,
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurface,
                                     fontStyle: FontStyle.italic,
                                   ),
                                 ),

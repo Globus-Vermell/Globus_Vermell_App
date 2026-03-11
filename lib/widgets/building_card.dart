@@ -23,13 +23,13 @@ class BuildingCard extends StatefulWidget {
 
 class _BuildingCardState extends State<BuildingCard> {
   late String distance = getDistance(widget.location, widget.building);
-  
+
   @override
   Widget build(BuildContext context) {
     final colores = Theme.of(context).colorScheme;
 
     return Card(
-      margin: const EdgeInsets.only(bottom: 12), 
+      margin: const EdgeInsets.only(bottom: 12),
       elevation: 2,
       color: colores.surface,
       shadowColor: colores.shadow.withValues(alpha: 0.1),
@@ -42,7 +42,7 @@ class _BuildingCardState extends State<BuildingCard> {
         borderRadius: BorderRadius.circular(12),
         child: Padding(
           padding: const EdgeInsets.all(12.0),
-          child: Row( 
+          child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
@@ -61,7 +61,7 @@ class _BuildingCardState extends State<BuildingCard> {
                           errorWidget: (context, url, error) {
                             return Icon(
                               Icons.broken_image,
-                              color: colores.onSurfaceVariant, 
+                              color: colores.onSurfaceVariant,
                             );
                           },
                           placeholder: (context, url) {
@@ -71,7 +71,7 @@ class _BuildingCardState extends State<BuildingCard> {
                                 height: 20,
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2,
-                                  color: colores.primary, 
+                                  color: colores.primary,
                                 ),
                               ),
                             );
@@ -85,7 +85,7 @@ class _BuildingCardState extends State<BuildingCard> {
                       ),
               ),
               const SizedBox(width: 12),
-              
+
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,7 +95,7 @@ class _BuildingCardState extends State<BuildingCard> {
                       style: TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.bold,
-                        color: colores.onSurface, 
+                        color: colores.onSurface,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -105,7 +105,7 @@ class _BuildingCardState extends State<BuildingCard> {
                       widget.building.location,
                       style: TextStyle(
                         fontSize: 14,
-                        color: colores.onSurfaceVariant, 
+                        color: colores.onSurfaceVariant,
                         height: 1.3,
                       ),
                       maxLines: 2,
@@ -116,7 +116,7 @@ class _BuildingCardState extends State<BuildingCard> {
                       children: [
                         Icon(
                           Icons.location_on,
-                          color: colores.primary, 
+                          color: colores.primary,
                           size: 16,
                         ),
                         const SizedBox(width: 4),
@@ -155,7 +155,7 @@ class _BuildingCardState extends State<BuildingCard> {
                           style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.bold,
-                            color: colores.primary, 
+                            color: colores.primary,
                           ),
                         ),
                       ],

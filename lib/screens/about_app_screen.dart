@@ -10,24 +10,24 @@ class AboutAppScreen extends StatelessWidget {
     final colores = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor: colores.surface, 
+      backgroundColor: colores.surface,
       appBar: AppBar(
-        backgroundColor: colores.surface, 
+        backgroundColor: colores.surface,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_rounded, color: colores.onSurface), 
+          icon: Icon(Icons.arrow_back_rounded, color: colores.onSurface),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           context.loc.aboutApp,
           style: TextStyle(
-            fontSize: 18, 
-            fontWeight: FontWeight.bold, 
-            color: colores.onSurface, 
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: colores.onSurface,
           ),
         ),
       ),
-      body: SingleChildScrollView( 
+      body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 24.0),
           child: Column(
@@ -53,32 +53,32 @@ class AboutAppScreen extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.w800,
-                  color: colores.onSurface, 
+                  color: colores.onSurface,
                 ),
               ),
               const SizedBox(height: 8),
               Text(
-                context.loc.appSubtitle, 
+                context.loc.appSubtitle,
                 textAlign: TextAlign.center,
-                style: TextStyle(color: colores.onSurfaceVariant), 
+                style: TextStyle(color: colores.onSurfaceVariant),
               ),
               const SizedBox(height: 8),
               Text(
                 "${context.loc.appVersion} 1.0.0",
-                style: TextStyle(color: colores.onSurfaceVariant), 
+                style: TextStyle(color: colores.onSurfaceVariant),
               ),
 
               const SizedBox(height: 20),
               Text(
-                context.loc.appDescription1, 
+                context.loc.appDescription1,
                 textAlign: TextAlign.justify,
-                style: TextStyle(color: colores.onSurfaceVariant), 
+                style: TextStyle(color: colores.onSurfaceVariant),
               ),
               const SizedBox(height: 20),
               Text(
-                context.loc.appDescription2, 
+                context.loc.appDescription2,
                 textAlign: TextAlign.justify,
-                style: TextStyle(color: colores.onSurfaceVariant), 
+                style: TextStyle(color: colores.onSurfaceVariant),
               ),
               const SizedBox(height: 20),
               SizedBox(
@@ -93,11 +93,11 @@ class AboutAppScreen extends StatelessWidget {
                       ),
                     );
                   },
-                  icon: Icon(Icons.menu_book, color: colores.onPrimary), 
+                  icon: Icon(Icons.menu_book, color: colores.onPrimary),
                   label: Text(context.loc.viewTutorial),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: colores.primary, 
-                    foregroundColor: colores.onPrimary, 
+                    backgroundColor: colores.primary,
+                    foregroundColor: colores.onPrimary,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 24,
                       vertical: 12,
@@ -110,12 +110,15 @@ class AboutAppScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              Divider(color: colores.outline.withValues(alpha: 0.2), thickness: 1), 
+              Divider(
+                color: colores.outline.withValues(alpha: 0.2),
+                thickness: 1,
+              ),
               const SizedBox(height: 20),
               Text(
-                context.loc.developedWith, 
+                context.loc.developedWith,
                 textAlign: TextAlign.center,
-                style: TextStyle(color: colores.onSurfaceVariant), 
+                style: TextStyle(color: colores.onSurfaceVariant),
               ),
             ],
           ),
@@ -132,12 +135,16 @@ Widget buildInfoRow(String label, String value, ColorScheme colores) {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          label, 
+          label,
           style: TextStyle(fontSize: 16, color: colores.onSurfaceVariant),
         ),
         Text(
           value,
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: colores.onSurface),
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w400,
+            color: colores.onSurface,
+          ),
         ),
       ],
     ),

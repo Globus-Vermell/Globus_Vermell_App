@@ -63,7 +63,11 @@ class _ThemesScreenState extends State<ThemesScreen> {
       ),
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: _isLoading
-          ? Center(child: CircularProgressIndicator(color: Theme.of(context).colorScheme.primary))
+          ? Center(
+              child: CircularProgressIndicator(
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            )
           : ListView(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
               children: [
@@ -97,7 +101,11 @@ class _ThemesScreenState extends State<ThemesScreen> {
   Widget _buildSectionHeader(String title, IconData icon) {
     return Row(
       children: [
-        Icon(icon, size: 18, color: Theme.of(context).colorScheme.onSurfaceVariant),
+        Icon(
+          icon,
+          size: 18,
+          color: Theme.of(context).colorScheme.onSurfaceVariant,
+        ),
         const SizedBox(width: 8),
         Text(
           title,
@@ -126,10 +134,16 @@ class _ThemesScreenState extends State<ThemesScreen> {
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2)),
+            border: Border.all(
+              color: Theme.of(
+                context,
+              ).colorScheme.outline.withValues(alpha: 0.2),
+            ),
             boxShadow: [
               BoxShadow(
-                color: Theme.of(context).colorScheme.shadow.withValues(alpha: 0.04),
+                color: Theme.of(
+                  context,
+                ).colorScheme.shadow.withValues(alpha: 0.04),
                 blurRadius: 12,
                 offset: const Offset(0, 4),
               ),

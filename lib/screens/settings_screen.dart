@@ -120,8 +120,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               thickness: 1,
             ),
             _buildSwitch(
-              titulo:
-                  context.loc.blindMode, 
+              titulo: context.loc.blindMode,
               valor: context.watch<ThemeProvider>().isColorBlind,
               onChanged: (val) {
                 context.read<ThemeProvider>().toggleColorBlind();

@@ -16,18 +16,18 @@ class SectionHeader extends StatelessWidget {
           width: 4,
           height: 18,
           decoration: BoxDecoration(
-            color: colores.primary, 
+            color: colores.primary,
             borderRadius: BorderRadius.circular(2),
           ),
         ),
         const SizedBox(width: 8),
         Text(
           title,
-          style: TextStyle( 
+          style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.bold,
             letterSpacing: 1.0,
-            color: colores.onSurface, 
+            color: colores.onSurface,
           ),
         ),
         if (onInfo != null) ...[
@@ -40,7 +40,7 @@ class SectionHeader extends StatelessWidget {
               child: Icon(
                 Icons.info_outline_rounded,
                 size: 20,
-                color: colores.onSurfaceVariant, 
+                color: colores.onSurfaceVariant,
               ),
             ),
           ),

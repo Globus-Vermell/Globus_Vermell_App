@@ -40,14 +40,13 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
   }
 
   Future<void> _openPublication(String title) async {
-    final colores = Theme.of(context).colorScheme; 
+    final colores = Theme.of(context).colorScheme;
 
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) => Center(
-        child: CircularProgressIndicator(color: colores.primary),
-      ),
+      builder: (context) =>
+          Center(child: CircularProgressIndicator(color: colores.primary)),
     );
 
     try {
@@ -72,7 +71,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(context.loc.pubNotFound),
-          backgroundColor: colores.error, 
+          backgroundColor: colores.error,
         ),
       );
     }
@@ -84,7 +83,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: colores.surface, 
+        backgroundColor: colores.surface,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Text(
           context.loc.iconsLegend,
@@ -97,7 +96,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
               _buildLegendItem(
                 Icons.auto_stories_rounded,
                 context.loc.publication,
-                colores.primary, 
+                colores.primary,
                 colores,
               ),
               const SizedBox(height: 12),
@@ -166,12 +165,12 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
   Widget build(BuildContext context) {
     final building = widget.building;
     final location = widget.location;
-    final colores = Theme.of(context).colorScheme; 
+    final colores = Theme.of(context).colorScheme;
 
     String distanciaPorDefecto = getDistance(location, building);
 
     return Scaffold(
-      backgroundColor: colores.surface, 
+      backgroundColor: colores.surface,
       body: CustomScrollView(
         slivers: [
           _buildSliverAppBar(building, distanciaPorDefecto, colores),
@@ -190,7 +189,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                       fontSize: 28,
                       fontWeight: FontWeight.w800,
                       height: 1.1,
-                      color: colores.onSurface, 
+                      color: colores.onSurface,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -208,7 +207,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                           building.location,
                           style: TextStyle(
                             fontSize: 15,
-                            color: colores.onSurfaceVariant, 
+                            color: colores.onSurfaceVariant,
                             height: 1.3,
                           ),
                         ),
@@ -229,7 +228,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                           vertical: 8,
                         ),
                         decoration: BoxDecoration(
-                          color: colores.primary.withValues(alpha: 0.08), 
+                          color: colores.primary.withValues(alpha: 0.08),
                           borderRadius: BorderRadius.circular(50),
                         ),
                         child: Row(
@@ -245,7 +244,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                               child: Text(
                                 building.publications.first,
                                 style: TextStyle(
-                                  color: colores.primary, 
+                                  color: colores.primary,
                                   fontWeight: FontWeight.w700,
                                   fontSize: 13,
                                 ),
@@ -257,7 +256,10 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                     ),
 
                   const SizedBox(height: 32),
-                  Divider(color: colores.outline.withValues(alpha: 0.2), thickness: 1),
+                  Divider(
+                    color: colores.outline.withValues(alpha: 0.2),
+                    thickness: 1,
+                  ),
                   const SizedBox(height: 32),
 
                   SectionHeader(
@@ -339,7 +341,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                       ).copyWith(dividerColor: Colors.transparent),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: colores.primary.withValues(alpha: 0.04), 
+                          color: colores.primary.withValues(alpha: 0.04),
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(
                             color: colores.outline.withValues(alpha: 0.15),
@@ -480,13 +482,20 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
         icon: Icon(Icons.map_rounded, color: colores.onPrimary),
         label: Text(
           context.loc.viewInMap,
-          style: TextStyle(color: colores.onPrimary, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            color: colores.onPrimary,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildSliverAppBar(Building building, String distanciaPorDefecto, ColorScheme colores) {
+  Widget _buildSliverAppBar(
+    Building building,
+    String distanciaPorDefecto,
+    ColorScheme colores,
+  ) {
     return SliverAppBar(
       expandedHeight: 320.0,
       pinned: true,
@@ -495,7 +504,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
       leading: Container(
         margin: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: colores.surface.withValues(alpha: 0.9), 
+          color: colores.surface.withValues(alpha: 0.9),
           shape: BoxShape.circle,
         ),
         child: IconButton(
@@ -522,12 +531,12 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
               )
             else
               Container(
-                color: colores.outline.withValues(alpha: 0.1), 
+                color: colores.outline.withValues(alpha: 0.1),
                 child: Center(
                   child: Icon(
                     Icons.broken_image_rounded,
                     size: 60,
-                    color: colores.onSurfaceVariant, 
+                    color: colores.onSurfaceVariant,
                   ),
                 ),
               ),
@@ -544,7 +553,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                     end: Alignment.bottomCenter,
                     colors: [
                       Colors.transparent,
-                      Colors.black.withValues(alpha: 0.5), 
+                      Colors.black.withValues(alpha: 0.5),
                     ],
                   ),
                 ),
@@ -602,7 +611,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                   children: [
                     Icon(
                       Icons.near_me_rounded,
-                      color: colores.primary, 
+                      color: colores.primary,
                       size: 16,
                     ),
                     const SizedBox(width: 4),
@@ -624,7 +633,12 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
     );
   }
 
-  Widget _buildLegendItem(IconData icon, String text, Color color, ColorScheme colores) {
+  Widget _buildLegendItem(
+    IconData icon,
+    String text,
+    Color color,
+    ColorScheme colores,
+  ) {
     return Row(
       children: [
         Container(
@@ -640,7 +654,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
           text,
           style: TextStyle(
             fontSize: 15,
-            color: colores.onSurface, 
+            color: colores.onSurface,
             fontWeight: FontWeight.w500,
           ),
         ),
