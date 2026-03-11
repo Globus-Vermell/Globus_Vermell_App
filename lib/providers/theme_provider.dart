@@ -11,33 +11,34 @@ class ThemeProvider with ChangeNotifier {
   bool get isColorBlind => _isColorBlind;
 
   ThemeData get themeData {
-    // Si el modo alto contraste esta activo, tiene prioridad absoluta
+    // 1. Si el modo alto contraste está activo
     if (_isHighContrast) {
-      return AppThemes.highContrastMode;
+      // Devolvemos la versión oscura o clara dependiendo del switch de Dark Mode
+      return _isDark ? AppThemes.darkHighContrastMode : AppThemes.highContrastMode;
     }
 
-    // Modo daltonismo
+    // 2. Si el modo daltonismo está activo
     if (_isColorBlind) {
-      return AppThemes.colorBlindMode;
+      // Devolvemos la versión oscura o clara dependiendo del switch de Dark Mode
+      return _isDark ? AppThemes.darkColorBlindMode : AppThemes.colorBlindMode;
     }
 
-    // En caso de no tener modos de adaptavilidad elegimos los modos claro u oscuro
+    // 3. En caso de no tener modos de adaptabilidad, elegimos los modos normales
     return _isDark ? AppThemes.darkMode : AppThemes.lightMode;
   }
 
   void toggleTheme() {
     _isDark = !_isDark;
-    // Apagamos los otros modos para que no se peleen entre ellos
-    if (_isDark) {
-      _isHighContrast = false;
-      _isColorBlind = false;
-    }
+    // ¡Ojo al dato bb! Ya NO apagamos los otros modos aquí. 
+    // Queremos que el modo oscuro se sume a la fiesta, ¡owo! ✨
     notifyListeners();
   }
 
   void toggleHighContrast() {
     _isHighContrast = !_isHighContrast;
     if (_isHighContrast) {
+      // Apagamos el daltonismo para que no choquen entre sí,
+      // ¡pero dejamos el Dark Mode tranquilo para que se combinen!
       _isColorBlind = false;
     }
     notifyListeners();
@@ -46,8 +47,9 @@ class ThemeProvider with ChangeNotifier {
   void toggleColorBlind() {
     _isColorBlind = !_isColorBlind;
     if (_isColorBlind) {
+      // Apagamos el alto contraste,
+      // ¡pero dejamos el Dark Mode en paz!
       _isHighContrast = false;
-      _isDark = false; // Nuestro modo daltonismo está hecho sobre base clarita
     }
     notifyListeners();
   }
