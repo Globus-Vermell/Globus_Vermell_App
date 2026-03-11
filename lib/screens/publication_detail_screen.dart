@@ -44,7 +44,7 @@ class PublicationDetailScreen extends StatelessWidget {
                 children: [
                   Icon(
                     Icons.bookmark_outline_rounded,
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    color: Theme.of(context).colorScheme.onSurface,
                     size: 18,
                   ),
                   const SizedBox(width: 6),
@@ -91,7 +91,7 @@ class PublicationDetailScreen extends StatelessWidget {
                             textAlign: TextAlign.justify,
                             style: TextStyle(
                               fontSize: 16,
-                              color: Theme.of(context).colorScheme.onSurfaceVariant,
+                              color: Theme.of(context).colorScheme.onSurface,
                               height: 1.6,
                             ),
                           )
@@ -113,7 +113,7 @@ class PublicationDetailScreen extends StatelessWidget {
                                 Text(
                                   context.loc.noDescription,
                                   style: TextStyle(
-                                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                    color: Theme.of(context).colorScheme.onSurface,
                                     fontStyle: FontStyle.italic,
                                   ),
                                 ),

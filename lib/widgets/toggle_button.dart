@@ -16,11 +16,16 @@ class ToggleButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ¡Nuestro atajito de colores! ✨
+    final colores = Theme.of(context).colorScheme;
+
     return Material(
-      color: isSelected ? const Color(0xFFE41E26) : Colors.white,
+      // Pedacito 2: Fondos adaptables
+      color: isSelected ? colores.primary : colores.surface,
       elevation: isSelected ? 0 : 2,
       borderRadius: BorderRadius.circular(8),
-      shadowColor: Colors.black.withValues(alpha: 0.1),
+      // Pedacito 3: Sombrita mágica
+      shadowColor: colores.shadow.withValues(alpha: 0.1),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(8),
@@ -31,7 +36,8 @@ class ToggleButton extends StatelessWidget {
             children: [
               Icon(
                 icon,
-                color: isSelected ? Colors.white : Colors.grey[700],
+                // Pedacito 4: Color blanco si está activo, gris inteligente si no
+                color: isSelected ? Colors.white : colores.onSurfaceVariant,
                 size: 20,
               ),
               const SizedBox(width: 8),
@@ -40,7 +46,8 @@ class ToggleButton extends StatelessWidget {
                 child: Text(
                   text,
                   style: TextStyle(
-                    color: isSelected ? Colors.white : Colors.grey[700],
+                    // Pedacito 4: Color blanco si está activo, gris inteligente si no
+                    color: isSelected ? Colors.white : colores.onSurfaceVariant,
                     fontWeight: FontWeight.w600,
                     fontSize: 16,
                   ),

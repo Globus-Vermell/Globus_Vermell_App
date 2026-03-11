@@ -14,23 +14,29 @@ class EmptyCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colores = Theme.of(context).colorScheme;
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: backgroundColor ?? Colors.grey[50],
+        color: backgroundColor ?? colores.outline.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 40, color: Colors.grey[300]),
+          Icon(
+            icon, 
+            size: 40, 
+            color: colores.onSurfaceVariant.withValues(alpha: 0.5),
+          ),
           const SizedBox(height: 12),
           Text(
             message,
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: Colors.grey[500],
+              color: colores.onSurfaceVariant, 
               fontStyle: FontStyle.italic,
             ),
           ),

@@ -32,16 +32,20 @@ class BottomBarState extends State<BottomBar> {
 
   @override
   Widget build(BuildContext context) {
+    final colores = Theme.of(context).colorScheme;
+
     return Scaffold(
+      backgroundColor: colores.surface, 
       body: IndexedStack(index: _selectedIndex, children: _widgetOptions),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: colores.surface, 
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.map),
+            icon: const Icon(Icons.map),
             label: context.loc.map,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.menu_book),
+            icon: const Icon(Icons.menu_book),
             label: context.loc.publications,
           ),
           BottomNavigationBarItem(
@@ -50,7 +54,8 @@ class BottomBarState extends State<BottomBar> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.red,
+        selectedItemColor: colores.primary, 
+        unselectedItemColor: colores.onSurfaceVariant, 
         onTap: _onItemTapped,
       ),
     );

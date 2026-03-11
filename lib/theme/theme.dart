@@ -50,7 +50,7 @@ class AppThemes {
       onPrimary: Color(0xff561e16),
       secondary: Color(0xffe7bdb6),
       onSecondary: Color(0xff442925),
-      surface: Color(0xff1a1110),         // Fondo oscuro
+      surface: Color.fromARGB(255, 53, 53, 53),         // Fondo oscuro
       onSurface: Color(0xfff1dfdc),       // Texto claro
       onSurfaceVariant: Color(0xffd8c2be), // Gris claro para modo oscuro
       outline: Color(0xffa08c89),

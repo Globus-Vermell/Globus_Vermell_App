@@ -8,24 +8,26 @@ class SectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colores = Theme.of(context).colorScheme;
+
     return Row(
       children: [
         Container(
           width: 4,
           height: 18,
           decoration: BoxDecoration(
-            color: const Color(0xFFE41E26),
+            color: colores.primary, 
             borderRadius: BorderRadius.circular(2),
           ),
         ),
         const SizedBox(width: 8),
         Text(
           title,
-          style: const TextStyle(
+          style: TextStyle( 
             fontSize: 14,
             fontWeight: FontWeight.bold,
             letterSpacing: 1.0,
-            color: Colors.black54,
+            color: colores.onSurface, 
           ),
         ),
         if (onInfo != null) ...[
@@ -38,7 +40,7 @@ class SectionHeader extends StatelessWidget {
               child: Icon(
                 Icons.info_outline_rounded,
                 size: 20,
-                color: Colors.grey[400],
+                color: colores.onSurfaceVariant, 
               ),
             ),
           ),

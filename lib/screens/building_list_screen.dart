@@ -93,7 +93,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(context.loc.connectionError),
-        backgroundColor: const Color(0xFFE41E26),
+        backgroundColor: Theme.of(context).colorScheme.error, // Pedacito 1
         behavior: SnackBarBehavior.floating,
       ),
     );
@@ -138,7 +138,11 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // ¡Nuestro atajito mágico! ✨
+    final colores = Theme.of(context).colorScheme;
+
     return Scaffold(
+      backgroundColor: colores.surface, // Fondo dinámico para el Scaffold
       appBar: AppBar(
         title: const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -155,16 +159,16 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
         builder: (context, controller, child) {
           return FloatingActionButton(
             onPressed: () => controller.isLoading ? null : _useGPS(),
-            backgroundColor: const Color(0xFFE41E26),
+            backgroundColor: colores.primary, // Pedacito 1
             child: controller.isLoading
-                ? const Padding(
-                    padding: EdgeInsets.all(12.0),
+                ? Padding(
+                    padding: const EdgeInsets.all(12.0),
                     child: CircularProgressIndicator(
-                      color: Colors.white,
+                      color: colores.onPrimary, // Pedacito 1
                       strokeWidth: 2,
                     ),
                   )
-                : const Icon(Icons.my_location, color: Colors.white),
+                : Icon(Icons.my_location, color: colores.onPrimary), // Pedacito 1
           );
         },
       ),
@@ -213,6 +217,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                               onTap: () {
                                 _filterByPublication(0);
                               },
+                              colores: colores, // Le pasamos los colores
                             ),
                           ),
                           const SizedBox(width: 8),
@@ -223,8 +228,9 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                               icono: Icons.keyboard_arrow_down_rounded,
                               isSelected: controller.publicationFilter != 0,
                               onTap: () {
-                                _showPublicationsMenu(controller);
+                                _showPublicationsMenu(controller, colores);
                               },
+                              colores: colores,
                             ),
                           ),
                           const SizedBox(width: 8),
@@ -237,6 +243,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                               onTap: () {
                                 _useGPS();
                               },
+                              colores: colores,
                             ),
                           ),
                         ],
@@ -250,7 +257,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                           '${controller.buildings.length} ${context.loc.buildingsByDistance}',
                           style: TextStyle(
                             fontSize: 14,
-                            color: Colors.grey[700],
+                            color: colores.onSurfaceVariant, // Pedacito 3
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -259,8 +266,8 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                     const SizedBox(height: 12),
                     Expanded(
                       child: _listView
-                          ? _buildList(controller)
-                          : _buildMap(controller),
+                          ? _buildList(controller, colores)
+                          : _buildMap(controller, colores),
                     ),
                   ],
                 );
@@ -272,7 +279,8 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
     );
   }
 
-  void _showPublicationsMenu(BuildingListController controller) {
+  // Modificado para recibir los colores
+  void _showPublicationsMenu(BuildingListController controller, ColorScheme colores) {
     showGeneralDialog(
       context: context,
       barrierDismissible: true,
@@ -285,11 +293,11 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
             margin: const EdgeInsets.only(top: 275, left: 16, right: 16),
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: colores.surface, // Pedacito 4
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.1),
+                  color: colores.shadow.withValues(alpha: 0.1), // Pedacito 4
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),
@@ -313,16 +321,16 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                         return ListTile(
                           title: Text(
                             pub.title,
-                            style: const TextStyle(fontSize: 14),
+                            style: TextStyle(fontSize: 14, color: colores.onSurface), // Pedacito 4
                           ),
                           onTap: () {
                             Navigator.pop(context);
                             _filterByPublication(pub.idPublication);
                           },
                           trailing: IconButton(
-                            icon: const Icon(
+                            icon: Icon(
                               Icons.info_outline,
-                              color: Color(0xFFE41E26),
+                              color: colores.primary, // Pedacito 4
                               size: 20,
                             ),
                             onPressed: () {
@@ -347,8 +355,8 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                       child: TextButton(
                         onPressed: () => Navigator.pop(context),
                         style: TextButton.styleFrom(
-                          backgroundColor: const Color(0xFFE41E26),
-                          foregroundColor: Colors.white,
+                          backgroundColor: colores.primary, // Pedacito 4
+                          foregroundColor: colores.onPrimary, // Pedacito 4
                           padding: const EdgeInsets.symmetric(
                             horizontal: 20,
                             vertical: 8,
@@ -382,9 +390,9 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
     );
   }
 
-  Widget _buildList(BuildingListController controller) {
+  Widget _buildList(BuildingListController controller, ColorScheme colores) {
     if (controller.buildings.isEmpty && controller.isLoading) {
-      return const Center(child: CircularProgressIndicator());
+      return Center(child: CircularProgressIndicator(color: colores.primary));
     }
     return ListView.builder(
       controller: _scrollController,
@@ -392,22 +400,22 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
       itemCount: controller.buildings.length + (controller.hasMoreData ? 1 : 0),
       itemBuilder: (context, index) {
         if (index == controller.buildings.length) {
-          return const Padding(
-            padding: EdgeInsets.all(20.0),
-            child: Center(child: CircularProgressIndicator()),
+          return Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Center(child: CircularProgressIndicator(color: colores.primary)),
           );
         }
         final edificio = controller.buildings[index];
         return BuildingCard(
-          building: edificio,
-          location: controller.location,
-          onTap: () => _navegarADetalle(edificio, controller),
-        );
+        building: edificio,
+        location: controller.location,
+        onTap: () => _navegarADetalle(edificio, controller), // ¡Le devolvemos su función para que se pueda tocar, uwu! ✨
+      );
       },
     );
   }
 
-  Widget _buildMap(BuildingListController controller) {
+  Widget _buildMap(BuildingListController controller, ColorScheme colores) {
     LatLng centro = controller.location;
     if (centro.latitude == 0 && centro.longitude == 0) {
       centro =
@@ -439,7 +447,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                   children: [
                     const Icon(
                       Icons.person_pin_circle,
-                      color: Colors.blue,
+                      color: Colors.blue, // Universalmente el GPS propio es azul, lo dejamos así ✨
                       size: 40,
                     ),
                     Text(
@@ -463,9 +471,9 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                 height: 50,
                 child: GestureDetector(
                   onTap: () => _navegarADetalle(edificio, controller),
-                  child: const Icon(
+                  child: Icon(
                     Icons.location_on,
-                    color: Color(0xFFE41E26),
+                    color: colores.primary, // Pedacito 5: Chincheta adaptativa
                     size: 40,
                   ),
                 ),
@@ -482,6 +490,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
     IconData? icono,
     required bool isSelected,
     required VoidCallback onTap,
+    required ColorScheme colores, // Pasamos el ColorScheme
   }) {
     return InkWell(
       onTap: onTap,
@@ -489,12 +498,12 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
-          color: isSelected ? Colors.primaries[0] : Colors.white,
+          color: isSelected ? colores.primary : colores.surface, // Pedacito 2
           borderRadius: BorderRadius.circular(30),
           border: Border.all(
             color: isSelected
-                ? Colors.primaries[0]
-                : Colors.grey.withValues(alpha: 0.3),
+                ? colores.primary
+                : colores.outline.withValues(alpha: 0.3), // Pedacito 2
           ),
         ),
         child: Row(
@@ -504,7 +513,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
               Icon(
                 icono,
                 size: 16,
-                color: isSelected ? Colors.white : Colors.black87,
+                color: isSelected ? colores.onPrimary : colores.onSurface, // Pedacito 2
               ),
               const SizedBox(width: 6),
             ],
@@ -514,7 +523,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                 style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
-                  color: isSelected ? Colors.white : Colors.black87,
+                  color: isSelected ? colores.onPrimary : colores.onSurface, // Pedacito 2
                 ),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,

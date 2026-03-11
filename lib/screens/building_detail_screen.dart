@@ -40,11 +40,13 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
   }
 
   Future<void> _openPublication(String title) async {
+    final colores = Theme.of(context).colorScheme; 
+
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) => const Center(
-        child: CircularProgressIndicator(color: Color(0xFFE41E26)),
+      builder: (context) => Center(
+        child: CircularProgressIndicator(color: colores.primary),
       ),
     );
 
@@ -70,21 +72,23 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(context.loc.pubNotFound),
-          backgroundColor: const Color(0xFFE41E26),
+          backgroundColor: colores.error, 
         ),
       );
     }
   }
 
   void _showLegend(BuildContext context) {
+    final colores = Theme.of(context).colorScheme;
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: Colors.white,
+        backgroundColor: colores.surface, 
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Text(
           context.loc.iconsLegend,
-          style: const TextStyle(color: Color(0xFFE41E26)),
+          style: TextStyle(color: colores.primary),
         ),
         content: SingleChildScrollView(
           child: Column(
@@ -93,43 +97,50 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
               _buildLegendItem(
                 Icons.auto_stories_rounded,
                 context.loc.publication,
-                const Color(0xFFE41E26),
+                colores.primary, 
+                colores,
               ),
               const SizedBox(height: 12),
               _buildLegendItem(
                 Icons.category,
                 context.loc.typology,
                 Colors.blue,
+                colores,
               ),
               const SizedBox(height: 12),
               _buildLegendItem(
                 Icons.security,
                 context.loc.protection,
                 Colors.orange,
+                colores,
               ),
               const SizedBox(height: 12),
               _buildLegendItem(
                 Icons.calendar_today,
                 context.loc.yearConst,
                 Colors.purple,
+                colores,
               ),
               const SizedBox(height: 12),
               _buildLegendItem(
                 Icons.square_foot,
                 context.loc.surface,
                 Colors.green,
+                colores,
               ),
               const SizedBox(height: 12),
               _buildLegendItem(
                 Icons.construction,
                 context.loc.renovation,
                 Colors.brown,
+                colores,
               ),
               const SizedBox(height: 12),
               _buildLegendItem(
                 Icons.emoji_events,
                 context.loc.award,
                 Colors.amber,
+                colores,
               ),
               const SizedBox(height: 12),
             ],
@@ -141,7 +152,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
             child: Text(
               context.loc.understood,
               style: TextStyle(
-                color: Color(0xFFE41E26),
+                color: colores.primary,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -155,14 +166,15 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
   Widget build(BuildContext context) {
     final building = widget.building;
     final location = widget.location;
+    final colores = Theme.of(context).colorScheme; 
 
     String distanciaPorDefecto = getDistance(location, building);
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: colores.surface, 
       body: CustomScrollView(
         slivers: [
-          _buildSliverAppBar(building, distanciaPorDefecto),
+          _buildSliverAppBar(building, distanciaPorDefecto, colores),
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.symmetric(
@@ -174,20 +186,20 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                 children: [
                   Text(
                     building.name,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.w800,
                       height: 1.1,
-                      color: Colors.black87,
+                      color: colores.onSurface, 
                     ),
                   ),
                   const SizedBox(height: 8),
 
                   Row(
                     children: [
-                      const Icon(
+                      Icon(
                         Icons.location_on_outlined,
-                        color: Colors.grey,
+                        color: colores.onSurfaceVariant,
                         size: 18,
                       ),
                       const SizedBox(width: 6),
@@ -196,7 +208,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                           building.location,
                           style: TextStyle(
                             fontSize: 15,
-                            color: Colors.grey[600],
+                            color: colores.onSurfaceVariant, 
                             height: 1.3,
                           ),
                         ),
@@ -217,25 +229,23 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                           vertical: 8,
                         ),
                         decoration: BoxDecoration(
-                          color: const Color(
-                            0xFFE41E26,
-                          ).withValues(alpha: 0.08),
+                          color: colores.primary.withValues(alpha: 0.08), 
                           borderRadius: BorderRadius.circular(50),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Icon(
+                            Icon(
                               Icons.auto_stories_rounded,
                               size: 18,
-                              color: Color(0xFFE41E26),
+                              color: colores.primary,
                             ),
                             const SizedBox(width: 8),
                             Flexible(
                               child: Text(
                                 building.publications.first,
-                                style: const TextStyle(
-                                  color: Color(0xFFE41E26),
+                                style: TextStyle(
+                                  color: colores.primary, 
                                   fontWeight: FontWeight.w700,
                                   fontSize: 13,
                                 ),
@@ -247,7 +257,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                     ),
 
                   const SizedBox(height: 32),
-                  Divider(color: Colors.grey[200], thickness: 1),
+                  Divider(color: colores.outline.withValues(alpha: 0.2), thickness: 1),
                   const SizedBox(height: 32),
 
                   SectionHeader(
@@ -312,7 +322,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                           textAlign: TextAlign.justify,
                           style: TextStyle(
                             fontSize: 16,
-                            color: Colors.grey[800],
+                            color: colores.onSurfaceVariant,
                             height: 1.6,
                           ),
                         )
@@ -322,8 +332,6 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                         ),
 
                   const SizedBox(height: 40),
-
-                  // 5. ARQUITECTOS
                   if (building.architects.isNotEmpty)
                     Theme(
                       data: Theme.of(
@@ -331,30 +339,30 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                       ).copyWith(dividerColor: Colors.transparent),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.blueGrey.withValues(alpha: 0.04),
+                          color: colores.primary.withValues(alpha: 0.04), 
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(
-                            color: Colors.grey.withValues(alpha: 0.15),
+                            color: colores.outline.withValues(alpha: 0.15),
                           ),
                         ),
                         child: ExpansionTile(
-                          iconColor: const Color(0xFFE41E26),
-                          collapsedIconColor: const Color(0xFFE41E26),
+                          iconColor: colores.primary,
+                          collapsedIconColor: colores.primary,
                           tilePadding: const EdgeInsets.symmetric(
                             horizontal: 16,
                             vertical: 4,
                           ),
                           title: Text(
                             context.loc.architects,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
-                              color: Color(0xFFE41E26),
+                              color: colores.primary,
                             ),
                           ),
-                          leading: const Icon(
+                          leading: Icon(
                             Icons.person_rounded,
-                            color: Color(0xFFE41E26),
+                            color: colores.primary,
                           ),
                           children: building.architects.map((arq) {
                             return Padding(
@@ -365,9 +373,9 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                               ),
                               child: Row(
                                 children: [
-                                  const Icon(
+                                  Icon(
                                     Icons.subdirectory_arrow_right_rounded,
-                                    color: Color(0xFFE41E26),
+                                    color: colores.primary,
                                     size: 18,
                                   ),
                                   const SizedBox(width: 12),
@@ -375,7 +383,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                                     child: Text(
                                       arq,
                                       style: TextStyle(
-                                        color: Colors.grey[800],
+                                        color: colores.onSurfaceVariant,
                                         fontSize: 15,
                                         fontWeight: FontWeight.w500,
                                       ),
@@ -398,15 +406,15 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                       ).copyWith(dividerColor: Colors.transparent),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.blueGrey.withValues(alpha: 0.04),
+                          color: colores.primary.withValues(alpha: 0.04),
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(
-                            color: Colors.grey.withValues(alpha: 0.15),
+                            color: colores.outline.withValues(alpha: 0.15),
                           ),
                         ),
                         child: ExpansionTile(
-                          iconColor: const Color(0xFFE41E26),
-                          collapsedIconColor: const Color(0xFFE41E26),
+                          iconColor: colores.primary,
+                          collapsedIconColor: colores.primary,
                           tilePadding: const EdgeInsets.symmetric(
                             horizontal: 16,
                             vertical: 4,
@@ -416,12 +424,12 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
-                              color: Color(0xFFE41E26),
+                              color: colores.primary,
                             ),
                           ),
-                          leading: const Icon(
+                          leading: Icon(
                             Icons.domain_rounded,
-                            color: Color(0xFFE41E26),
+                            color: colores.primary,
                           ),
                           children: building.uses.map((uso) {
                             return Padding(
@@ -432,9 +440,9 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                               ),
                               child: Row(
                                 children: [
-                                  const Icon(
+                                  Icon(
                                     Icons.subdirectory_arrow_right_rounded,
-                                    color: Color(0xFFE41E26),
+                                    color: colores.primary,
                                     size: 18,
                                   ),
                                   const SizedBox(width: 12),
@@ -442,7 +450,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                                     child: Text(
                                       uso,
                                       style: TextStyle(
-                                        color: Colors.grey[800],
+                                        color: colores.onSurfaceVariant,
                                         fontSize: 15,
                                         fontWeight: FontWeight.w500,
                                       ),
@@ -467,31 +475,31 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
         onPressed: () {
           Navigator.pop(context, 'show_map');
         },
-        backgroundColor: const Color(0xFFE41E26),
+        backgroundColor: colores.primary,
         elevation: 4,
-        icon: const Icon(Icons.map_rounded, color: Colors.white),
+        icon: Icon(Icons.map_rounded, color: colores.onPrimary),
         label: Text(
           context.loc.viewInMap,
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style: TextStyle(color: colores.onPrimary, fontWeight: FontWeight.bold),
         ),
       ),
     );
   }
 
-  Widget _buildSliverAppBar(Building building, String distanciaPorDefecto) {
+  Widget _buildSliverAppBar(Building building, String distanciaPorDefecto, ColorScheme colores) {
     return SliverAppBar(
       expandedHeight: 320.0,
       pinned: true,
-      backgroundColor: Colors.white,
+      backgroundColor: colores.surface,
       elevation: 0,
       leading: Container(
         margin: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.9),
+          color: colores.surface.withValues(alpha: 0.9), 
           shape: BoxShape.circle,
         ),
         child: IconButton(
-          icon: const Icon(Icons.arrow_back_rounded, color: Colors.black87),
+          icon: Icon(Icons.arrow_back_rounded, color: colores.onSurface),
           onPressed: () => Navigator.pop(context),
           padding: EdgeInsets.zero,
         ),
@@ -514,12 +522,12 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
               )
             else
               Container(
-                color: Colors.grey[100],
+                color: colores.outline.withValues(alpha: 0.1), 
                 child: Center(
                   child: Icon(
                     Icons.broken_image_rounded,
                     size: 60,
-                    color: Colors.grey[300],
+                    color: colores.onSurfaceVariant, 
                   ),
                 ),
               ),
@@ -536,7 +544,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                     end: Alignment.bottomCenter,
                     colors: [
                       Colors.transparent,
-                      Colors.black.withValues(alpha: 0.5),
+                      Colors.black.withValues(alpha: 0.5), 
                     ],
                   ),
                 ),
@@ -580,28 +588,28 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                   vertical: 6,
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.95),
+                  color: colores.surface.withValues(alpha: 0.95),
                   borderRadius: BorderRadius.circular(30),
-                  boxShadow: const [
+                  boxShadow: [
                     BoxShadow(
-                      color: Colors.black12,
+                      color: colores.shadow.withValues(alpha: 0.1),
                       blurRadius: 8,
-                      offset: Offset(0, 4),
+                      offset: const Offset(0, 4),
                     ),
                   ],
                 ),
                 child: Row(
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.near_me_rounded,
-                      color: Color(0xFFE41E26),
+                      color: colores.primary, 
                       size: 16,
                     ),
                     const SizedBox(width: 4),
                     Text(
                       distanciaPorDefecto,
                       style: TextStyle(
-                        color: Colors.grey[800],
+                        color: colores.onSurface,
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
                       ),
@@ -616,7 +624,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
     );
   }
 
-  Widget _buildLegendItem(IconData icon, String text, Color color) {
+  Widget _buildLegendItem(IconData icon, String text, Color color, ColorScheme colores) {
     return Row(
       children: [
         Container(
@@ -632,7 +640,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
           text,
           style: TextStyle(
             fontSize: 15,
-            color: Colors.grey[800],
+            color: colores.onSurface, 
             fontWeight: FontWeight.w500,
           ),
         ),

@@ -115,7 +115,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           decoration: BoxDecoration(
                             color: Theme.of(
                               context,
-                            ).colorScheme.primaryContainer,
+                            ).colorScheme.primary.withValues(alpha: 0.1),
                             shape: BoxShape.circle,
                           ),
                           child: Icon(
@@ -123,23 +123,24 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             size: 48,
                             color: Theme.of(
                               context,
-                            ).colorScheme.onPrimaryContainer,
+                            ).colorScheme.primary,
                           ),
                         ),
                         const SizedBox(height: 40),
                         Text(
                           _pages[index]['title'],
                           textAlign: TextAlign.center,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
+                            color : Theme.of(context).colorScheme.onSurface
                           ),
                         ),
                         const SizedBox(height: 20),
                         Text(
                           _pages[index]['description'],
                           textAlign: TextAlign.center,
-                          style: const TextStyle(fontSize: 15),
+                          style: TextStyle(fontSize: 15, color: Theme.of(context).colorScheme.onSurface,),
                         ),
                         const SizedBox(height: 40),
                       ],
@@ -160,7 +161,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   decoration: BoxDecoration(
                     color: _currentPage == index
                         ? Theme.of(context).colorScheme.primary
-                        : Theme.of(context).colorScheme.outlineVariant,
+                        : Theme.of(context).colorScheme.outline.withValues(alpha: 0.3),
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
@@ -218,9 +219,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             _currentPage == _pages.length - 1
                                 ? context.loc.start
                                 : context.loc.next,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 15,
+                              color : Theme.of(context).colorScheme.surface,
                             ),
                           ),
                           if (_currentPage < _pages.length - 1) ...[
