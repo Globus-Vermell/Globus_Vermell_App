@@ -19,6 +19,7 @@ class BuildingListController extends ChangeNotifier {
   int _currentPage = 1;
   StreamSubscription<Position>? _realPosition;
 
+
   Future<void> initialData() async {
     isLoading = true;
     notifyListeners();
@@ -182,5 +183,39 @@ class BuildingListController extends ChangeNotifier {
 
   void stopTracking() {
     _realPosition?.cancel();
+  }
+
+  //Función que busca edifcios cercanos a partir de la posición actual del usuario.
+  //Mostramos un máximo de 20 edificios para que no se sature la pantalla del usuario.
+  Future<void> nearbyBuildings() async {
+    publicationFilter = -1;
+    isLoading = true;
+    notifyListeners();
+
+    try {
+      //Cogemos la última ubicación que tenemos del usuario, en caso de no tener
+      //Buscamos su ubicación pero con el accuracy medio para no tardar tanto
+      //YA que no necesitamos tener su ubicación exacta sinó saber un aproximado para buscar edificios cercanos
+      Position? position = await Geolocator.getLastKnownPosition();
+
+      position ??= await Geolocator.getCurrentPosition(
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.medium,
+        ),
+      );
+      location = LatLng(position.latitude, position.longitude);
+      final nearby = await _service.getBuildings(
+        latitude: position.latitude,
+        longitude: position.longitude,
+        forceRefresh: true,
+      );
+      buildings = nearby.take(20).toList();
+      hasMoreData = false;
+    } catch (e) {
+      debugPrint("Error: $e");
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
   }
 }

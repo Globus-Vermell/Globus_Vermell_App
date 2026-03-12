@@ -89,6 +89,19 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
     }
   }
 
+  Future<void> _onNearbyButtonPressed() async {
+    try {
+      final controller = context.read<BuildingListController>();
+
+      await controller.nearbyBuildings();
+
+      _mapController.move(controller.location, 15.0);
+
+    } catch (e) {
+      _errorNetwork();
+    }
+  }
+
   void _errorNetwork() {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -229,7 +242,8 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                             child: _buildFilter(
                               texto: context.loc.publications,
                               icono: Icons.keyboard_arrow_down_rounded,
-                              isSelected: controller.publicationFilter != 0,
+                              isSelected: controller.publicationFilter != 0 &&
+                                  controller.publicationFilter != -1,
                               onTap: () {
                                 _showPublicationsMenu(controller, colores);
                               },
@@ -242,9 +256,9 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                             child: _buildFilter(
                               texto: context.loc.nearby,
                               icono: Icons.location_on_outlined,
-                              isSelected: false,
+                              isSelected: controller.publicationFilter == -1,
                               onTap: () {
-                                _useGPS();
+                                _onNearbyButtonPressed();
                               },
                               colores: colores,
                             ),
