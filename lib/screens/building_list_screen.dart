@@ -52,7 +52,11 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
 
   Future<void> _filterByPublication(int idPublicacion) async {
     try {
-      await context.read<BuildingListController>().applyFilter(idPublicacion);
+      if (idPublicacion == 0) {
+        await context.read<BuildingListController>().clearFilter();
+      } else {
+        await context.read<BuildingListController>().applyFilter(idPublicacion);
+      }
     } catch (e) {
       if (mounted) _errorNetwork();
     }
@@ -75,15 +79,6 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
       if (!_listView && controller.location.latitude != 0) {
         _mapController.move(controller.location, 17.0);
       }
-
-      if (controller.buildings.isNotEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(context.loc.locationUpdated),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-      }
     } catch (e) {
       if (mounted) _errorNetwork();
     }
@@ -92,13 +87,12 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
   Future<void> _onNearbyButtonPressed() async {
     try {
       final controller = context.read<BuildingListController>();
-
       await controller.nearbyBuildings();
 
-      _mapController.move(controller.location, 15.0);
+      _mapController.move(controller.location, 17.0);
 
     } catch (e) {
-      _errorNetwork();
+      if (mounted) _errorNetwork();
     }
   }
 
@@ -121,9 +115,9 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
   }
 
   Future<void> _navegarADetalle(
-    Building edificio,
-    BuildingListController controller,
-  ) async {
+      Building edificio,
+      BuildingListController controller,
+      ) async {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
@@ -155,7 +149,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
     final colores = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor: colores.surface, // Fondo dinámico para el Scaffold
+      backgroundColor: colores.surface,
       appBar: AppBar(
         title: const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -175,16 +169,16 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
             backgroundColor: colores.primary, // Pedacito 1
             child: controller.isLoading
                 ? Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: CircularProgressIndicator(
-                      color: colores.onPrimary, // Pedacito 1
-                      strokeWidth: 2,
-                    ),
-                  )
+              padding: const EdgeInsets.all(12.0),
+              child: CircularProgressIndicator(
+                color: colores.onPrimary, // Pedacito 1
+                strokeWidth: 2,
+              ),
+            )
                 : Icon(
-                    Icons.my_location,
-                    color: colores.onPrimary,
-                  ), // Pedacito 1
+              Icons.my_location,
+              color: colores.onPrimary,
+            ), // Pedacito 1
           );
         },
       ),
@@ -229,11 +223,11 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                           Expanded(
                             child: _buildFilter(
                               texto: context.loc.all,
-                              isSelected: controller.publicationFilter == 0,
+                              isSelected: controller.currentMode == SearchMode.all,
                               onTap: () {
                                 _filterByPublication(0);
                               },
-                              colores: colores, // Le pasamos los colores
+                              colores: colores,
                             ),
                           ),
                           const SizedBox(width: 8),
@@ -242,8 +236,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                             child: _buildFilter(
                               texto: context.loc.publications,
                               icono: Icons.keyboard_arrow_down_rounded,
-                              isSelected: controller.publicationFilter != 0 &&
-                                  controller.publicationFilter != -1,
+                              isSelected: controller.currentMode == SearchMode.publication,
                               onTap: () {
                                 _showPublicationsMenu(controller, colores);
                               },
@@ -256,7 +249,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                             child: _buildFilter(
                               texto: context.loc.nearby,
                               icono: Icons.location_on_outlined,
-                              isSelected: controller.publicationFilter == -1,
+                              isSelected: controller.currentMode == SearchMode.nearby,
                               onTap: () {
                                 _onNearbyButtonPressed();
                               },
@@ -296,11 +289,10 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
     );
   }
 
-  // Modificado para recibir los colores
   void _showPublicationsMenu(
-    BuildingListController controller,
-    ColorScheme colores,
-  ) {
+      BuildingListController controller,
+      ColorScheme colores,
+      ) {
     showGeneralDialog(
       context: context,
       barrierDismissible: true,
@@ -447,12 +439,12 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
     LatLng centro = controller.location;
     if (centro.latitude == 0 && centro.longitude == 0) {
       centro =
-          controller.buildings.isNotEmpty &&
-              controller.buildings.first.latitude != 0
+      controller.buildings.isNotEmpty &&
+          controller.buildings.first.latitude != 0
           ? LatLng(
-              controller.buildings.first.latitude,
-              controller.buildings.first.longitude,
-            )
+        controller.buildings.first.latitude,
+        controller.buildings.first.longitude,
+      )
           : const LatLng(41.3879, 2.16992);
     }
 

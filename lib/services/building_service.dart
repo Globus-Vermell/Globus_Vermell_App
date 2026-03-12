@@ -15,44 +15,55 @@ class BuildingService {
     'API_URL',
     defaultValue: 'Error',
   );
+
   // 2. Memoria Caché: Aquí guardaremos los edificios para no perderlos
   List<Building> buildingsCache = [];
   bool firstPageLoading = false; // Para saber si ya hicimos la pre-carga
 
   Future<List<Building>> getBuildings({
     int page = 1,
+    int? limit,
     bool forceRefresh = false,
     double? latitude,
     double? longitude,
     int? publicationId,
   }) async {
+    final bool isCleanFetch = publicationId == null && latitude == null && longitude == null;
+
     if (page == 1 &&
         firstPageLoading &&
         !forceRefresh &&
-        publicationId == null) {
+        isCleanFetch) {
       return buildingsCache;
     }
 
     try {
-      String urlString = '$_baseUrl/buildings/api/list?page=$page&limit=100';
+      final queryParams = {
+        'page': page.toString(),
+        'limit': (limit ?? 100).toString(),
+      };
 
       if (latitude != null && longitude != null) {
-        urlString += '&lat=$latitude&long=$longitude';
+        queryParams['lat'] = latitude.toString();
+        queryParams['long'] = longitude.toString();
       }
 
       if (publicationId != null) {
-        urlString += '&publication=$publicationId';
+        queryParams['publication'] = publicationId.toString();
       }
-      final url = Uri.parse(urlString);
-      debugPrint("Llamando a la API: $url");
-      final response = await client.get(url);
+
+      final uri = Uri.parse('$_baseUrl/buildings/api/list').replace(queryParameters: queryParams);
+      debugPrint("Llamando a la API: $uri");
+
+      final response = await client.get(uri);
 
       if (response.statusCode == 200) {
         final List<Building> nuevosEdificios = await compute(
           _parseBuildings,
           response.body,
         );
-        if (page == 1) {
+
+        if (page == 1 && isCleanFetch) {
           buildingsCache = nuevosEdificios;
           firstPageLoading = true;
         }

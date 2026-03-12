@@ -7,215 +7,194 @@ import '../models/publication_model.dart';
 import '../services/building_service.dart';
 import '../services/publications_service.dart';
 
+enum SearchMode { all, publication, nearby }
+
 class BuildingListController extends ChangeNotifier {
   final BuildingService _service = BuildingService();
+  final PublicationService _pubService = PublicationService();
 
   List<Building> buildings = [];
   List<Publication> publicationsFilter = [];
+
   bool isLoading = false;
-  int publicationFilter = 0;
-  LatLng location = const LatLng(0, 0);
   bool hasMoreData = true;
+
+  SearchMode _currentMode = SearchMode.all;
+  int? _selectedPublicationId;
+  LatLng location = const LatLng(0, 0);
+
   int _currentPage = 1;
   StreamSubscription<Position>? _realPosition;
 
+  SearchMode get currentMode => _currentMode;
 
-  Future<void> initialData() async {
+  Future<void> _loadPage({bool reset = false, int? limit}) async {
+    if (isLoading || (!hasMoreData && !reset)) return;
+
     isLoading = true;
-    notifyListeners();
-
-    try {
-      publicationsFilter = await PublicationService().getPublications();
-
-      if (_service.firstPageLoading && publicationFilter == 0) {
-        _currentPage = 2;
-        buildings = List.from(_service.buildingsCache);
-        if (buildings.isEmpty) hasMoreData = false;
-      } else {
-        final newBuildings = await _service.getBuildings(
-          page: _currentPage,
-          publicationId: publicationFilter == 0 ? null : publicationFilter,
-        );
-        if (newBuildings.isEmpty) {
-          hasMoreData = false;
-        } else {
-          _currentPage++;
-          buildings.addAll(newBuildings);
-        }
-      }
-    } catch (e) {
-      rethrow;
-    } finally {
-      isLoading = false;
-      notifyListeners();
+    if (reset) {
+      _currentPage = 1;
+      buildings.clear();
+      hasMoreData = true;
     }
-  }
-
-  Future<void> fetchNextPage() async {
-    if (isLoading || !hasMoreData) return;
-
-    isLoading = true;
     notifyListeners();
 
     try {
+      final isNearby = _currentMode == SearchMode.nearby;
+      final hasValidLocation = location.latitude != 0 && location.longitude != 0;
+
+      final int? activeLimit = isNearby ? (limit ?? 20) : limit;
+
       final newBuildings = await _service.getBuildings(
         page: _currentPage,
-        publicationId: publicationFilter == 0 ? null : publicationFilter,
+        limit: activeLimit,
+        publicationId: _currentMode == SearchMode.publication ? _selectedPublicationId : null,
+        latitude: (isNearby || hasValidLocation) ? location.latitude : null,
+        longitude: (isNearby || hasValidLocation) ? location.longitude : null,
+        forceRefresh: reset,
       );
 
       if (newBuildings.isEmpty) {
         hasMoreData = false;
       } else {
-        _currentPage++;
-        buildings.addAll(newBuildings);
+        if (isNearby) {
+          buildings = newBuildings.take(activeLimit!).toList();
+          hasMoreData = false;
+        } else {
+          buildings.addAll(newBuildings);
+          _currentPage++;
+        }
       }
     } catch (e) {
       hasMoreData = false;
-      rethrow;
+      debugPrint("Error loading buildings: $e");
     } finally {
       isLoading = false;
       notifyListeners();
     }
   }
 
-  Future<void> applyFilter(int idPublicacion) async {
-    isLoading = true;
-    publicationFilter = idPublicacion;
-    _currentPage = 1;
-    hasMoreData = true;
-    buildings.clear();
-    notifyListeners();
-
-    try {
-      final filteredBuildings = await _service.getBuildings(
-        page: 1,
-        publicationId: publicationFilter == 0 ? null : publicationFilter,
-        latitude: location.latitude == 0.0 ? null : location.latitude,
-        longitude: location.longitude == 0.0 ? null : location.longitude,
-        forceRefresh: true,
-      );
-
-      if (filteredBuildings.isNotEmpty) {
-        _currentPage++;
-        buildings.addAll(filteredBuildings);
-      } else {
-        hasMoreData = false;
-      }
-    } catch (e) {
-      hasMoreData = false;
-      rethrow;
-    } finally {
-      isLoading = false;
-      notifyListeners();
+  Future<void> initialData() async {
+    if (publicationsFilter.isEmpty) {
+      publicationsFilter = await _pubService.getPublications();
     }
+
+    if (_service.firstPageLoading && _currentMode == SearchMode.all && _service.buildingsCache.isNotEmpty) {
+      buildings = List.from(_service.buildingsCache);
+      _currentPage = 2;
+      notifyListeners();
+    } else {
+      await _loadPage(reset: true);
+    }
+  }
+
+  Future<void> fetchNextPage() => _loadPage();
+
+  Future<void> applyFilter(int idPublicacion) async {
+    _currentMode = SearchMode.publication;
+    _selectedPublicationId = idPublicacion;
+    await _loadPage(reset: true);
+  }
+
+  Future<void> clearFilter() async {
+    _currentMode = SearchMode.all;
+    _selectedPublicationId = null;
+    await _loadPage(reset: true);
   }
 
   Future<void> activateGPS() async {
+    if (!await _checkPermissionsAndService()) return;
+
     isLoading = true;
     notifyListeners();
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied ||
-          permission == LocationPermission.deniedForever) {
-        isLoading = false;
-        notifyListeners();
-        return;
-      }
-    }
 
     try {
       Position position = await Geolocator.getCurrentPosition(
-        locationSettings: const LocationSettings(
-          accuracy: LocationAccuracy.high,
-        ),
+        locationSettings: const LocationSettings(accuracy: LocationAccuracy.high),
       );
 
       location = LatLng(position.latitude, position.longitude);
-      _currentPage = 1;
-      hasMoreData = true;
-      buildings.clear();
 
-      final gpsBuildings = await _service.getBuildings(
-        page: 1,
-        latitude: position.latitude,
-        longitude: position.longitude,
-        publicationId: publicationFilter == 0 ? null : publicationFilter,
-        forceRefresh: true,
-      );
+      isLoading = false;
+      await _loadPage(reset: true);
 
-      if (gpsBuildings.isNotEmpty) {
-        _currentPage++;
-        buildings.addAll(gpsBuildings);
-      } else {
-        hasMoreData = false;
-      }
-
-      startGPSTracking();
+      _startListeningToPosition();
     } catch (e) {
-      hasMoreData = false;
-      rethrow;
-    } finally {
       isLoading = false;
       notifyListeners();
+      debugPrint("Error obteniendo GPS: $e");
     }
   }
 
-  void startGPSTracking() async {
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied ||
-        permission == LocationPermission.deniedForever) {
-      return;
-    }
-
+  void _startListeningToPosition() {
     _realPosition?.cancel();
-    _realPosition =
-        Geolocator.getPositionStream(
-          locationSettings: const LocationSettings(
-            accuracy: LocationAccuracy.high,
-            distanceFilter: 10,
-          ),
-        ).listen((Position position) {
-          location = LatLng(position.latitude, position.longitude);
-          notifyListeners();
-        });
+    _realPosition = Geolocator.getPositionStream(
+      locationSettings: const LocationSettings(
+        accuracy: LocationAccuracy.high,
+        distanceFilter: 10,
+      ),
+    ).listen((Position position) {
+      location = LatLng(position.latitude, position.longitude);
+      notifyListeners();
+    });
   }
 
   void stopTracking() {
     _realPosition?.cancel();
+    _realPosition = null;
   }
 
   //Función que busca edifcios cercanos a partir de la posición actual del usuario.
   //Mostramos un máximo de 20 edificios para que no se sature la pantalla del usuario.
   Future<void> nearbyBuildings() async {
-    publicationFilter = -1;
+    if (!await _checkPermissionsAndService()) return;
+
+    _currentMode = SearchMode.nearby;
     isLoading = true;
     notifyListeners();
 
+    //Cogemos la última ubicación que tenemos del usuario, en caso de no tener
+    //Buscamos su ubicación pero con el accuracy medio para no tardar tanto
     try {
-      //Cogemos la última ubicación que tenemos del usuario, en caso de no tener
-      //Buscamos su ubicación pero con el accuracy medio para no tardar tanto
-      //YA que no necesitamos tener su ubicación exacta sinó saber un aproximado para buscar edificios cercanos
       Position? position = await Geolocator.getLastKnownPosition();
-
       position ??= await Geolocator.getCurrentPosition(
-        locationSettings: const LocationSettings(
-          accuracy: LocationAccuracy.medium,
-        ),
+        locationSettings: const LocationSettings(accuracy: LocationAccuracy.medium),
       );
+
       location = LatLng(position.latitude, position.longitude);
-      final nearby = await _service.getBuildings(
-        latitude: position.latitude,
-        longitude: position.longitude,
-        forceRefresh: true,
-      );
-      buildings = nearby.take(20).toList();
-      hasMoreData = false;
+      isLoading = false;
+      await _loadPage(reset: true, limit: 20);
     } catch (e) {
-      debugPrint("Error: $e");
-    } finally {
       isLoading = false;
       notifyListeners();
+      debugPrint("Error obteniendo GPS en cercanos: $e");
     }
+  }
+
+  Future<bool> _checkPermissionsAndService() async {
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return false;
+    }
+
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return false;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return false;
+    }
+
+    return true;
+  }
+
+  @override
+  void dispose() {
+    stopTracking();
+    super.dispose();
   }
 }
