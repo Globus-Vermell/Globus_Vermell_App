@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:globus_vermell_app/screens/settings_screen.dart';
 import 'package:provider/provider.dart';
+import '../providers/theme_provider.dart'; 
 import '../controllers/building_list_controller.dart';
 import '../utils/lang_extensions.dart';
 import 'building_list_screen.dart';
@@ -33,30 +34,36 @@ class BottomBarState extends State<BottomBar> {
   @override
   Widget build(BuildContext context) {
     final colores = Theme.of(context).colorScheme;
+    
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final isHighContrast = themeProvider.isHighContrast;
 
     return Scaffold(
       backgroundColor: colores.surface,
       body: IndexedStack(index: _selectedIndex, children: _widgetOptions),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: colores.surface,
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.map),
-            label: context.loc.map,
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.menu_book),
-            label: context.loc.publications,
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.settings),
-            label: context.loc.settings,
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: colores.primary,
-        unselectedItemColor: colores.onSurfaceVariant,
-        onTap: _onItemTapped,
+      bottomNavigationBar: Container(
+        child: BottomNavigationBar(
+          backgroundColor: colores.surface,
+          elevation: isHighContrast ? 0 : 8, 
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.map),
+              label: context.loc.map,
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.menu_book),
+              label: context.loc.publications,
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.settings),
+              label: context.loc.settings,
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: isHighContrast ? colores.onSurface : colores.primary,
+          unselectedItemColor: isHighContrast ? colores.onSurface.withValues(alpha: 0.5) : colores.onSurfaceVariant,
+          onTap: _onItemTapped,
+        ),
       ),
     );
   }

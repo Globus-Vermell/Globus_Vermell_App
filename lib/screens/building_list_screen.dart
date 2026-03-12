@@ -149,7 +149,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
     final colores = Theme.of(context).colorScheme;
 
     final themeProvider = Provider.of<ThemeProvider>(context);
-    final isPureHighContrast = themeProvider.isHighContrast && !themeProvider.isDarkMode;
+    final isHighContrast = themeProvider.isHighContrast;
 
     return Scaffold(
       backgroundColor: colores.surface,
@@ -163,7 +163,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
               style: TextStyle(
                 fontSize: 18, 
                 fontWeight: FontWeight.bold,
-                color: isPureHighContrast ? Colors.black : colores.surface,
+                color: isHighContrast ? colores.onSurface : Theme.of(context).appBarTheme.foregroundColor,
               ),
             ),
           ],
@@ -173,24 +173,24 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
         builder: (context, controller, child) {
           return FloatingActionButton(
             onPressed: () => controller.isLoading ? null : _useGPS(),
-            backgroundColor: isPureHighContrast ? Colors.white : colores.primary, 
-            shape: isPureHighContrast 
+            backgroundColor: isHighContrast ? colores.surface : colores.primary, 
+            shape: isHighContrast 
                 ? RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
-                    side: const BorderSide(color: Colors.black, width: 2.0) 
+                    side: BorderSide(color: colores.onSurface, width: 2.0) 
                   )
                 : null,
             child: controller.isLoading
                 ? Padding(
               padding: const EdgeInsets.all(12.0),
               child: CircularProgressIndicator(
-                color: isPureHighContrast ? Colors.black : colores.onPrimary, 
+                color: isHighContrast ? colores.onSurface : colores.onPrimary, 
                 strokeWidth: 2,
               ),
             )
                 : Icon(
               Icons.my_location,
-              color: isPureHighContrast ? Colors.black : colores.onPrimary, 
+              color: isHighContrast ? colores.onSurface : colores.onPrimary, 
             ),
           );
         },
@@ -241,7 +241,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                                 _filterByPublication(0);
                               },
                               colores: colores,
-                              isPureHighContrast: isPureHighContrast,
+                              isHighContrast: isHighContrast,
                             ),
                           ),
                           const SizedBox(width: 8),
@@ -252,10 +252,10 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                               icono: Icons.keyboard_arrow_down_rounded,
                               isSelected: controller.currentMode == SearchMode.publication,
                               onTap: () {
-                                _showPublicationsMenu(controller, colores, isPureHighContrast); 
+                                _showPublicationsMenu(controller, colores, isHighContrast); 
                               },
                               colores: colores,
-                              isPureHighContrast: isPureHighContrast,
+                              isHighContrast: isHighContrast,
                             ),
                           ),
                           const SizedBox(width: 8),
@@ -269,7 +269,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                                 _onNearbyButtonPressed();
                               },
                               colores: colores,
-                              isPureHighContrast: isPureHighContrast,
+                              isHighContrast: isHighContrast,
                             ),
                           ),
                         ],
@@ -308,7 +308,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
   void _showPublicationsMenu(
       BuildingListController controller,
       ColorScheme colores,
-      bool isPureHighContrast, 
+      bool isHighContrast, 
       ) {
     showGeneralDialog(
       context: context,
@@ -322,10 +322,10 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
             margin: const EdgeInsets.only(top: 275, left: 16, right: 16),
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: isPureHighContrast ? Colors.white : colores.surface, 
+              color: isHighContrast ? colores.surface : colores.surface, 
               borderRadius: BorderRadius.circular(12),
-              border: isPureHighContrast ? Border.all(color: Colors.black, width: 2.0) : null,
-              boxShadow: isPureHighContrast ? null : [ 
+              border: isHighContrast ? Border.all(color: colores.onSurface, width: 2.0) : null,
+              boxShadow: isHighContrast ? null : [ 
                 BoxShadow(
                   color: colores.shadow.withValues(alpha: 0.1), 
                   blurRadius: 10,
@@ -353,7 +353,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                             pub.title,
                             style: TextStyle(
                               fontSize: 14,
-                              color: isPureHighContrast ? Colors.black : colores.onSurface, 
+                              color: isHighContrast ? colores.onSurface : colores.onSurface, 
                             ), 
                           ),
                           onTap: () {
@@ -363,7 +363,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                           trailing: IconButton(
                             icon: Icon(
                               Icons.info_outline,
-                              color: isPureHighContrast ? Colors.black : colores.primary, 
+                              color: isHighContrast ? colores.onSurface : colores.primary, 
                               size: 20,
                             ),
                             onPressed: () {
@@ -388,15 +388,15 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                       child: TextButton(
                         onPressed: () => Navigator.pop(context),
                         style: TextButton.styleFrom(
-                          backgroundColor: isPureHighContrast ? Colors.white : colores.primary, 
-                          foregroundColor: isPureHighContrast ? Colors.black : colores.onPrimary, 
+                          backgroundColor: isHighContrast ? colores.surface : colores.primary, 
+                          foregroundColor: isHighContrast ? colores.onSurface : colores.onPrimary, 
                           padding: const EdgeInsets.symmetric(
                             horizontal: 20,
                             vertical: 8,
                           ),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),
-                            side: isPureHighContrast ? const BorderSide(color: Colors.black, width: 2.0) : BorderSide.none, // Borde negro botón
+                            side: isHighContrast ? BorderSide(color: colores.onSurface, width: 2.0) : BorderSide.none,
                           ),
                         ),
                         child: Text(
@@ -531,15 +531,15 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
     required bool isSelected,
     required VoidCallback onTap,
     required ColorScheme colores, 
-    required bool isPureHighContrast, 
+    required bool isHighContrast, 
   }) {
-    final bgColor = isPureHighContrast ? Colors.white : (isSelected ? colores.primary : colores.surface);
-    final textColor = isPureHighContrast ? Colors.black : (isSelected ? colores.onPrimary : colores.onSurface);
+    final bgColor = isHighContrast ? colores.surface : (isSelected ? colores.primary : colores.surface);
+    final textColor = isHighContrast ? colores.onSurface : (isSelected ? colores.onPrimary : colores.onSurface);
     
-    final borderSide = isPureHighContrast && isSelected
-        ? const BorderSide(color: Colors.black, width: 3.0)
-        : isPureHighContrast 
-            ? const BorderSide(color: Colors.black, width: 1.0)
+    final borderSide = isHighContrast && isSelected
+        ? BorderSide(color: colores.onSurface, width: 3.0)
+        : isHighContrast 
+            ? BorderSide(color: colores.onSurface, width: 1.0)
             : BorderSide(
                 color: isSelected ? colores.primary : colores.outline.withValues(alpha: 0.3),
                 width: 1.0,

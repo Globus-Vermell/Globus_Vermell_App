@@ -69,7 +69,7 @@ class _ThemesScreenState extends State<ThemesScreen> {
               style: TextStyle(
                 fontSize: 18, 
                 fontWeight: FontWeight.bold,
-                color: isPureHighContrast ? Colors.black : colores.surface,
+                color: isPureHighContrast ? Colors.black : Theme.of(context).appBarTheme.foregroundColor,
               ),
             ),
           ],

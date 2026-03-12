@@ -125,7 +125,7 @@ class AppThemes {
     textTheme: _textTheme,
     appBarTheme: _appBarTheme.copyWith(
       backgroundColor: Colors.black,
-      foregroundColor: const Color(0xffff5555), // Rojo súper brillante
+      foregroundColor: Colors.white,
     ),
     colorScheme: const ColorScheme.highContrastDark(
       // Un rojo muy neón/brillante para que destaque al máximo sobre el negro puro

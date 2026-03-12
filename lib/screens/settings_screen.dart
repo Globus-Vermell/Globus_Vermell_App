@@ -4,8 +4,6 @@ import '../providers/language_provider.dart';
 import '../providers/theme_provider.dart';
 import '../utils/lang_extensions.dart';
 import 'about_app_screen.dart';
-import '../providers/theme_provider.dart';
-import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -102,7 +100,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               style: TextStyle(
                 fontSize: 18, 
                 fontWeight: FontWeight.bold,
-                color: isPureHighContrast ? Colors.black : colores.surface,
+                color: isPureHighContrast ? Colors.black : Theme.of(context).appBarTheme.foregroundColor,
               ),
             ),
           ],
