@@ -3,6 +3,8 @@ import '../controllers/themes_controller.dart';
 import '../models/publication_model.dart';
 import '../utils/lang_extensions.dart';
 import 'publication_detail_screen.dart';
+import '../providers/theme_provider.dart';
+import 'package:provider/provider.dart';
 
 class ThemesScreen extends StatefulWidget {
   const ThemesScreen({super.key});
@@ -53,12 +55,24 @@ class _ThemesScreenState extends State<ThemesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colores = Theme.of(context).colorScheme;
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final isPureHighContrast = themeProvider.isHighContrast && !themeProvider.isDarkMode;
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Column(
+        title: Column( 
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [Text(context.loc.publications)],
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              context.loc.publications,
+              style: TextStyle(
+                fontSize: 18, 
+                fontWeight: FontWeight.bold,
+                color: isPureHighContrast ? Colors.black : colores.surface,
+              ),
+            ),
+          ],
         ),
       ),
       backgroundColor: Theme.of(context).colorScheme.surface,

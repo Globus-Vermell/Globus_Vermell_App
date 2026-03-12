@@ -64,8 +64,8 @@ class AppThemes {
     useMaterial3: true,
     textTheme: _textTheme,
     appBarTheme: _appBarTheme.copyWith(
-      backgroundColor: Colors.black,
-      foregroundColor: Colors.white,
+      backgroundColor: Colors.white,
+      foregroundColor: Colors.black,
     ),
     colorScheme: const ColorScheme.highContrastLight(
       primary: Color.fromARGB(255, 0, 0, 0),         

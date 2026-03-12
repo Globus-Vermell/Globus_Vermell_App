@@ -3,6 +3,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:globus_vermell_app/utils/lang_extensions.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
+import '../providers/theme_provider.dart'; 
 import '../controllers/building_list_controller.dart';
 import '../models/building_model.dart';
 import '../widgets/building_card.dart';
@@ -100,7 +101,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(context.loc.connectionError),
-        backgroundColor: Theme.of(context).colorScheme.error, // Pedacito 1
+        backgroundColor: Theme.of(context).colorScheme.error, 
         behavior: SnackBarBehavior.floating,
       ),
     );
@@ -145,19 +146,25 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // ¡Nuestro atajito mágico! ✨
     final colores = Theme.of(context).colorScheme;
+
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final isPureHighContrast = themeProvider.isHighContrast && !themeProvider.isDarkMode;
 
     return Scaffold(
       backgroundColor: colores.surface,
       appBar: AppBar(
-        title: const Column(
+        title: Column( 
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               'Globus Vermell',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 18, 
+                fontWeight: FontWeight.bold,
+                color: isPureHighContrast ? Colors.black : colores.surface,
+              ),
             ),
           ],
         ),
@@ -166,19 +173,25 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
         builder: (context, controller, child) {
           return FloatingActionButton(
             onPressed: () => controller.isLoading ? null : _useGPS(),
-            backgroundColor: colores.primary, // Pedacito 1
+            backgroundColor: isPureHighContrast ? Colors.white : colores.primary, 
+            shape: isPureHighContrast 
+                ? RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    side: const BorderSide(color: Colors.black, width: 2.0) 
+                  )
+                : null,
             child: controller.isLoading
                 ? Padding(
               padding: const EdgeInsets.all(12.0),
               child: CircularProgressIndicator(
-                color: colores.onPrimary, // Pedacito 1
+                color: isPureHighContrast ? Colors.black : colores.onPrimary, 
                 strokeWidth: 2,
               ),
             )
                 : Icon(
               Icons.my_location,
-              color: colores.onPrimary,
-            ), // Pedacito 1
+              color: isPureHighContrast ? Colors.black : colores.onPrimary, 
+            ),
           );
         },
       ),
@@ -228,6 +241,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                                 _filterByPublication(0);
                               },
                               colores: colores,
+                              isPureHighContrast: isPureHighContrast,
                             ),
                           ),
                           const SizedBox(width: 8),
@@ -238,9 +252,10 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                               icono: Icons.keyboard_arrow_down_rounded,
                               isSelected: controller.currentMode == SearchMode.publication,
                               onTap: () {
-                                _showPublicationsMenu(controller, colores);
+                                _showPublicationsMenu(controller, colores, isPureHighContrast); 
                               },
                               colores: colores,
+                              isPureHighContrast: isPureHighContrast,
                             ),
                           ),
                           const SizedBox(width: 8),
@@ -254,6 +269,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                                 _onNearbyButtonPressed();
                               },
                               colores: colores,
+                              isPureHighContrast: isPureHighContrast,
                             ),
                           ),
                         ],
@@ -267,7 +283,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                           '${controller.buildings.length} ${context.loc.buildingsByDistance}',
                           style: TextStyle(
                             fontSize: 14,
-                            color: colores.onSurfaceVariant, // Pedacito 3
+                            color: colores.onSurfaceVariant, 
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -292,6 +308,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
   void _showPublicationsMenu(
       BuildingListController controller,
       ColorScheme colores,
+      bool isPureHighContrast, 
       ) {
     showGeneralDialog(
       context: context,
@@ -305,11 +322,12 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
             margin: const EdgeInsets.only(top: 275, left: 16, right: 16),
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: colores.surface, // Pedacito 4
+              color: isPureHighContrast ? Colors.white : colores.surface, 
               borderRadius: BorderRadius.circular(12),
-              boxShadow: [
+              border: isPureHighContrast ? Border.all(color: Colors.black, width: 2.0) : null,
+              boxShadow: isPureHighContrast ? null : [ 
                 BoxShadow(
-                  color: colores.shadow.withValues(alpha: 0.1), // Pedacito 4
+                  color: colores.shadow.withValues(alpha: 0.1), 
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),
@@ -335,8 +353,8 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                             pub.title,
                             style: TextStyle(
                               fontSize: 14,
-                              color: colores.onSurface,
-                            ), // Pedacito 4
+                              color: isPureHighContrast ? Colors.black : colores.onSurface, 
+                            ), 
                           ),
                           onTap: () {
                             Navigator.pop(context);
@@ -345,7 +363,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                           trailing: IconButton(
                             icon: Icon(
                               Icons.info_outline,
-                              color: colores.primary, // Pedacito 4
+                              color: isPureHighContrast ? Colors.black : colores.primary, 
                               size: 20,
                             ),
                             onPressed: () {
@@ -370,14 +388,15 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                       child: TextButton(
                         onPressed: () => Navigator.pop(context),
                         style: TextButton.styleFrom(
-                          backgroundColor: colores.primary, // Pedacito 4
-                          foregroundColor: colores.onPrimary, // Pedacito 4
+                          backgroundColor: isPureHighContrast ? Colors.white : colores.primary, 
+                          foregroundColor: isPureHighContrast ? Colors.black : colores.onPrimary, 
                           padding: const EdgeInsets.symmetric(
                             horizontal: 20,
                             vertical: 8,
                           ),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20),
+                            side: isPureHighContrast ? const BorderSide(color: Colors.black, width: 2.0) : BorderSide.none, // Borde negro botón
                           ),
                         ),
                         child: Text(
@@ -429,7 +448,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
           onTap: () => _navegarADetalle(
             edificio,
             controller,
-          ), // ¡Le devolvemos su función para que se pueda tocar, uwu! ✨
+          ), 
         );
       },
     );
@@ -468,7 +487,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                     const Icon(
                       Icons.person_pin_circle,
                       color: Colors
-                          .blue, // Universalmente el GPS propio es azul, lo dejamos así ✨
+                          .blue, 
                       size: 40,
                     ),
                     Text(
@@ -494,7 +513,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                   onTap: () => _navegarADetalle(edificio, controller),
                   child: Icon(
                     Icons.location_on,
-                    color: colores.primary, // Pedacito 5: Chincheta adaptativa
+                    color: colores.primary, 
                     size: 40,
                   ),
                 ),
@@ -511,33 +530,36 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
     IconData? icono,
     required bool isSelected,
     required VoidCallback onTap,
-    required ColorScheme colores, // Pasamos el ColorScheme
+    required ColorScheme colores, 
+    required bool isPureHighContrast, 
   }) {
+    final bgColor = isPureHighContrast ? Colors.white : (isSelected ? colores.primary : colores.surface);
+    final textColor = isPureHighContrast ? Colors.black : (isSelected ? colores.onPrimary : colores.onSurface);
+    
+    final borderSide = isPureHighContrast && isSelected
+        ? const BorderSide(color: Colors.black, width: 3.0)
+        : isPureHighContrast 
+            ? const BorderSide(color: Colors.black, width: 1.0)
+            : BorderSide(
+                color: isSelected ? colores.primary : colores.outline.withValues(alpha: 0.3),
+                width: 1.0,
+              );
+
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(30),
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
-          color: isSelected ? colores.primary : colores.surface, // Pedacito 2
+          color: bgColor,
           borderRadius: BorderRadius.circular(30),
-          border: Border.all(
-            color: isSelected
-                ? colores.primary
-                : colores.outline.withValues(alpha: 0.3), // Pedacito 2
-          ),
+          border: Border.fromBorderSide(borderSide),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             if (icono != null) ...[
-              Icon(
-                icono,
-                size: 16,
-                color: isSelected
-                    ? colores.onPrimary
-                    : colores.onSurface, // Pedacito 2
-              ),
+              Icon(icono, size: 16, color: textColor),
               const SizedBox(width: 6),
             ],
             Flexible(
@@ -546,9 +568,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                 style: TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
-                  color: isSelected
-                      ? colores.onPrimary
-                      : colores.onSurface, // Pedacito 2
+                  color: textColor,
                 ),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,

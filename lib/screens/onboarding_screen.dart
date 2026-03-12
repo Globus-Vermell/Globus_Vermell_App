@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart'; 
+import '../providers/theme_provider.dart'; 
 import 'package:globus_vermell_app/screens/bottom_bar.dart';
 import '../utils/lang_extensions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -71,8 +73,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colores = Theme.of(context).colorScheme;
+    
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final isPureHighContrast = themeProvider.isHighContrast && !themeProvider.isDarkMode;
+
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      backgroundColor: colores.surface,
       body: SafeArea(
         child: Column(
           children: [
@@ -81,9 +88,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               child: TextButton(
                 onPressed: () => _finishOnboarding(),
                 style: TextButton.styleFrom(
-                  foregroundColor: Theme.of(
-                    context,
-                  ).colorScheme.onSurfaceVariant,
+                  foregroundColor: isPureHighContrast ? Colors.black : colores.onSurfaceVariant,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 24,
                     vertical: 16,
@@ -113,15 +118,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         Container(
                           padding: const EdgeInsets.all(24),
                           decoration: BoxDecoration(
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.primary.withValues(alpha: 0.1),
+                            color: isPureHighContrast ? Colors.white : colores.primary.withValues(alpha: 0.1),
                             shape: BoxShape.circle,
+                            border: isPureHighContrast ? Border.all(color: Colors.black, width: 2.0) : null,
                           ),
                           child: Icon(
                             _pages[index]['icon'],
                             size: 48,
-                            color: Theme.of(context).colorScheme.primary,
+                            color: isPureHighContrast ? Colors.black : colores.primary,
                           ),
                         ),
                         const SizedBox(height: 40),
@@ -131,7 +135,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           style: TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
-                            color: Theme.of(context).colorScheme.onSurface,
+                            color: isPureHighContrast ? Colors.black : colores.onSurface,
                           ),
                         ),
                         const SizedBox(height: 20),
@@ -140,7 +144,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 15,
-                            color: Theme.of(context).colorScheme.onSurface,
+                            color: isPureHighContrast ? Colors.black : colores.onSurface,
                           ),
                         ),
                         const SizedBox(height: 40),
@@ -161,11 +165,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   height: 8,
                   decoration: BoxDecoration(
                     color: _currentPage == index
-                        ? Theme.of(context).colorScheme.primary
-                        : Theme.of(
-                            context,
-                          ).colorScheme.outline.withValues(alpha: 0.3),
+                        ? (isPureHighContrast ? Colors.black : colores.primary)
+                        : (isPureHighContrast ? Colors.transparent : colores.outline.withValues(alpha: 0.3)),
                     borderRadius: BorderRadius.circular(4),
+                    border: isPureHighContrast ? Border.all(color: Colors.black, width: 1.5) : null,
                   ),
                 ),
               ),
@@ -186,9 +189,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         icon: const Icon(Icons.chevron_left, size: 20),
                         label: Text(context.loc.back),
                         style: TextButton.styleFrom(
-                          foregroundColor: Theme.of(
-                            context,
-                          ).colorScheme.onSurfaceVariant,
+                          foregroundColor: isPureHighContrast ? Colors.black : colores.onSurfaceVariant,
                           padding: const EdgeInsets.symmetric(vertical: 16),
                         ),
                       ),
@@ -201,10 +202,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     child: ElevatedButton(
                       onPressed: _nextPage,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).colorScheme.primary,
-                        foregroundColor: Theme.of(
-                          context,
-                        ).colorScheme.onPrimary,
+                        backgroundColor: isPureHighContrast ? Colors.white : colores.primary,
+                        foregroundColor: isPureHighContrast ? Colors.black : colores.onPrimary,
                         elevation: 0,
                         padding: EdgeInsets.symmetric(
                           vertical: 16,
@@ -212,6 +211,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         ),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
+                          side: isPureHighContrast ? const BorderSide(color: Colors.black, width: 2.0) : BorderSide.none,
                         ),
                       ),
                       child: Row(
@@ -225,12 +225,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 15,
-                              color: Theme.of(context).colorScheme.surface,
+                              color: isPureHighContrast ? Colors.black : colores.onPrimary,
                             ),
                           ),
                           if (_currentPage < _pages.length - 1) ...[
                             const SizedBox(width: 4),
-                            const Icon(Icons.chevron_right, size: 20),
+                            Icon(
+                              Icons.chevron_right, 
+                              size: 20, 
+                              color: isPureHighContrast ? Colors.black : colores.onPrimary,
+                            ),
                           ],
                         ],
                       ),
