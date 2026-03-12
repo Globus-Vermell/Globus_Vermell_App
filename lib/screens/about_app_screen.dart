@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/theme_provider.dart'; 
+import '../providers/theme_provider.dart';
 import 'package:globus_vermell_app/utils/lang_extensions.dart';
 import 'onboarding_screen.dart';
 
@@ -42,9 +42,13 @@ class AboutAppScreen extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
-                  color: isHighContrast ? colores.surface : colores.primary.withValues(alpha: 0.1),
+                  color: isHighContrast
+                      ? colores.surface
+                      : colores.primary.withValues(alpha: 0.1),
                   shape: BoxShape.circle,
-                  border: isHighContrast ? Border.all(color: colores.onSurface, width: 2.0) : null,
+                  border: isHighContrast
+                      ? Border.all(color: colores.onSurface, width: 2.0)
+                      : null,
                 ),
                 child: Icon(
                   Icons.location_on_outlined,
@@ -100,13 +104,19 @@ class AboutAppScreen extends StatelessWidget {
                     );
                   },
                   icon: Icon(
-                    Icons.menu_book, 
-                    color: isHighContrast ? colores.onSurface : colores.onPrimary, 
+                    Icons.menu_book,
+                    color: isHighContrast
+                        ? colores.onSurface
+                        : colores.onPrimary,
                   ),
                   label: Text(context.loc.viewTutorial),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: isHighContrast ? colores.surface : colores.primary, 
-                    foregroundColor: isHighContrast ? colores.onSurface : colores.onPrimary, 
+                    backgroundColor: isHighContrast
+                        ? colores.surface
+                        : colores.primary,
+                    foregroundColor: isHighContrast
+                        ? colores.onSurface
+                        : colores.onPrimary,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 24,
                       vertical: 12,
@@ -114,15 +124,19 @@ class AboutAppScreen extends StatelessWidget {
                     elevation: 4,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
-                      side: isHighContrast ? BorderSide(color: colores.onSurface, width: 2.0) : BorderSide.none,
+                      side: isHighContrast
+                          ? BorderSide(color: colores.onSurface, width: 2.0)
+                          : BorderSide.none,
                     ),
                   ),
                 ),
               ),
               const SizedBox(height: 20),
               Divider(
-                color: isHighContrast ? colores.onSurface : colores.outline.withValues(alpha: 0.2), 
-                thickness: isHighContrast ? 2 : 1, 
+                color: isHighContrast
+                    ? colores.onSurface
+                    : colores.outline.withValues(alpha: 0.2),
+                thickness: isHighContrast ? 2 : 1,
               ),
               const SizedBox(height: 20),
               Text(

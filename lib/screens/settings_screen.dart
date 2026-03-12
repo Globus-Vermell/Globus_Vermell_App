@@ -33,7 +33,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color : Theme.of(context).colorScheme.onSurface
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -85,22 +85,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final colores = Theme.of(context).colorScheme;
     final themeProvider = Provider.of<ThemeProvider>(context);
-    final isPureHighContrast = themeProvider.isHighContrast && !themeProvider.isDarkMode;
+    final isPureHighContrast =
+        themeProvider.isHighContrast && !themeProvider.isDarkMode;
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
-        title: Column( 
+        title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               context.loc.settings,
               style: TextStyle(
-                fontSize: 18, 
+                fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: isPureHighContrast ? Colors.black : Theme.of(context).appBarTheme.foregroundColor,
+                color: isPureHighContrast
+                    ? Colors.black
+                    : Theme.of(context).appBarTheme.foregroundColor,
               ),
             ),
           ],

@@ -55,21 +55,23 @@ class _ThemesScreenState extends State<ThemesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final colores = Theme.of(context).colorScheme;
     final themeProvider = Provider.of<ThemeProvider>(context);
-    final isPureHighContrast = themeProvider.isHighContrast && !themeProvider.isDarkMode;
+    final isPureHighContrast =
+        themeProvider.isHighContrast && !themeProvider.isDarkMode;
     return Scaffold(
       appBar: AppBar(
-        title: Column( 
+        title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               context.loc.publications,
               style: TextStyle(
-                fontSize: 18, 
+                fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: isPureHighContrast ? Colors.black : Theme.of(context).appBarTheme.foregroundColor,
+                color: isPureHighContrast
+                    ? Colors.black
+                    : Theme.of(context).appBarTheme.foregroundColor,
               ),
             ),
           ],

@@ -20,19 +20,19 @@ class AppThemes {
     textTheme: _textTheme,
     appBarTheme: _appBarTheme.copyWith(
       // ¡Nuevo rojo más suavecito y pastel! (Hex: #EF5350)
-      backgroundColor: const Color(0xFFEF5350), 
+      backgroundColor: const Color(0xFFEF5350),
       foregroundColor: const Color.fromARGB(255, 242, 242, 242),
     ),
     dividerTheme: const DividerThemeData(color: Color(0xffd8c2be)),
     colorScheme: const ColorScheme.light(
-      primary: Color(0xFFEF5350),         // Tu NUEVO rojo suavecito y elegante ✨
+      primary: Color(0xFFEF5350), // Tu NUEVO rojo suavecito y elegante ✨
       onPrimary: Colors.white,
-      secondary: Color(0xff775651),       
+      secondary: Color(0xff775651),
       onSecondary: Colors.white,
-      surface: Color(0xfffbfbfb),         
-      onSurface: Color(0xff231918),       
-      onSurfaceVariant: Color(0xff534341), 
-      outline: Color(0xff857370),          
+      surface: Color(0xfffbfbfb),
+      onSurface: Color(0xff231918),
+      onSurfaceVariant: Color(0xff534341),
+      outline: Color(0xff857370),
       error: Color(0xffba1a1a),
     ),
   );
@@ -47,13 +47,13 @@ class AppThemes {
     ),
     dividerTheme: const DividerThemeData(color: Color(0xff534341)),
     colorScheme: const ColorScheme.dark(
-      primary: Color(0xffffb4a8),         
+      primary: Color(0xffffb4a8),
       onPrimary: Color(0xff561e16),
       secondary: Color(0xffe7bdb6),
       onSecondary: Color(0xff442925),
-      surface: Color.fromARGB(255, 53, 53, 53),         
-      onSurface: Color(0xfff1dfdc),       
-      onSurfaceVariant: Color(0xffd8c2be), 
+      surface: Color.fromARGB(255, 53, 53, 53),
+      onSurface: Color(0xfff1dfdc),
+      onSurfaceVariant: Color(0xffd8c2be),
       outline: Color(0xffa08c89),
       error: Color(0xffffb4ab),
     ),
@@ -68,10 +68,10 @@ class AppThemes {
       foregroundColor: Colors.black,
     ),
     colorScheme: const ColorScheme.highContrastLight(
-      primary: Color.fromARGB(255, 0, 0, 0),         
+      primary: Color.fromARGB(255, 0, 0, 0),
       onPrimary: Colors.white,
       surface: Colors.white,
-      onSurface: Colors.black,            
+      onSurface: Colors.black,
       onSurfaceVariant: Colors.black,
       outline: Colors.black,
     ),
@@ -82,7 +82,7 @@ class AppThemes {
     useMaterial3: true,
     textTheme: _textTheme,
     appBarTheme: _appBarTheme.copyWith(
-      backgroundColor: const Color(0xff005faf), 
+      backgroundColor: const Color(0xff005faf),
       foregroundColor: Colors.white,
     ),
     colorScheme: const ColorScheme.light(
@@ -107,12 +107,17 @@ class AppThemes {
     dividerTheme: const DividerThemeData(color: Color(0xff534341)),
     colorScheme: const ColorScheme.dark(
       // Usamos un azul más brillante (#66b2ff) para que resalte en el fondo oscuro
-      primary: Color(0xff66b2ff),         
+      primary: Color(0xff66b2ff),
       onPrimary: Color(0xff003366),
       secondary: Color(0xff4a90e2),
       onSecondary: Colors.white,
-      surface: Color.fromARGB(255, 53, 53, 53), // El fondo gris oscuro que elegiste         
-      onSurface: Color(0xffe6f2ff),       // Texto blanco-azulado
+      surface: Color.fromARGB(
+        255,
+        53,
+        53,
+        53,
+      ), // El fondo gris oscuro que elegiste
+      onSurface: Color(0xffe6f2ff), // Texto blanco-azulado
       onSurfaceVariant: Color(0xffb3d9ff), // Texto secundario azuladito
       outline: Color(0xff8099b3),
       error: Color(0xffffb4ab),
@@ -129,12 +134,12 @@ class AppThemes {
     ),
     colorScheme: const ColorScheme.highContrastDark(
       // Un rojo muy neón/brillante para que destaque al máximo sobre el negro puro
-      primary: Color(0xffff5555),         
+      primary: Color(0xffff5555),
       onPrimary: Colors.black,
-      surface: Colors.black,              // Fondo negro 100% puro
-      onSurface: Colors.white,            // Texto blanco puro
-      onSurfaceVariant: Colors.white,     // Todo el texto blanco puro
-      outline: Colors.white,              // Bordes blancos puros
+      surface: Colors.black, // Fondo negro 100% puro
+      onSurface: Colors.white, // Texto blanco puro
+      onSurfaceVariant: Colors.white, // Todo el texto blanco puro
+      outline: Colors.white, // Bordes blancos puros
       error: Color(0xffff5555),
     ),
   );

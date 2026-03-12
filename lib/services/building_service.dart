@@ -28,12 +28,10 @@ class BuildingService {
     double? longitude,
     int? publicationId,
   }) async {
-    final bool isCleanFetch = publicationId == null && latitude == null && longitude == null;
+    final bool isCleanFetch =
+        publicationId == null && latitude == null && longitude == null;
 
-    if (page == 1 &&
-        firstPageLoading &&
-        !forceRefresh &&
-        isCleanFetch) {
+    if (page == 1 && firstPageLoading && !forceRefresh && isCleanFetch) {
       return buildingsCache;
     }
 
@@ -52,7 +50,9 @@ class BuildingService {
         queryParams['publication'] = publicationId.toString();
       }
 
-      final uri = Uri.parse('$_baseUrl/buildings/api/list').replace(queryParameters: queryParams);
+      final uri = Uri.parse(
+        '$_baseUrl/buildings/api/list',
+      ).replace(queryParameters: queryParams);
       debugPrint("Llamando a la API: $uri");
 
       final response = await client.get(uri);

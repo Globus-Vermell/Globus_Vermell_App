@@ -17,16 +17,18 @@ class InfoChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colores = Theme.of(context).colorScheme;
-    
+
     final isHighContrast = context.watch<ThemeProvider>().isHighContrast;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       decoration: BoxDecoration(
-        color: isHighContrast ? colores.surface : color.withValues(alpha: 0.1), 
+        color: isHighContrast ? colores.surface : color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(30),
         border: Border.all(
-          color: isHighContrast ? colores.onSurface : color.withValues(alpha: 0.2),
+          color: isHighContrast
+              ? colores.onSurface
+              : color.withValues(alpha: 0.2),
           width: isHighContrast ? 2.0 : 1.0,
         ),
       ),
@@ -34,16 +36,16 @@ class InfoChip extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Icon(
-            icon, 
-            size: 16, 
-            color: isHighContrast ? colores.onSurface : color, 
-          ), 
+            icon,
+            size: 16,
+            color: isHighContrast ? colores.onSurface : color,
+          ),
           const SizedBox(width: 8),
           Flexible(
             child: Text(
               label,
               style: TextStyle(
-                color: isHighContrast ? colores.onSurface : color, 
+                color: isHighContrast ? colores.onSurface : color,
                 fontWeight: FontWeight.w600,
                 fontSize: 13,
               ),

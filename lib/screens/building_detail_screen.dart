@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart'; 
-import '../providers/theme_provider.dart'; 
+import 'package:provider/provider.dart';
+import '../providers/theme_provider.dart';
 import 'package:globus_vermell_app/utils/get_distance.dart';
 import 'package:globus_vermell_app/widgets/empty_card.dart';
 import 'package:latlong2/latlong.dart';
@@ -81,7 +81,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
 
   void _showLegend(BuildContext context) {
     final colores = Theme.of(context).colorScheme;
-    
+
     final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
     final isHighContrast = themeProvider.isHighContrast;
 
@@ -91,11 +91,15 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
         backgroundColor: colores.surface,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
-          side: isHighContrast ? BorderSide(color: colores.onSurface, width: 2.0) : BorderSide.none,
+          side: isHighContrast
+              ? BorderSide(color: colores.onSurface, width: 2.0)
+              : BorderSide.none,
         ),
         title: Text(
           context.loc.iconsLegend,
-          style: TextStyle(color: isHighContrast ? colores.onSurface : colores.primary),
+          style: TextStyle(
+            color: isHighContrast ? colores.onSurface : colores.primary,
+          ),
         ),
         content: SingleChildScrollView(
           child: Column(
@@ -246,9 +250,13 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                           vertical: 8,
                         ),
                         decoration: BoxDecoration(
-                          color: isHighContrast ? colores.surface : colores.primary.withValues(alpha: 0.08),
+                          color: isHighContrast
+                              ? colores.surface
+                              : colores.primary.withValues(alpha: 0.08),
                           borderRadius: BorderRadius.circular(50),
-                          border: isHighContrast ? Border.all(color: colores.onSurface, width: 2.0) : null,
+                          border: isHighContrast
+                              ? Border.all(color: colores.onSurface, width: 2.0)
+                              : null,
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -256,14 +264,18 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                             Icon(
                               Icons.auto_stories_rounded,
                               size: 18,
-                              color: isHighContrast ? colores.onSurface : colores.primary,
+                              color: isHighContrast
+                                  ? colores.onSurface
+                                  : colores.primary,
                             ),
                             const SizedBox(width: 8),
                             Flexible(
                               child: Text(
                                 building.publications.first,
                                 style: TextStyle(
-                                  color: isHighContrast ? colores.onSurface : colores.primary,
+                                  color: isHighContrast
+                                      ? colores.onSurface
+                                      : colores.primary,
                                   fontWeight: FontWeight.w700,
                                   fontSize: 13,
                                 ),
@@ -353,7 +365,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                         ),
 
                   const SizedBox(height: 40),
-                  
+
                   if (building.architects.isNotEmpty)
                     Theme(
                       data: Theme.of(
@@ -361,16 +373,24 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                       ).copyWith(dividerColor: Colors.transparent),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: isHighContrast ? colores.surface : colores.primary.withValues(alpha: 0.04),
+                          color: isHighContrast
+                              ? colores.surface
+                              : colores.primary.withValues(alpha: 0.04),
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(
-                            color: isHighContrast ? colores.onSurface : colores.outline.withValues(alpha: 0.15),
+                            color: isHighContrast
+                                ? colores.onSurface
+                                : colores.outline.withValues(alpha: 0.15),
                             width: isHighContrast ? 2.0 : 1.0,
                           ),
                         ),
                         child: ExpansionTile(
-                          iconColor: isHighContrast ? colores.onSurface : colores.primary,
-                          collapsedIconColor: isHighContrast ? colores.onSurface : colores.primary,
+                          iconColor: isHighContrast
+                              ? colores.onSurface
+                              : colores.primary,
+                          collapsedIconColor: isHighContrast
+                              ? colores.onSurface
+                              : colores.primary,
                           tilePadding: const EdgeInsets.symmetric(
                             horizontal: 16,
                             vertical: 4,
@@ -380,12 +400,16 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
-                              color: isHighContrast ? colores.onSurface : colores.primary,
+                              color: isHighContrast
+                                  ? colores.onSurface
+                                  : colores.primary,
                             ),
                           ),
                           leading: Icon(
                             Icons.person_rounded,
-                            color: isHighContrast ? colores.onSurface : colores.primary,
+                            color: isHighContrast
+                                ? colores.onSurface
+                                : colores.primary,
                           ),
                           children: building.architects.map((arq) {
                             return Padding(
@@ -398,7 +422,9 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                                 children: [
                                   Icon(
                                     Icons.subdirectory_arrow_right_rounded,
-                                    color: isHighContrast ? colores.onSurface : colores.primary,
+                                    color: isHighContrast
+                                        ? colores.onSurface
+                                        : colores.primary,
                                     size: 18,
                                   ),
                                   const SizedBox(width: 12),
@@ -406,7 +432,9 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                                     child: Text(
                                       arq,
                                       style: TextStyle(
-                                        color: isHighContrast ? colores.onSurface : colores.onSurfaceVariant,
+                                        color: isHighContrast
+                                            ? colores.onSurface
+                                            : colores.onSurfaceVariant,
                                         fontSize: 15,
                                         fontWeight: FontWeight.w500,
                                       ),
@@ -430,16 +458,24 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                       ).copyWith(dividerColor: Colors.transparent),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: isHighContrast ? colores.surface : colores.primary.withValues(alpha: 0.04),
+                          color: isHighContrast
+                              ? colores.surface
+                              : colores.primary.withValues(alpha: 0.04),
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(
-                            color: isHighContrast ? colores.onSurface : colores.outline.withValues(alpha: 0.15),
+                            color: isHighContrast
+                                ? colores.onSurface
+                                : colores.outline.withValues(alpha: 0.15),
                             width: isHighContrast ? 2.0 : 1.0,
                           ),
                         ),
                         child: ExpansionTile(
-                          iconColor: isHighContrast ? colores.onSurface : colores.primary,
-                          collapsedIconColor: isHighContrast ? colores.onSurface : colores.primary,
+                          iconColor: isHighContrast
+                              ? colores.onSurface
+                              : colores.primary,
+                          collapsedIconColor: isHighContrast
+                              ? colores.onSurface
+                              : colores.primary,
                           tilePadding: const EdgeInsets.symmetric(
                             horizontal: 16,
                             vertical: 4,
@@ -449,12 +485,16 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
-                              color: isHighContrast ? colores.onSurface : colores.primary,
+                              color: isHighContrast
+                                  ? colores.onSurface
+                                  : colores.primary,
                             ),
                           ),
                           leading: Icon(
                             Icons.domain_rounded,
-                            color: isHighContrast ? colores.onSurface : colores.primary,
+                            color: isHighContrast
+                                ? colores.onSurface
+                                : colores.primary,
                           ),
                           children: building.uses.map((uso) {
                             return Padding(
@@ -467,7 +507,9 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                                 children: [
                                   Icon(
                                     Icons.subdirectory_arrow_right_rounded,
-                                    color: isHighContrast ? colores.onSurface : colores.primary,
+                                    color: isHighContrast
+                                        ? colores.onSurface
+                                        : colores.primary,
                                     size: 18,
                                   ),
                                   const SizedBox(width: 12),
@@ -475,7 +517,9 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                                     child: Text(
                                       uso,
                                       style: TextStyle(
-                                        color: isHighContrast ? colores.onSurface : colores.onSurfaceVariant,
+                                        color: isHighContrast
+                                            ? colores.onSurface
+                                            : colores.onSurfaceVariant,
                                         fontSize: 15,
                                         fontWeight: FontWeight.w500,
                                       ),
@@ -502,14 +546,14 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
         },
         backgroundColor: isHighContrast ? colores.surface : colores.primary,
         elevation: 4,
-        shape: isHighContrast 
+        shape: isHighContrast
             ? RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30), 
-                side: BorderSide(color: colores.onSurface, width: 2.0)
-              ) 
+                borderRadius: BorderRadius.circular(30),
+                side: BorderSide(color: colores.onSurface, width: 2.0),
+              )
             : null,
         icon: Icon(
-          Icons.map_rounded, 
+          Icons.map_rounded,
           color: isHighContrast ? colores.onSurface : colores.onPrimary,
         ),
         label: Text(
@@ -677,13 +721,17 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: isHighContrast ? colores.surface : color.withValues(alpha: 0.15),
+            color: isHighContrast
+                ? colores.surface
+                : color.withValues(alpha: 0.15),
             shape: BoxShape.circle,
-            border: isHighContrast ? Border.all(color: colores.onSurface, width: 2.0) : null,
+            border: isHighContrast
+                ? Border.all(color: colores.onSurface, width: 2.0)
+                : null,
           ),
           child: Icon(
-            icon, 
-            size: 18, 
+            icon,
+            size: 18,
             color: isHighContrast ? colores.onSurface : color,
           ),
         ),

@@ -27,7 +27,9 @@ class ThemeProvider with ChangeNotifier {
    */
   ThemeData get themeData {
     if (_isHighContrast) {
-      return _isDark ? AppThemes.darkHighContrastMode : AppThemes.highContrastMode;
+      return _isDark
+          ? AppThemes.darkHighContrastMode
+          : AppThemes.highContrastMode;
     }
     if (_isColorBlind) {
       return _isDark ? AppThemes.darkColorBlindMode : AppThemes.colorBlindMode;

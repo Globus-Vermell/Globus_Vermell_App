@@ -41,14 +41,17 @@ class BuildingListController extends ChangeNotifier {
 
     try {
       final isNearby = _currentMode == SearchMode.nearby;
-      final hasValidLocation = location.latitude != 0 && location.longitude != 0;
+      final hasValidLocation =
+          location.latitude != 0 && location.longitude != 0;
 
       final int? activeLimit = isNearby ? (limit ?? 20) : limit;
 
       final newBuildings = await _service.getBuildings(
         page: _currentPage,
         limit: activeLimit,
-        publicationId: _currentMode == SearchMode.publication ? _selectedPublicationId : null,
+        publicationId: _currentMode == SearchMode.publication
+            ? _selectedPublicationId
+            : null,
         latitude: (isNearby || hasValidLocation) ? location.latitude : null,
         longitude: (isNearby || hasValidLocation) ? location.longitude : null,
         forceRefresh: reset,
@@ -79,7 +82,9 @@ class BuildingListController extends ChangeNotifier {
       publicationsFilter = await _pubService.getPublications();
     }
 
-    if (_service.firstPageLoading && _currentMode == SearchMode.all && _service.buildingsCache.isNotEmpty) {
+    if (_service.firstPageLoading &&
+        _currentMode == SearchMode.all &&
+        _service.buildingsCache.isNotEmpty) {
       buildings = List.from(_service.buildingsCache);
       _currentPage = 2;
       notifyListeners();
@@ -110,7 +115,9 @@ class BuildingListController extends ChangeNotifier {
 
     try {
       Position position = await Geolocator.getCurrentPosition(
-        locationSettings: const LocationSettings(accuracy: LocationAccuracy.high),
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.high,
+        ),
       );
 
       location = LatLng(position.latitude, position.longitude);
@@ -128,15 +135,16 @@ class BuildingListController extends ChangeNotifier {
 
   void _startListeningToPosition() {
     _realPosition?.cancel();
-    _realPosition = Geolocator.getPositionStream(
-      locationSettings: const LocationSettings(
-        accuracy: LocationAccuracy.high,
-        distanceFilter: 10,
-      ),
-    ).listen((Position position) {
-      location = LatLng(position.latitude, position.longitude);
-      notifyListeners();
-    });
+    _realPosition =
+        Geolocator.getPositionStream(
+          locationSettings: const LocationSettings(
+            accuracy: LocationAccuracy.high,
+            distanceFilter: 10,
+          ),
+        ).listen((Position position) {
+          location = LatLng(position.latitude, position.longitude);
+          notifyListeners();
+        });
   }
 
   void stopTracking() {
@@ -158,7 +166,9 @@ class BuildingListController extends ChangeNotifier {
     try {
       Position? position = await Geolocator.getLastKnownPosition();
       position ??= await Geolocator.getCurrentPosition(
-        locationSettings: const LocationSettings(accuracy: LocationAccuracy.medium),
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.medium,
+        ),
       );
 
       location = LatLng(position.latitude, position.longitude);
