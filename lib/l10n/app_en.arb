@@ -60,5 +60,7 @@
   "onboardingTitle2": "Find hidden gems",
   "onboardingDesc2": "Use the top filters to discover buildings by neighborhood, era, or architectural style. Browse the map and find your favorites.",
   "onboardingTitle3": "Explore every detail",
-  "onboardingDesc3": "Click on the map markers to view complete information, history, opening hours, and how to get to each building."
+  "onboardingDesc3": "Click on the map markers to view complete information, history, opening hours, and how to get to each building.",
+  "adaptability": "Adaptability",
+  "general": "General"
 }

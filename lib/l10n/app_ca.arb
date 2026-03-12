@@ -60,5 +60,7 @@
   "onboardingTitle2": "Troba joies ocultes",
   "onboardingDesc2": "Utilitza els filtres superiors per descobrir edificacions per barri, època o estil arquitectònic. Navega pel mapa i troba les teves favorites.",
   "onboardingTitle3": "Explora cada detall",
-  "onboardingDesc3": "Fes clic als marcadors del mapa per veure informació completa, història, horaris i com arribar a cada edificació."
+  "onboardingDesc3": "Fes clic als marcadors del mapa per veure informació completa, història, horaris i com arribar a cada edificació.",
+  "adaptability": "Adaptabilitat",
+  "general": "General"
 }
