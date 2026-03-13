@@ -23,6 +23,7 @@ class BuildingsListScreen extends StatefulWidget {
 class _BuildingsListScreenState extends State<BuildingsListScreen> {
   final ScrollController _scrollController = ScrollController();
   GoogleMapController? _googleMapController;
+  
   String get llave => dotenv.env['API_KEY_MAPA'] ?? '';
   String get urlMapa => 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}';
 
