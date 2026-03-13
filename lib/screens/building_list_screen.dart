@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:globus_vermell_app/utils/lang_extensions.dart';
-import 'package:latlong2/latlong.dart' as ll; 
 import 'package:provider/provider.dart';
 import '../providers/theme_provider.dart';
 import '../controllers/building_list_controller.dart';
 import '../models/building/building_entity.dart';
 import '../widgets/building_card.dart';
-import '../models/building/building_entity.dart';
 import '../widgets/toggle_button.dart';
 import 'building_detail_screen.dart';
 import 'publication_detail_screen.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'dart:ui' as ui;
+import 'dart:typed_data';
 
 class BuildingsListScreen extends StatefulWidget {
   const BuildingsListScreen({super.key});
@@ -27,6 +27,9 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
   String get urlMapa => 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}';
 
   bool _listView = false;
+  BitmapDescriptor _iconoEdificio = BitmapDescriptor.defaultMarker;
+  BitmapDescriptor _iconoYo = BitmapDescriptor.defaultMarker;
+  bool _iconosCargados = false;
 
   @override
   void initState() {
@@ -45,6 +48,51 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
         }
       }
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _cargarIconosPersonalizados();
+  }
+
+  Future<void> _cargarIconosPersonalizados() async {
+    final colores = Theme.of(context).colorScheme;
+    final iconoEdificio = await _crearIconoDesdeFlutter(Icons.location_on, colores.primary);
+    final iconoYo = await _crearIconoDesdeFlutter(Icons.person_pin_circle, colores.primary);
+
+    if (mounted) {
+      setState(() {
+        _iconoEdificio = iconoEdificio;
+        _iconoYo = iconoYo;
+        _iconosCargados = true;
+      });
+    }
+  }
+
+  Future<BitmapDescriptor> _crearIconoDesdeFlutter(IconData icono, Color color) async {
+    final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
+    final Canvas canvas = Canvas(pictureRecorder);
+    
+    final TextPainter textPainter = TextPainter(textDirection: TextDirection.ltr);
+    textPainter.text = TextSpan(
+      text: String.fromCharCode(icono.codePoint),
+      style: TextStyle(
+        fontSize: 120.0, 
+        fontFamily: icono.fontFamily,
+        package: icono.fontPackage,
+        color: color,
+      ),
+    );
+    textPainter.layout();
+    textPainter.paint(canvas, const Offset(0.0, 0.0));
+
+    final ui.Image image = await pictureRecorder.endRecording().toImage(
+      textPainter.width.toInt(), 
+      textPainter.height.toInt()
+    );
+    final ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+    return BitmapDescriptor.fromBytes(byteData!.buffer.asUint8List());
   }
 
   Future<void> _initialData() async {
@@ -167,6 +215,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
 
     return Scaffold(
       backgroundColor: colores.surface,
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       appBar: AppBar(
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -512,6 +561,9 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
           : const LatLng(41.3879, 2.16992);
     }
 
+    final double colorPrimarioHue = HSVColor.fromColor(colores.primary).hue;
+    final double colorSecundarioHue = HSVColor.fromColor(colores.secondary).hue;
+
     return GoogleMap(
       initialCameraPosition: CameraPosition(
         target: centro,
@@ -525,8 +577,8 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
           Marker(
             markerId: const MarkerId('yo'),
             position: LatLng(controller.location.latitude, controller.location.longitude),
-            icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
-            infoWindow: InfoWindow(title: context.loc.me), 
+            icon: _iconoYo,
+            infoWindow: InfoWindow(title: context.loc.me),
           ),
         ...controller.buildings
             .where((e) => e.latitude != 0 && e.longitude != 0)
@@ -534,7 +586,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
           return Marker(
             markerId: MarkerId(edificio.hashCode.toString()), 
             position: LatLng(edificio.latitude, edificio.longitude),
-            icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+            icon: _iconoEdificio,
             onTap: () => _navegarADetalle(edificio, controller),
           );
         }),
