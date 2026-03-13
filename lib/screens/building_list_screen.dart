@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:globus_vermell_app/utils/lang_extensions.dart';
-import 'package:latlong2/latlong.dart';
+import 'package:latlong2/latlong.dart' as ll; 
 import 'package:provider/provider.dart';
 import '../providers/theme_provider.dart';
 import '../controllers/building_list_controller.dart';
@@ -11,6 +10,7 @@ import '../widgets/toggle_button.dart';
 import 'building_detail_screen.dart';
 import 'publication_detail_screen.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class BuildingsListScreen extends StatefulWidget {
   const BuildingsListScreen({super.key});
@@ -21,9 +21,9 @@ class BuildingsListScreen extends StatefulWidget {
 
 class _BuildingsListScreenState extends State<BuildingsListScreen> {
   final ScrollController _scrollController = ScrollController();
-  final MapController _mapController = MapController();
+  GoogleMapController? _googleMapController;
   String get llave => dotenv.env['API_KEY_MAPA'] ?? '';
-  String get urlMapa => 'https://api.thunderforest.com/atlas/{z}/{x}/{y}.png?apikey=$llave';
+  String get urlMapa => 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}';
 
   bool _listView = false;
 
@@ -81,7 +81,12 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
       if (!mounted) return;
 
       if (!_listView && controller.location.latitude != 0) {
-        _mapController.move(controller.location, 17.0);
+        _googleMapController?.animateCamera(
+          CameraUpdate.newLatLngZoom(
+            LatLng(controller.location.latitude, controller.location.longitude), 
+            17.0
+          )
+        );
       }
     } catch (e) {
       if (mounted) _errorNetwork();
@@ -93,7 +98,12 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
       final controller = context.read<BuildingListController>();
       await controller.nearbyBuildings();
 
-      _mapController.move(controller.location, 17.0);
+      _googleMapController?.animateCamera(
+        CameraUpdate.newLatLngZoom(
+          LatLng(controller.location.latitude, controller.location.longitude), 
+          17.0
+        )
+      );
     } catch (e) {
       if (mounted) _errorNetwork();
     }
@@ -113,7 +123,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
   void dispose() {
     context.read<BuildingListController>().stopTracking();
     _scrollController.dispose();
-    _mapController.dispose();
+    _googleMapController?.dispose(); 
     super.dispose();
   }
 
@@ -132,19 +142,20 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
     );
 
     if (!mounted) return;
-
     if (result == 'show_map') {
       setState(() => _listView = false);
       Future.delayed(const Duration(milliseconds: 300), () {
         if (edificio.latitude != 0 && edificio.longitude != 0) {
-          _mapController.move(
-            LatLng(edificio.latitude, edificio.longitude),
-            17.0,
+          _googleMapController?.animateCamera(
+            CameraUpdate.newLatLngZoom(
+              LatLng(edificio.latitude, edificio.longitude), 
+              17.0
+            )
           );
         }
       });
     }
-  }
+  } 
 
   @override
   Widget build(BuildContext context) {
@@ -485,11 +496,14 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
   }
 
   Widget _buildMap(BuildingListController controller, ColorScheme colores) {
-    LatLng centro = controller.location;
+    LatLng centro = LatLng(
+      controller.location.latitude, 
+      controller.location.longitude
+    );
+    
     if (centro.latitude == 0 && centro.longitude == 0) {
-      centro =
-          controller.buildings.isNotEmpty &&
-              controller.buildings.first.latitude != 0
+      centro = controller.buildings.isNotEmpty &&
+               controller.buildings.first.latitude != 0
           ? LatLng(
               controller.buildings.first.latitude,
               controller.buildings.first.longitude,
@@ -497,60 +511,33 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
           : const LatLng(41.3879, 2.16992);
     }
 
-    return FlutterMap(
-      mapController: _mapController,
-      options: MapOptions(initialCenter: centro, initialZoom: 14.0),
-      children: [
-        TileLayer(
-          urlTemplate: urlMapa,
-          userAgentPackageName: 'com.example.globus_vermell',
-        ),
-        MarkerLayer(
-          markers: [
-            if (controller.location.latitude != 0)
-              Marker(
-                point: controller.location,
-                width: 60,
-                height: 60,
-                child: Column(
-                  children: [
-                    const Icon(
-                      Icons.person_pin_circle,
-                      color: Colors.blue,
-                      size: 40,
-                    ),
-                    Text(
-                      context.loc.me,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.blue,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ...controller.buildings.map((edificio) {
-              if (edificio.latitude == 0 && edificio.longitude == 0) {
-                return const Marker(point: LatLng(0, 0), child: SizedBox());
-              }
-
-              return Marker(
-                point: LatLng(edificio.latitude, edificio.longitude),
-                width: 50,
-                height: 50,
-                child: GestureDetector(
-                  onTap: () => _navegarADetalle(edificio, controller),
-                  child: Icon(
-                    Icons.location_on,
-                    color: colores.primary,
-                    size: 40,
-                  ),
-                ),
-              );
-            }),
-          ],
-        ),
-      ],
+    return GoogleMap(
+      initialCameraPosition: CameraPosition(
+        target: centro,
+        zoom: 14.0,
+      ),
+      onMapCreated: (GoogleMapController googleController) {
+        _googleMapController = googleController;
+      },
+      markers: {
+        if (controller.location.latitude != 0)
+          Marker(
+            markerId: const MarkerId('yo'),
+            position: LatLng(controller.location.latitude, controller.location.longitude),
+            icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
+            infoWindow: InfoWindow(title: context.loc.me), 
+          ),
+        ...controller.buildings
+            .where((e) => e.latitude != 0 && e.longitude != 0)
+            .map((edificio) {
+          return Marker(
+            markerId: MarkerId(edificio.hashCode.toString()), 
+            position: LatLng(edificio.latitude, edificio.longitude),
+            icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+            onTap: () => _navegarADetalle(edificio, controller),
+          );
+        }),
+      },
     );
   }
 
@@ -614,4 +601,4 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
       ),
     );
   }
-}
+} 
