@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import '../models/building_model.dart';
-import '../models/publication_model.dart';
+import '../models/building/building_entity.dart';
+import '../models/publication/publication_entity.dart';
 import '../services/publications_service.dart';
 
 class BuildingDetailController {
   final Building building;
-
+  final PublicationService _pubService;
   final ValueNotifier<int> currentImageIndex = ValueNotifier(0);
 
-  BuildingDetailController(this.building);
+  BuildingDetailController(this.building, this._pubService);
 
   // Método para actualizar el índice del carrusel
   void onPageChanged(int index) {
@@ -25,7 +25,7 @@ class BuildingDetailController {
   }
 
   Future<Publication> getPublicationByTitle(String title) async {
-    final publications = await PublicationService().getPublications();
+    final publications = await _pubService.getPublications();
 
     return publications.firstWhere(
       (p) => p.title.trim().toLowerCase() == title.trim().toLowerCase(),

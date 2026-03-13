@@ -1,11 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:globus_vermell_app/services/publications_service.dart';
 import 'package:provider/provider.dart';
 import '../providers/theme_provider.dart';
 import 'package:globus_vermell_app/utils/get_distance.dart';
 import 'package:globus_vermell_app/widgets/empty_card.dart';
 import 'package:latlong2/latlong.dart';
-import '../models/building_model.dart';
+import '../models/building/building_entity.dart';
 import '../controllers/building_detail_controller.dart';
 import '../utils/lang_extensions.dart';
 import '../widgets/info_chip.dart';
@@ -32,7 +33,10 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
   @override
   void initState() {
     super.initState();
-    _controller = BuildingDetailController(widget.building);
+    _controller = BuildingDetailController(
+      widget.building,
+      context.read<PublicationService>(),
+    );
   }
 
   @override

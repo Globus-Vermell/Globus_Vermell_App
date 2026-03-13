@@ -5,7 +5,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import '../providers/theme_provider.dart';
 import '../controllers/building_list_controller.dart';
-import '../models/building_model.dart';
+import '../models/building/building_entity.dart';
 import '../widgets/building_card.dart';
 import '../widgets/toggle_button.dart';
 import 'building_detail_screen.dart';
@@ -23,7 +23,8 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
   final ScrollController _scrollController = ScrollController();
   final MapController _mapController = MapController();
   String get llave => dotenv.env['API_KEY_MAPA'] ?? '';
-  String get urlMapa => 'https://api.thunderforest.com/atlas/{z}/{x}/{y}.png?apikey=$llave';
+  String get urlMapa =>
+      'https://api.thunderforest.com/atlas/{z}/{x}/{y}.png?apikey=$llave';
 
   bool _listView = false;
 

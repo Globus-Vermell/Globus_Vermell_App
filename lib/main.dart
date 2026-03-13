@@ -12,16 +12,17 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:globus_vermell_app/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'models/building_model.dart';
+import 'models/building/building_entity.dart';
+import 'models/publication/publication_entity.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final dir = await getApplicationDocumentsDirectory();
-  final isar = await Isar.open(
-    [BuildingSchema],
-    directory: dir.path,
-  );
+  final isar = await Isar.open([
+    BuildingSchema,
+    PublicationSchema,
+  ], directory: dir.path);
 
   final prefs = await SharedPreferences.getInstance();
   final bool isFirstTime = prefs.getBool('isFirstTime') ?? true;
@@ -31,7 +32,7 @@ Future<void> main() async {
     MultiProvider(
       providers: [
         Provider(create: (_) => BuildingService(isar)),
-        Provider(create: (_) => PublicationService()),
+        Provider(create: (_) => PublicationService(isar)),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => LanguageProvider()),
       ],
