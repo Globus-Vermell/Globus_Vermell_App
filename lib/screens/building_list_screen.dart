@@ -10,6 +10,7 @@ import '../widgets/building_card.dart';
 import '../widgets/toggle_button.dart';
 import 'building_detail_screen.dart';
 import 'publication_detail_screen.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class BuildingsListScreen extends StatefulWidget {
   const BuildingsListScreen({super.key});
@@ -21,6 +22,8 @@ class BuildingsListScreen extends StatefulWidget {
 class _BuildingsListScreenState extends State<BuildingsListScreen> {
   final ScrollController _scrollController = ScrollController();
   final MapController _mapController = MapController();
+  String get llave => dotenv.env['API_KEY_MAPA'] ?? '';
+  String get urlMapa => 'https://api.thunderforest.com/atlas/{z}/{x}/{y}.png?apikey=$llave';
 
   bool _listView = false;
 
@@ -499,7 +502,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
       options: MapOptions(initialCenter: centro, initialZoom: 14.0),
       children: [
         TileLayer(
-          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+          urlTemplate: urlMapa,
           userAgentPackageName: 'com.example.globus_vermell',
         ),
         MarkerLayer(
