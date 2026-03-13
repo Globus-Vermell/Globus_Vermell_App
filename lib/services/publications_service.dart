@@ -21,7 +21,7 @@ class PublicationService {
     if (!forceRefresh) {
       final localPublications = await isar.publications.where().findAll();
       if (localPublications.isNotEmpty) {
-        debugPrint("Cargando publicaciones desde Isar (Offline)");
+        debugPrint("Cargando publicaciones desde Isar");
         return localPublications;
       }
     }
@@ -42,7 +42,7 @@ class PublicationService {
           }
           await isar.publications.putAll(publications);
         });
-        debugPrint("Nuevas publicaciones guardadas en Isar");
+        debugPrint("Nuevas publicaciones guardadas en el disco local");
 
         return publications;
       } else {
