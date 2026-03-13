@@ -5,7 +5,7 @@ import '../models/building/building_entity.dart';
 import '../utils/get_distance.dart';
 import '../utils/lang_extensions.dart';
 
-class BuildingCard extends StatefulWidget {
+class BuildingCard extends StatelessWidget {
   final Building building;
   final VoidCallback onTap;
   final LatLng? location;
@@ -18,13 +18,8 @@ class BuildingCard extends StatefulWidget {
   });
 
   @override
-  State<BuildingCard> createState() => _BuildingCardState();
-}
-
-class _BuildingCardState extends State<BuildingCard> {
-  @override
   Widget build(BuildContext context) {
-    final String distance = getDistance(widget.location, widget.building);
+    final String distance = getDistance(location, building);
     final colores = Theme.of(context).colorScheme;
 
     return Card(
@@ -37,7 +32,7 @@ class _BuildingCardState extends State<BuildingCard> {
         side: BorderSide(color: colores.outline.withValues(alpha: 0.2)),
       ),
       child: InkWell(
-        onTap: widget.onTap,
+        onTap: onTap,
         borderRadius: BorderRadius.circular(12),
         child: Padding(
           padding: const EdgeInsets.all(12.0),
@@ -51,11 +46,11 @@ class _BuildingCardState extends State<BuildingCard> {
                   color: colores.outline.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: (widget.building.images.isNotEmpty)
+                child: (building.images.isNotEmpty)
                     ? ClipRRect(
                         borderRadius: BorderRadius.circular(8),
                         child: CachedNetworkImage(
-                          imageUrl: widget.building.images.first,
+                          imageUrl: building.images.first,
                           fit: BoxFit.cover,
                           errorWidget: (context, url, error) {
                             return Icon(
@@ -90,7 +85,7 @@ class _BuildingCardState extends State<BuildingCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      widget.building.name,
+                      building.name,
                       style: TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.bold,
@@ -101,7 +96,7 @@ class _BuildingCardState extends State<BuildingCard> {
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      widget.building.location,
+                      building.location,
                       style: TextStyle(
                         fontSize: 14,
                         color: colores.onSurfaceVariant,
@@ -121,20 +116,20 @@ class _BuildingCardState extends State<BuildingCard> {
                         const SizedBox(width: 4),
                         Expanded(
                           child: Text(
-                            (widget.building.publications.isNotEmpty)
-                                ? widget.building.publications.first
+                            (building.publications.isNotEmpty)
+                                ? building.publications.first
                                 : context.loc.noPublication,
                             style: TextStyle(
                               fontSize: 13,
-                              color: (widget.building.publications.isNotEmpty)
+                              color: (building.publications.isNotEmpty)
                                   ? colores.onSurface
                                   : colores.onSurfaceVariant,
                               fontWeight:
-                                  (widget.building.publications.isNotEmpty)
+                                  (building.publications.isNotEmpty)
                                   ? FontWeight.bold
                                   : FontWeight.normal,
                               fontStyle:
-                                  (widget.building.publications.isNotEmpty)
+                                  (building.publications.isNotEmpty)
                                   ? FontStyle.normal
                                   : FontStyle.italic,
                             ),
