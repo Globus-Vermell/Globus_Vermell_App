@@ -14,8 +14,6 @@ class BuildingService {
     defaultValue: 'Error',
   );
 
-  bool firstPageLoading = false; // Para saber si ya hicimos la pre-carga
-
   Future<List<Building>> getBuildings({
     int page = 1,
     int? limit,
