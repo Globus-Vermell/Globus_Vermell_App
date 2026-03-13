@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:globus_vermell_app/screens/settings_screen.dart';
+import 'package:globus_vermell_app/services/publications_service.dart';
 import 'package:provider/provider.dart';
 import '../providers/theme_provider.dart';
 import '../controllers/building_list_controller.dart';
+import '../services/building_service.dart';
 import '../utils/lang_extensions.dart';
 import 'building_list_screen.dart';
 import 'themes_screen.dart';
@@ -22,9 +24,12 @@ class BottomBarState extends State<BottomBar> {
     });
   }
 
-  final List<Widget> _widgetOptions = <Widget>[
+  List<Widget> get _widgetOptions => <Widget>[
     ChangeNotifierProvider(
-      create: (_) => BuildingListController(),
+      create: (context) => BuildingListController(
+        context.read<BuildingService>(),
+        context.read<PublicationService>(),
+      ),
       child: const BuildingsListScreen(),
     ),
     const ThemesScreen(),

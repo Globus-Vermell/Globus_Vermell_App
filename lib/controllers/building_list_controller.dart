@@ -10,8 +10,10 @@ import '../services/publications_service.dart';
 enum SearchMode { all, publication, nearby }
 
 class BuildingListController extends ChangeNotifier {
-  final BuildingService _service = BuildingService();
-  final PublicationService _pubService = PublicationService();
+  final BuildingService _service;
+  final PublicationService _pubService;
+
+  BuildingListController(this._service, this._pubService);
 
   List<Building> buildings = [];
   List<Publication> publicationsFilter = [];

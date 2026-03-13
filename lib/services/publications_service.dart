@@ -4,10 +4,6 @@ import 'package:http/http.dart' as http;
 import '../models/publication_model.dart';
 
 class PublicationService {
-  static final PublicationService _instance = PublicationService._internal();
-  factory PublicationService() => _instance;
-  PublicationService._internal();
-
   http.Client client = http.Client();
 
   static const String _baseUrl = String.fromEnvironment(

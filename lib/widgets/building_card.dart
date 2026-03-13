@@ -22,10 +22,9 @@ class BuildingCard extends StatefulWidget {
 }
 
 class _BuildingCardState extends State<BuildingCard> {
-  late String distance = getDistance(widget.location, widget.building);
-
   @override
   Widget build(BuildContext context) {
+    final String distance = getDistance(widget.location, widget.building);
     final colores = Theme.of(context).colorScheme;
 
     return Card(

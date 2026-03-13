@@ -4,11 +4,6 @@ import 'package:http/http.dart' as http;
 import '../models/building_model.dart';
 
 class BuildingService {
-  // 1. Singleton: Para que sea la MISMA instancia en toda la app
-  static final BuildingService _instance = BuildingService._internal();
-  factory BuildingService() => _instance;
-  BuildingService._internal();
-
   http.Client client = http.Client();
 
   static const String _baseUrl = String.fromEnvironment(
