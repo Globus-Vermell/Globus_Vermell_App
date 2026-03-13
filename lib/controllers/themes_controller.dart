@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
-
-import '../models/publication_model.dart';
+import '../models/publication/publication_entity.dart';
 import '../services/publications_service.dart';
 
 class ThemesController {
-  final PublicationService _service = PublicationService();
+  final PublicationService _service;
 
+  ThemesController(this._service);
   Future<Map<String, List<Publication>>> getOrganizedPublications() async {
     final allPubs = await _service.getPublications();
 

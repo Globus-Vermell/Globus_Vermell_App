@@ -2,7 +2,9 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:isar/isar.dart';
-import '../models/building_model.dart';
+import '../models/building/building_entity.dart';
+import '../models/building/building_dto.dart';
+import '../models/building/building_mapper.dart';
 
 class BuildingService {
   final Isar isar;
@@ -91,5 +93,10 @@ List<Building> _parseBuildings(String responseBody) {
   final List<Map<String, dynamic>> listaJson = List<Map<String, dynamic>>.from(
     data['buildings'] ?? [],
   );
-  return listaJson.map((mapa) => Building.fromMap(mapa)).toList();
+
+  // 1. Convertimos el JSON en objetos DTO
+  final dtos = listaJson.map((mapa) => BuildingDto.fromMap(mapa)).toList();
+
+  // 2. Convertimos los DTOs en Entidades Isar usando nuestro Mapper
+  return dtos.map((dto) => dto.toEntity()).toList();
 }

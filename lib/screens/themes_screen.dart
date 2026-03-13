@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../controllers/themes_controller.dart';
-import '../models/publication_model.dart';
+import '../models/publication/publication_entity.dart';
 import '../utils/lang_extensions.dart';
 import 'publication_detail_screen.dart';
 import '../providers/theme_provider.dart';
@@ -14,7 +14,7 @@ class ThemesScreen extends StatefulWidget {
 }
 
 class _ThemesScreenState extends State<ThemesScreen> {
-  final ThemesController _controller = ThemesController();
+  late ThemesController _controller;
 
   Map<String, List<Publication>> _organizedData = {
     'etapes': [],
@@ -27,6 +27,7 @@ class _ThemesScreenState extends State<ThemesScreen> {
   @override
   void initState() {
     super.initState();
+    _controller = ThemesController(context.read());
     _loadData();
   }
 

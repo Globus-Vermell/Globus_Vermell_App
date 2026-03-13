@@ -2,18 +2,21 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
-import '../models/building_model.dart';
-import '../models/publication_model.dart';
+import '../models/building/building_entity.dart';
+import '../models/publication/publication_entity.dart';
 import '../services/building_service.dart';
 import '../services/publications_service.dart';
 
 enum SearchMode { all, publication, nearby }
 
-class BuildingListController extends ChangeNotifier {
+class BuildingListController extends ChangeNotifier
+    with WidgetsBindingObserver {
   final BuildingService _service;
   final PublicationService _pubService;
 
-  BuildingListController(this._service, this._pubService);
+  BuildingListController(this._service, this._pubService) {
+    WidgetsBinding.instance.addObserver(this);
+  }
 
   List<Building> buildings = [];
   List<Publication> publicationsFilter = [];
@@ -29,6 +32,23 @@ class BuildingListController extends ChangeNotifier {
   StreamSubscription<Position>? _realPosition;
 
   SearchMode get currentMode => _currentMode;
+
+  //Controlar cuando estamos en segundo plano
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.paused) {
+      debugPrint("App en segundo plano: Pausando GPS");
+      _realPosition?.pause();
+    } else if (state == AppLifecycleState.resumed) {
+      debugPrint("App en primer plano: Reanudando GPS");
+      _realPosition?.resume();
+    }
+  }
+
+  Future<void> refreshData() async {
+    await _loadPage(reset: true);
+  }
 
   Future<void> _loadPage({bool reset = false, int? limit}) async {
     if (isLoading || (!hasMoreData && !reset)) return;
@@ -201,6 +221,7 @@ class BuildingListController extends ChangeNotifier {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     stopTracking();
     super.dispose();
   }

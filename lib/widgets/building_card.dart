@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
-import '../models/building_model.dart';
+import '../models/building/building_entity.dart';
 import '../utils/get_distance.dart';
 import '../utils/lang_extensions.dart';
 

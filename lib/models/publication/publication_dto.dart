@@ -1,11 +1,11 @@
-class Publication {
+class PublicationDto {
   final int idPublication;
   final String title;
   final String description;
   final String themes;
   final String publicationEdition;
 
-  Publication({
+  PublicationDto({
     required this.idPublication,
     required this.title,
     required this.description,
@@ -13,7 +13,7 @@ class Publication {
     required this.publicationEdition,
   });
 
-  factory Publication.fromMap(Map<String, dynamic> map) {
+  factory PublicationDto.fromMap(Map<String, dynamic> map) {
     var rawThemes = map['themes'];
     String finalThemes = '';
 
@@ -27,16 +27,13 @@ class Publication {
       finalThemes = rawThemes.toString();
     }
 
-    return Publication(
+    return PublicationDto(
       idPublication: map['id_publication'] is int
           ? map['id_publication']
           : int.tryParse(map['id_publication'].toString()) ?? 0,
-
       title: map['title'] ?? 'Sin título',
       description: map['description'] ?? '',
-
       themes: finalThemes,
-
       publicationEdition: map['publication_edition'] ?? '',
     );
   }

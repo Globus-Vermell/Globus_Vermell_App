@@ -1,6 +1,6 @@
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
-import '../models/building_model.dart';
+import '../models/building/building_entity.dart';
 
 String getDistance(LatLng? location, Building building) {
   String distance = '0.6 Km';
