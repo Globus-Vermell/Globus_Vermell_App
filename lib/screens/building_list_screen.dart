@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:globus_vermell_app/utils/lang_extensions.dart';
-import 'package:latlong2/latlong.dart' as ll; 
 import 'package:provider/provider.dart';
 import '../providers/theme_provider.dart';
 import '../controllers/building_list_controller.dart';
 import '../models/building/building_entity.dart';
 import '../widgets/building_card.dart';
-import '../models/building/building_entity.dart';
 import '../widgets/toggle_button.dart';
 import 'building_detail_screen.dart';
 import 'publication_detail_screen.dart';
