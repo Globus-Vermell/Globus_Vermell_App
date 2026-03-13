@@ -80,19 +80,14 @@ class BuildingListController extends ChangeNotifier {
   }
 
   Future<void> initialData() async {
-    if (publicationsFilter.isEmpty) {
-      publicationsFilter = await _pubService.getPublications();
+    try {
+      if (publicationsFilter.isEmpty) {
+        publicationsFilter = await _pubService.getPublications();
+      }
+    } catch (e) {
+      debugPrint("Error al cargar publicaciones (Offline): $e");
     }
-
-    if (_service.firstPageLoading &&
-        _currentMode == SearchMode.all &&
-        _service.buildingsCache.isNotEmpty) {
-      buildings = List.from(_service.buildingsCache);
-      _currentPage = 2;
-      notifyListeners();
-    } else {
-      await _loadPage(reset: true);
-    }
+    await _loadPage(reset: true);
   }
 
   Future<void> fetchNextPage() => _loadPage();

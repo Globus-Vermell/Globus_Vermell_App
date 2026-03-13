@@ -1,18 +1,19 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:isar/isar.dart';
 import '../models/building_model.dart';
 
 class BuildingService {
+  final Isar isar;
   http.Client client = http.Client();
 
+  BuildingService(this.isar);
   static const String _baseUrl = String.fromEnvironment(
     'API_URL',
     defaultValue: 'Error',
   );
 
-  // 2. Memoria Caché: Aquí guardaremos los edificios para no perderlos
-  List<Building> buildingsCache = [];
   bool firstPageLoading = false; // Para saber si ya hicimos la pre-carga
 
   Future<List<Building>> getBuildings({
@@ -26,10 +27,13 @@ class BuildingService {
     final bool isCleanFetch =
         publicationId == null && latitude == null && longitude == null;
 
-    if (page == 1 && firstPageLoading && !forceRefresh && isCleanFetch) {
-      return buildingsCache;
+    if (page == 1 && !forceRefresh && isCleanFetch) {
+      final localBuildings = await isar.buildings.where().findAll();
+      if (localBuildings.isNotEmpty) {
+        debugPrint("Cargando edificios desde la memoria local (Offline)");
+        return localBuildings;
+      }
     }
-
     try {
       final queryParams = {
         'page': page.toString(),
@@ -59,16 +63,26 @@ class BuildingService {
         );
 
         if (page == 1 && isCleanFetch) {
-          buildingsCache = nuevosEdificios;
-          firstPageLoading = true;
+          //writeTxn bloquea la BBDD hasta que se complete la escritura
+          await isar.writeTxn(() async {
+            if (forceRefresh) {
+              await isar.buildings.clear();
+            }
+            await isar.buildings.putAll(nuevosEdificios);
+          });
+          debugPrint("Nuevos edificios guardados en el disco local");
         }
-
         return nuevosEdificios;
       } else {
         throw Exception('Error del servidor: ${response.statusCode}');
       }
     } catch (e) {
       debugPrint(" Error fetching data: $e");
+      //Si no hay wifi o hay modo avión tiramos de la memoria local
+      if (isCleanFetch) {
+        final localBuildings = await isar.buildings.where().findAll();
+        if (localBuildings.isNotEmpty) return localBuildings;
+      }
       throw Exception('NetworkError');
     }
   }

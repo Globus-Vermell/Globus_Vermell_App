@@ -1,5 +1,10 @@
+import 'package:isar/isar.dart';
+
+part 'building_model.g.dart';
+
+@collection
 class Building {
-  final int idBuilding;
+  Id idBuilding;
   final String name;
   final String location;
   final int constructionYear;
