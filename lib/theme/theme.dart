@@ -43,19 +43,19 @@ class AppThemes {
     textTheme: _textTheme,
     appBarTheme: _appBarTheme.copyWith(
       backgroundColor: const Color(0xff1a1110),
-      foregroundColor: const Color(0xffffb4a8),
+      foregroundColor: const Color(0xffe55c50),
     ),
     dividerTheme: const DividerThemeData(color: Color(0xff534341)),
     colorScheme: const ColorScheme.dark(
-      primary: Color(0xffffb4a8),
-      onPrimary: Color(0xff561e16),
-      secondary: Color(0xffe7bdb6),
-      onSecondary: Color(0xff442925),
+      primary: Color(0xffe55c50),
+      onPrimary: Color(0xff4a1511),
+      secondary: Color(0xffcc7c74),
+      onSecondary: Color(0xff3d1c19),
       surface: Color.fromARGB(255, 53, 53, 53),
       onSurface: Color(0xfff1dfdc),
       onSurfaceVariant: Color(0xffd8c2be),
       outline: Color(0xffa08c89),
-      error: Color(0xffffb4ab),
+      error: Color(0xffff897d),
     ),
   );
 
