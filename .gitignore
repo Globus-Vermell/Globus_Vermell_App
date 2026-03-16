@@ -48,4 +48,10 @@ app.*.map.json
 .env
 lib/l10n/*.dart
 *.g.dart
-*.frezeed.dart
+*.freezed.dart
+
+# Configuración de Firebase
+google-services.json
+GoogleService-Info.plist
+lib/firebase_options.dart
+firebase.json
