@@ -1,11 +1,11 @@
 import 'package:geolocator/geolocator.dart';
-import 'package:latlong2/latlong.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../models/building/building_entity.dart';
 
-String getDistance(LatLng? location, Building building) {
+String getDistance(LatLng location, Building building) {
   String distance = '0.6 Km';
 
-  if (location != null && location.latitude != 0 && building.latitude != 0) {
+  if (location.latitude != 0 && building.latitude != 0) {
     double distanceM = Geolocator.distanceBetween(
       location.latitude,
       location.longitude,

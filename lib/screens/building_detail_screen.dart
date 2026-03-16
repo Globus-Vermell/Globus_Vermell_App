@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import '../providers/theme_provider.dart';
 import 'package:globus_vermell_app/utils/get_distance.dart';
 import 'package:globus_vermell_app/widgets/empty_card.dart';
-import 'package:latlong2/latlong.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../models/building/building_entity.dart';
 import '../controllers/building_detail_controller.dart';
 import '../utils/lang_extensions.dart';
@@ -15,12 +15,12 @@ import 'publication_detail_screen.dart';
 
 class BuildingDetailScreen extends StatefulWidget {
   final Building building;
-  final LatLng? location;
+  final LatLng location;
 
   const BuildingDetailScreen({
     super.key,
     required this.building,
-    this.location,
+    required this.location,
   });
 
   @override

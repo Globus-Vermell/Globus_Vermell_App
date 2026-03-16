@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:latlong2/latlong.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../models/building/building_entity.dart';
 import '../utils/get_distance.dart';
 import '../utils/lang_extensions.dart';
@@ -8,7 +8,7 @@ import '../utils/lang_extensions.dart';
 class BuildingCard extends StatelessWidget {
   final Building building;
   final VoidCallback onTap;
-  final LatLng? location;
+  final LatLng location;
 
   const BuildingCard({
     super.key,
