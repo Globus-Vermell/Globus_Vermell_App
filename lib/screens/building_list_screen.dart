@@ -8,7 +8,6 @@ import '../widgets/building_card.dart';
 import '../widgets/toggle_button.dart';
 import 'building_detail_screen.dart';
 import 'publication_detail_screen.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:ui' as ui;
 import 'dart:typed_data';
@@ -24,9 +23,6 @@ class BuildingsListScreen extends StatefulWidget {
 class _BuildingsListScreenState extends State<BuildingsListScreen> {
   final ScrollController _scrollController = ScrollController();
   GoogleMapController? _googleMapController;
-  
-  String get llave => dotenv.env['API_KEY_MAPA'] ?? '';
-  String get urlMapa => 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}';
 
   bool _listView = false;
   BitmapDescriptor _iconoEdificio = BitmapDescriptor.defaultMarker;

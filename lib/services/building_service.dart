@@ -5,6 +5,7 @@ import 'package:isar/isar.dart';
 import '../models/building/building_entity.dart';
 import '../models/building/building_dto.dart';
 import '../models/building/building_mapper.dart';
+import '../utils/app_exceptions.dart';
 
 class BuildingService {
   final Isar isar;
@@ -74,7 +75,7 @@ class BuildingService {
         }
         return nuevosEdificios;
       } else {
-        throw Exception('Error del servidor: ${response.statusCode}');
+        throw ServerException(response.statusCode);
       }
     } catch (e) {
       debugPrint(" Error fetching data: $e");
@@ -83,7 +84,7 @@ class BuildingService {
         final localBuildings = await isar.buildings.where().findAll();
         if (localBuildings.isNotEmpty) return localBuildings;
       }
-      throw Exception('NetworkError');
+      throw NetworkException();
     }
   }
 }

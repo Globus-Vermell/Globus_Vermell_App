@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
+import 'package:globus_vermell_app/utils/app_exceptions.dart';
 import 'package:http/http.dart' as http;
 import 'package:isar/isar.dart';
 import '../models/publication/publication_entity.dart';
@@ -46,7 +47,7 @@ class PublicationService {
 
         return publications;
       } else {
-        throw Exception('Error del servidor: ${response.statusCode}');
+        throw ServerException(response.statusCode);
       }
     } catch (e) {
       debugPrint("Error fetching publications: $e");
@@ -54,7 +55,7 @@ class PublicationService {
       final localPublications = await isar.publications.where().findAll();
       if (localPublications.isNotEmpty) return localPublications;
 
-      throw Exception('NetworkError');
+      throw NetworkException();
     }
   }
 }
