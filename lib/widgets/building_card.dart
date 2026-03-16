@@ -124,12 +124,10 @@ class BuildingCard extends StatelessWidget {
                               color: (building.publications.isNotEmpty)
                                   ? colores.onSurface
                                   : colores.onSurfaceVariant,
-                              fontWeight:
-                                  (building.publications.isNotEmpty)
+                              fontWeight: (building.publications.isNotEmpty)
                                   ? FontWeight.bold
                                   : FontWeight.normal,
-                              fontStyle:
-                                  (building.publications.isNotEmpty)
+                              fontStyle: (building.publications.isNotEmpty)
                                   ? FontStyle.normal
                                   : FontStyle.italic,
                             ),

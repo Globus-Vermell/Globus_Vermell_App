@@ -30,7 +30,6 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
   bool _listView = false;
   BitmapDescriptor _iconoEdificio = BitmapDescriptor.defaultMarker;
   BitmapDescriptor _iconoYo = BitmapDescriptor.defaultMarker;
-  bool _iconosCargados = false;
 
   @override
   void initState() {
@@ -66,12 +65,12 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
       setState(() {
         _iconoEdificio = iconoEdificio;
         _iconoYo = iconoYo;
-        _iconosCargados = true;
       });
     }
   }
 
   Future<BitmapDescriptor> _crearIconoDesdeFlutter(IconData icono, Color color) async {
+    final double pixelRatio = MediaQuery.of(context).devicePixelRatio;
     final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
     final Canvas canvas = Canvas(pictureRecorder);
     
@@ -93,7 +92,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
       textPainter.height.toInt()
     );
     final ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-    return BitmapDescriptor.fromBytes(byteData!.buffer.asUint8List());
+    return BitmapDescriptor.bytes(byteData!.buffer.asUint8List(), imagePixelRatio: pixelRatio);
   }
 
   Future<void> _initialData() async {
@@ -562,8 +561,6 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
           : const LatLng(41.3879, 2.16992);
     }
 
-    final double colorPrimarioHue = HSVColor.fromColor(colores.primary).hue;
-    final double colorSecundarioHue = HSVColor.fromColor(colores.secondary).hue;
 
     return GoogleMap(
       initialCameraPosition: CameraPosition(

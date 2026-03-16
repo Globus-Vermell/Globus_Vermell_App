@@ -371,170 +371,23 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                   const SizedBox(height: 40),
 
                   if (building.architects.isNotEmpty)
-                    Theme(
-                      data: Theme.of(
-                        context,
-                      ).copyWith(dividerColor: Colors.transparent),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: isHighContrast
-                              ? colores.surface
-                              : colores.primary.withValues(alpha: 0.04),
-                          borderRadius: BorderRadius.circular(16),
-                          border: Border.all(
-                            color: isHighContrast
-                                ? colores.onSurface
-                                : colores.outline.withValues(alpha: 0.15),
-                            width: isHighContrast ? 2.0 : 1.0,
-                          ),
-                        ),
-                        child: ExpansionTile(
-                          iconColor: isHighContrast
-                              ? colores.onSurface
-                              : colores.primary,
-                          collapsedIconColor: isHighContrast
-                              ? colores.onSurface
-                              : colores.primary,
-                          tilePadding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 4,
-                          ),
-                          title: Text(
-                            context.loc.architects,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              color: isHighContrast
-                                  ? colores.onSurface
-                                  : colores.primary,
-                            ),
-                          ),
-                          leading: Icon(
-                            Icons.person_rounded,
-                            color: isHighContrast
-                                ? colores.onSurface
-                                : colores.primary,
-                          ),
-                          children: building.architects.map((arq) {
-                            return Padding(
-                              padding: const EdgeInsets.only(
-                                bottom: 12,
-                                left: 16,
-                                right: 16,
-                              ),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.subdirectory_arrow_right_rounded,
-                                    color: isHighContrast
-                                        ? colores.onSurface
-                                        : colores.primary,
-                                    size: 18,
-                                  ),
-                                  const SizedBox(width: 12),
-                                  Expanded(
-                                    child: Text(
-                                      arq,
-                                      style: TextStyle(
-                                        color: isHighContrast
-                                            ? colores.onSurface
-                                            : colores.onSurfaceVariant,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                      ),
+                    _buildExpandableSection(
+                      title: context.loc.architects,
+                      icon: Icons.person_rounded,
+                      items: building.architects,
+                      colores: colores,
+                      isHighContrast: isHighContrast,
                     ),
 
                   const SizedBox(height: 16),
 
-                  // DESPLEGABLE DE USOS
                   if (building.uses.isNotEmpty)
-                    Theme(
-                      data: Theme.of(
-                        context,
-                      ).copyWith(dividerColor: Colors.transparent),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: isHighContrast
-                              ? colores.surface
-                              : colores.primary.withValues(alpha: 0.04),
-                          borderRadius: BorderRadius.circular(16),
-                          border: Border.all(
-                            color: isHighContrast
-                                ? colores.onSurface
-                                : colores.outline.withValues(alpha: 0.15),
-                            width: isHighContrast ? 2.0 : 1.0,
-                          ),
-                        ),
-                        child: ExpansionTile(
-                          iconColor: isHighContrast
-                              ? colores.onSurface
-                              : colores.primary,
-                          collapsedIconColor: isHighContrast
-                              ? colores.onSurface
-                              : colores.primary,
-                          tilePadding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 4,
-                          ),
-                          title: Text(
-                            context.loc.uses,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              color: isHighContrast
-                                  ? colores.onSurface
-                                  : colores.primary,
-                            ),
-                          ),
-                          leading: Icon(
-                            Icons.domain_rounded,
-                            color: isHighContrast
-                                ? colores.onSurface
-                                : colores.primary,
-                          ),
-                          children: building.uses.map((uso) {
-                            return Padding(
-                              padding: const EdgeInsets.only(
-                                bottom: 12,
-                                left: 16,
-                                right: 16,
-                              ),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.subdirectory_arrow_right_rounded,
-                                    color: isHighContrast
-                                        ? colores.onSurface
-                                        : colores.primary,
-                                    size: 18,
-                                  ),
-                                  const SizedBox(width: 12),
-                                  Expanded(
-                                    child: Text(
-                                      uso,
-                                      style: TextStyle(
-                                        color: isHighContrast
-                                            ? colores.onSurface
-                                            : colores.onSurfaceVariant,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                      ),
+                    _buildExpandableSection(
+                      title: context.loc.uses,
+                      icon: Icons.domain_rounded,
+                      items: building.uses,
+                      colores: colores,
+                      isHighContrast: isHighContrast,
                     ),
 
                   const SizedBox(height: 100),
@@ -566,6 +419,78 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
             color: isHighContrast ? colores.onSurface : colores.onPrimary,
             fontWeight: FontWeight.bold,
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildExpandableSection({
+    required String title,
+    required IconData icon,
+    required List<String> items,
+    required ColorScheme colores,
+    required bool isHighContrast,
+  }) {
+    return Theme(
+      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+      child: Container(
+        decoration: BoxDecoration(
+          color: isHighContrast
+              ? colores.surface
+              : colores.primary.withValues(alpha: 0.04),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: isHighContrast
+                ? colores.onSurface
+                : colores.outline.withValues(alpha: 0.15),
+            width: isHighContrast ? 2.0 : 1.0,
+          ),
+        ),
+        child: ExpansionTile(
+          iconColor: isHighContrast ? colores.onSurface : colores.primary,
+          collapsedIconColor: isHighContrast
+              ? colores.onSurface
+              : colores.primary,
+          tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          title: Text(
+            title,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+              color: isHighContrast ? colores.onSurface : colores.primary,
+            ),
+          ),
+          leading: Icon(
+            icon,
+            color: isHighContrast ? colores.onSurface : colores.primary,
+          ),
+          children: items.map((item) {
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 12, left: 16, right: 16),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.subdirectory_arrow_right_rounded,
+                    color: isHighContrast ? colores.onSurface : colores.primary,
+                    size: 18,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      item,
+                      style: TextStyle(
+                        color: isHighContrast
+                            ? colores.onSurface
+                            : colores.onSurfaceVariant,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }).toList(),
         ),
       ),
     );

@@ -47,3 +47,4 @@ app.*.map.json
 # Databases 
 .env
 lib/l10n/*.dart
+*.g.dart
