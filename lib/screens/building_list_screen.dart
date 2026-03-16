@@ -79,6 +79,14 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _cargarIconosPersonalizados();
+    if (_mapStyleDark != null) {
+      final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+      try {
+        _googleMapController?.setMapStyle(isDarkMode ? _mapStyleDark : null);
+      } catch (e) {
+        // Si el mapa es un fantasmita (estamos en la vista de lista), lo ignoramos 
+      }
+    }
   }
 
   Future<void> _cargarIconosPersonalizados() async {
@@ -587,16 +595,6 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
     }
 
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-
-    // Si ya tenemos el mapa, le cambiamos la ropa
-    if (_googleMapController != null) {
-      if (isDarkMode) {
-        _googleMapController!.setMapStyle(_mapStyleDark);
-      } else {
-        _googleMapController!.setMapStyle(null);
-      }
-    }
-
     return GoogleMap(
       initialCameraPosition: CameraPosition(
         target: centro,
@@ -606,6 +604,8 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
         _googleMapController = googleController;
         if (isDarkMode && _mapStyleDark != null) {
           _googleMapController!.setMapStyle(_mapStyleDark);
+        } else {
+          _googleMapController!.setMapStyle(null);
         }
       },
       markers: {
