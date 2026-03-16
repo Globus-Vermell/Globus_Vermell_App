@@ -12,6 +12,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:ui' as ui;
 import 'dart:typed_data';
+import 'package:flutter/services.dart' show rootBundle;
 
 class BuildingsListScreen extends StatefulWidget {
   const BuildingsListScreen({super.key});
@@ -30,10 +31,14 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
   bool _listView = false;
   BitmapDescriptor _iconoEdificio = BitmapDescriptor.defaultMarker;
   BitmapDescriptor _iconoYo = BitmapDescriptor.defaultMarker;
+  // Mapa en modo oscuro 
+  String? _mapStyleDark;
 
   @override
   void initState() {
     super.initState();
+
+    _cargarEstiloMapa();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _initialData();
@@ -48,6 +53,26 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
         }
       }
     });
+  }
+
+  Future<void> _cargarEstiloMapa() async {
+    final estilo = await rootBundle.loadString('assets/map_styles/dark_mode.json');
+    
+    if (mounted) {
+      setState(() {
+        _mapStyleDark = estilo;
+      });
+      
+      final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+      
+      if (_googleMapController != null) {
+        if (isDarkMode) {
+          _googleMapController!.setMapStyle(_mapStyleDark); 
+        } else {
+          _googleMapController!.setMapStyle(null); 
+        }
+      }
+    }
   }
 
   @override
@@ -561,6 +586,16 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
           : const LatLng(41.3879, 2.16992);
     }
 
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
+    // Si ya tenemos el mapa, le cambiamos la ropa
+    if (_googleMapController != null) {
+      if (isDarkMode) {
+        _googleMapController!.setMapStyle(_mapStyleDark);
+      } else {
+        _googleMapController!.setMapStyle(null);
+      }
+    }
 
     return GoogleMap(
       initialCameraPosition: CameraPosition(
@@ -569,6 +604,9 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
       ),
       onMapCreated: (GoogleMapController googleController) {
         _googleMapController = googleController;
+        if (isDarkMode && _mapStyleDark != null) {
+          _googleMapController!.setMapStyle(_mapStyleDark);
+        }
       },
       markers: {
         if (controller.location.latitude != 0)
