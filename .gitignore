@@ -48,3 +48,4 @@ app.*.map.json
 .env
 lib/l10n/*.dart
 *.g.dart
+*.frezeed.dart

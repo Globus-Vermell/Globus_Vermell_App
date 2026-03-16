@@ -47,12 +47,12 @@ dependencies:
   provider: ^6.1.5
   cached_network_image: ^3.4.1
   google_fonts: ^8.0.2
-  freezed_annotation: ^3.1.0
   shared_preferences: ^2.5.4
   isar: ^3.1.0+1
   isar_flutter_libs: ^3.1.0+1
   path_provider: ^2.1.5
   google_maps_flutter: ^2.15.0
+  freezed_annotation: ^2.4.4
 
 
 
@@ -70,6 +70,7 @@ dev_dependencies:
   mocktail: ^1.0.3
   build_runner: ^2.4.13
   isar_generator: ^3.1.0+1
+  freezed: ^2.4.7
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

@@ -1,22 +1,20 @@
-class PublicationDto {
-  final int idPublication;
-  final String title;
-  final String description;
-  final String themes;
-  final String publicationEdition;
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  PublicationDto({
-    required this.idPublication,
-    required this.title,
-    required this.description,
-    required this.themes,
-    required this.publicationEdition,
-  });
+part 'publication_dto.freezed.dart';
+
+@freezed
+class PublicationDto with _$PublicationDto {
+  const factory PublicationDto({
+    required int idPublication,
+    required String title,
+    required String description,
+    required String themes,
+    required String publicationEdition,
+  }) = _PublicationDto;
 
   factory PublicationDto.fromMap(Map<String, dynamic> map) {
     var rawThemes = map['themes'];
     String finalThemes = '';
-
     if (rawThemes == null) {
       finalThemes = '';
     } else if (rawThemes is String) {
