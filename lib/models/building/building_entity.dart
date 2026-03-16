@@ -46,4 +46,6 @@ class Building {
     required this.prizes,
     required this.publications,
   });
+
+  int get id => idBuilding;
 }

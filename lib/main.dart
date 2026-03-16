@@ -5,6 +5,7 @@ import 'package:globus_vermell_app/screens/onboarding_screen.dart';
 import 'package:globus_vermell_app/providers/theme_provider.dart';
 import 'package:globus_vermell_app/services/building_service.dart';
 import 'package:globus_vermell_app/services/publications_service.dart';
+import 'package:globus_vermell_app/services/push_notifications_service.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +17,8 @@ import 'models/publication/publication_entity.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await PushNotificationService.initializeApp();
 
   final dir = await getApplicationDocumentsDirectory();
   final isar = await Isar.open([
