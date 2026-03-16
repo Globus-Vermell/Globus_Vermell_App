@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import '../firebase_options.dart';
 
 class PushNotificationService {
@@ -26,8 +26,22 @@ class PushNotificationService {
     );
     await requestPermission();
 
-    token = await FirebaseMessaging.instance.getToken();
-    debugPrint('Token del dispositivo: $token');
+    try {
+      if (defaultTargetPlatform == TargetPlatform.iOS) {
+        String? apnsToken = await FirebaseMessaging.instance.getAPNSToken();
+        if (apnsToken != null) {
+          token = await FirebaseMessaging.instance.getToken();
+          debugPrint('Token del dispositivo: $token');
+        } else {
+          debugPrint(' No hay APNS Token');
+        }
+      } else {
+        token = await FirebaseMessaging.instance.getToken();
+        debugPrint('Token del dispositivo: $token');
+      }
+    } catch (e) {
+      debugPrint('Error al obtener el token FCM: $e');
+    }
 
     FirebaseMessaging.onBackgroundMessage(_backgroundHandler);
     FirebaseMessaging.onMessage.listen(_onMessageHandler);
