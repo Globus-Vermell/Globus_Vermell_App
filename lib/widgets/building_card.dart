@@ -85,7 +85,7 @@ class BuildingCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text( 
+                    Text(
                       building.name,
                       style: TextStyle(
                         fontSize: 17,
@@ -117,7 +117,7 @@ class BuildingCard extends StatelessWidget {
                         const SizedBox(width: 4),
                         Expanded(
                           child: (building.publications.isNotEmpty)
-                              ? TranslatedText( 
+                              ? TranslatedText(
                                   text: building.publications.first,
                                   style: TextStyle(
                                     fontSize: 13,
@@ -127,7 +127,7 @@ class BuildingCard extends StatelessWidget {
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                 )
-                              : Text( 
+                              : Text(
                                   context.loc.noPublication,
                                   style: TextStyle(
                                     fontSize: 13,

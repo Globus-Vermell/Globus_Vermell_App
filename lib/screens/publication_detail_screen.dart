@@ -96,7 +96,7 @@ class PublicationDetailScreen extends StatelessWidget {
 
                     (publication.description.isNotEmpty)
                         ? TranslatedText(
-                            text : publication.description,
+                            text: publication.description,
                             textAlign: TextAlign.justify,
                             style: TextStyle(
                               fontSize: 16,
