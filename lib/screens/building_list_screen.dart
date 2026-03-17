@@ -5,7 +5,6 @@ import '../providers/theme_provider.dart';
 import '../controllers/building_list_controller.dart';
 import '../models/building/building_entity.dart';
 import '../utils/map_utils.dart';
-import '../widgets/building_card.dart';
 import '../widgets/building_list_view.dart';
 import '../widgets/building_map_view.dart';
 import '../widgets/toggle_button.dart';
