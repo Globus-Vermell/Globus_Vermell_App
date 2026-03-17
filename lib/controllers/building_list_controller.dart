@@ -93,6 +93,7 @@ class BuildingListController extends ChangeNotifier
     } catch (e) {
       hasMoreData = false;
       debugPrint("Error loading buildings: $e");
+      rethrow;
     } finally {
       isLoading = false;
       notifyListeners();
@@ -147,6 +148,7 @@ class BuildingListController extends ChangeNotifier
       isLoading = false;
       notifyListeners();
       debugPrint("Error obteniendo GPS: $e");
+      rethrow;
     }
   }
 
@@ -195,6 +197,7 @@ class BuildingListController extends ChangeNotifier
       isLoading = false;
       notifyListeners();
       debugPrint("Error obteniendo GPS en cercanos: $e");
+      rethrow;
     }
   }
 
