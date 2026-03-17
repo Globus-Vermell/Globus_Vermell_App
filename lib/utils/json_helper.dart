@@ -1,23 +1,29 @@
 class JsonHelper {
   static List<String> extractImages(dynamic data) {
     if (data == null || data is! List) return [];
-    return data.map((item) {
-      if (item is Map) return item['image_url']?.toString() ?? '';
-      if (item is String) return item;
-      return '';
-    }).where((s) => s.isNotEmpty).toList();
+    return data
+        .map((item) {
+          if (item is Map) return item['image_url']?.toString() ?? '';
+          if (item is String) return item;
+          return '';
+        })
+        .where((s) => s.isNotEmpty)
+        .toList();
   }
 
   static List<String> parseList(dynamic input) {
     if (input == null || input is! List) return [];
-    return input.map((item) {
-      if (item is String) return item;
-      if (item is Map) {
-        if (item.containsKey('name')) return item['name'].toString();
-        if (item.containsKey('title')) return item['title'].toString();
-      }
-      return '';
-    }).where((item) => item.isNotEmpty).toList();
+    return input
+        .map((item) {
+          if (item is String) return item;
+          if (item is Map) {
+            if (item.containsKey('name')) return item['name'].toString();
+            if (item.containsKey('title')) return item['title'].toString();
+          }
+          return '';
+        })
+        .where((item) => item.isNotEmpty)
+        .toList();
   }
 
   static double parseDouble(dynamic value) {

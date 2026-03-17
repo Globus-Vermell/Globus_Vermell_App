@@ -6,15 +6,16 @@ import '../models/building/building_entity.dart';
 import '../models/publication/publication_entity.dart';
 import '../services/building_service.dart';
 import '../services/publications_service.dart';
+import '../utils/service_locator.dart';
 
 enum SearchMode { all, publication, nearby }
 
 class BuildingListController extends ChangeNotifier
     with WidgetsBindingObserver {
-  final BuildingService _service;
-  final PublicationService _pubService;
+  final BuildingService _service = getIt<BuildingService>();
+  final PublicationService _pubService = getIt<PublicationService>();
 
-  BuildingListController(this._service, this._pubService) {
+  BuildingListController() {
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -180,8 +181,6 @@ class BuildingListController extends ChangeNotifier
     isLoading = true;
     notifyListeners();
 
-    //Cogemos la última ubicación que tenemos del usuario, en caso de no tener
-    //Buscamos su ubicación pero con el accuracy medio para no tardar tanto
     try {
       Position? position = await Geolocator.getLastKnownPosition();
       position ??= await Geolocator.getCurrentPosition(

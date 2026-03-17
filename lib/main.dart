@@ -3,10 +3,9 @@ import 'package:globus_vermell_app/providers/language_provider.dart';
 import 'package:globus_vermell_app/screens/bottom_bar.dart';
 import 'package:globus_vermell_app/screens/onboarding_screen.dart';
 import 'package:globus_vermell_app/providers/theme_provider.dart';
-import 'package:globus_vermell_app/services/building_service.dart';
-import 'package:globus_vermell_app/services/publications_service.dart';
 import 'package:globus_vermell_app/services/push_notifications_service.dart';
 import 'package:globus_vermell_app/utils/app_constants.dart';
+import 'package:globus_vermell_app/utils/service_locator.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
@@ -27,14 +26,13 @@ Future<void> main() async {
     PublicationSchema,
   ], directory: dir.path);
 
+  setupServiceLocator(isar);
   final prefs = await SharedPreferences.getInstance();
   final bool isFirstTime = prefs.getBool(AppConstants.prefsIsFirstTime) ?? true;
 
   runApp(
     MultiProvider(
       providers: [
-        Provider(create: (_) => BuildingService(isar)),
-        Provider(create: (_) => PublicationService(isar)),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => LanguageProvider()),
       ],

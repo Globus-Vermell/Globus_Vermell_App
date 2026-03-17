@@ -27,7 +27,7 @@ class _ThemesScreenState extends State<ThemesScreen> {
   @override
   void initState() {
     super.initState();
-    _controller = ThemesController(context.read());
+    _controller = ThemesController();
     _loadData();
   }
 

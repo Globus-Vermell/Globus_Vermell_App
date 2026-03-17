@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:globus_vermell_app/services/publications_service.dart';
 import 'package:provider/provider.dart';
 import '../providers/theme_provider.dart';
 import 'package:globus_vermell_app/utils/get_distance.dart';
@@ -33,10 +32,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
   @override
   void initState() {
     super.initState();
-    _controller = BuildingDetailController(
-      widget.building,
-      context.read<PublicationService>(),
-    );
+    _controller = BuildingDetailController();
   }
 
   @override

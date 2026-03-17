@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import '../models/building/building_entity.dart';
 import '../models/publication/publication_entity.dart';
 import '../services/publications_service.dart';
+import '../utils/service_locator.dart';
 
 class BuildingDetailController {
-  final Building building;
-  final PublicationService _pubService;
+  final Building building = getIt<Building>();
+  final PublicationService _pubService = getIt<PublicationService>();
   final ValueNotifier<int> currentImageIndex = ValueNotifier(0);
 
-  BuildingDetailController(this.building, this._pubService);
+  BuildingDetailController();
 
   // Método para actualizar el índice del carrusel
   void onPageChanged(int index) {

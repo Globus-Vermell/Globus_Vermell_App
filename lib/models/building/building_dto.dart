@@ -30,19 +30,23 @@ class BuildingDto with _$BuildingDto {
   factory BuildingDto.fromMap(Map<String, dynamic> map) {
     return BuildingDto(
       idBuilding: JsonHelper.parseInt(map['id_building']),
-      name: map['name']?.toString() ?? 'Sin nombre',
-      location: map['location']?.toString() ?? 'Sin ubicación',
+      name: map['name'].toString(),
+      location: map['location'].toString(),
       constructionYear: JsonHelper.parseInt(map['construction_year']),
-      description: map['description']?.toString() ?? 'Sin descripción',
+      description: map['description'].toString(),
       surfaceArea: JsonHelper.parseInt(map['surface_area']),
       idTypology: JsonHelper.parseInt(map['id_typology']),
       idProtection: JsonHelper.parseInt(map['id_protection']),
-      validate: map['validated'] ?? false,
-
+      validate: map['validated'],
       images: JsonHelper.extractImages(map['building_images']),
-
-      typologyName: map['typologies']?['name']?.toString() ?? map['typologyName']?.toString() ?? '',
-      protectionName: map['protections']?['level']?.toString() ?? map['protectionName']?.toString() ?? '',
+      typologyName:
+          map['typologies']?['name']?.toString() ??
+          map['typologyName']?.toString() ??
+          '',
+      protectionName:
+          map['protections']?['level']?.toString() ??
+          map['protectionName']?.toString() ??
+          '',
 
       latitude: JsonHelper.parseDouble(map['latitude']),
       longitude: JsonHelper.parseDouble(map['longitude']),
