@@ -28,7 +28,7 @@ class TranslatedText extends StatelessWidget {
 
     final translator = GoogleTranslator();
 
-    if (text.isEmpty)
+    if (text.isEmpty){
       return Text(
         text,
         style: style,
@@ -36,6 +36,7 @@ class TranslatedText extends StatelessWidget {
         overflow: overflow,
         textAlign: textAlign,
       );
+    }
 
     return FutureBuilder<Translation>(
       // Le decimos: "Traduce este texto al idioma de la app (languageCode)"
