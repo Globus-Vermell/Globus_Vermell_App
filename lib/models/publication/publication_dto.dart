@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../utils/json_helper.dart';
 
 part 'publication_dto.freezed.dart';
 
@@ -13,26 +14,12 @@ class PublicationDto with _$PublicationDto {
   }) = _PublicationDto;
 
   factory PublicationDto.fromMap(Map<String, dynamic> map) {
-    var rawThemes = map['themes'];
-    String finalThemes = '';
-    if (rawThemes == null) {
-      finalThemes = '';
-    } else if (rawThemes is String) {
-      finalThemes = rawThemes;
-    } else if (rawThemes is List) {
-      finalThemes = rawThemes.join(', ');
-    } else {
-      finalThemes = rawThemes.toString();
-    }
-
     return PublicationDto(
-      idPublication: map['id_publication'] is int
-          ? map['id_publication']
-          : int.tryParse(map['id_publication'].toString()) ?? 0,
-      title: map['title'] ?? 'Sin título',
-      description: map['description'] ?? '',
-      themes: finalThemes,
-      publicationEdition: map['publication_edition'] ?? '',
+      idPublication: JsonHelper.parseInt(map['id_publication']),
+      title: map['title']?.toString() ?? 'Sin título',
+      description: map['description']?.toString() ?? '',
+      themes: JsonHelper.parseStringOrList(map['themes']),
+      publicationEdition: map['publication_edition']?.toString() ?? '',
     );
   }
 }

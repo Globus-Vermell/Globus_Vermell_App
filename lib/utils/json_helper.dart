@@ -31,4 +31,11 @@ class JsonHelper {
     if (value is int) return value;
     return int.tryParse(value.toString()) ?? 0;
   }
+
+  static String parseStringOrList(dynamic value) {
+    if (value == null) return '';
+    if (value is String) return value;
+    if (value is List) return value.join(', ');
+    return value.toString();
+  }
 }
