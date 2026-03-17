@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../utils/json_helper.dart';
 
 part 'building_dto.freezed.dart';
 
@@ -27,71 +28,30 @@ class BuildingDto with _$BuildingDto {
   }) = _BuildingDto;
 
   factory BuildingDto.fromMap(Map<String, dynamic> map) {
-    List<String> extractedImages = [];
-    if (map['building_images'] != null && map['building_images'] is List) {
-      extractedImages = (map['building_images'] as List)
-          .map((item) {
-            if (item is Map) return item['image_url'] as String? ?? '';
-            if (item is String) return item;
-            return '';
-          })
-          .where((s) => s.isNotEmpty)
-          .toList();
-    }
-
-    String extractedTypology = '';
-    if (map['typologies'] != null && map['typologies'] is Map) {
-      extractedTypology = map['typologies']['name'];
-    } else if (map['typologyName'] != null) {
-      extractedTypology = map['typologyName'];
-    }
-
-    String extractedProtection = '';
-    if (map['protections'] != null && map['protections'] is Map) {
-      extractedProtection = map['protections']['level'];
-    } else if (map['protectionName'] != null) {
-      extractedProtection = map['protectionName'];
-    }
-
     return BuildingDto(
-      idBuilding: map['id_building'] ?? 0,
-      name: map['name'] ?? 'Sin nombre',
-      location: map['location'] ?? 'Sin ubicación',
-      constructionYear: map['construction_year'] ?? 0,
-      description: map['description'] ?? 'Sin descripción',
-      surfaceArea: map['surface_area'] ?? 0,
-      idTypology: map['id_typology'] ?? 0,
-      idProtection: map['id_protection'] ?? 0,
+      idBuilding: JsonHelper.parseInt(map['id_building']),
+      name: map['name']?.toString() ?? 'Sin nombre',
+      location: map['location']?.toString() ?? 'Sin ubicación',
+      constructionYear: JsonHelper.parseInt(map['construction_year']),
+      description: map['description']?.toString() ?? 'Sin descripción',
+      surfaceArea: JsonHelper.parseInt(map['surface_area']),
+      idTypology: JsonHelper.parseInt(map['id_typology']),
+      idProtection: JsonHelper.parseInt(map['id_protection']),
       validate: map['validated'] ?? false,
-      images: extractedImages,
-      typologyName: extractedTypology,
-      uses: parseList(map['usos']),
-      protectionName: extractedProtection,
-      latitude: (map['latitude'] != null)
-          ? double.tryParse(map['latitude'].toString()) ?? 0.0
-          : 0.0,
-      longitude: (map['longitude'] != null)
-          ? double.tryParse(map['longitude'].toString()) ?? 0.0
-          : 0.0,
-      architects: parseList(map['architects']),
-      reforms: parseList(map['reforms']),
-      prizes: parseList(map['prizes']),
-      publications: parseList(map['publications']),
+
+      images: JsonHelper.extractImages(map['building_images']),
+
+      typologyName: map['typologies']?['name']?.toString() ?? map['typologyName']?.toString() ?? '',
+      protectionName: map['protections']?['level']?.toString() ?? map['protectionName']?.toString() ?? '',
+
+      latitude: JsonHelper.parseDouble(map['latitude']),
+      longitude: JsonHelper.parseDouble(map['longitude']),
+
+      architects: JsonHelper.parseList(map['architects']),
+      reforms: JsonHelper.parseList(map['reforms']),
+      prizes: JsonHelper.parseList(map['prizes']),
+      publications: JsonHelper.parseList(map['publications']),
+      uses: JsonHelper.parseList(map['usos']),
     );
   }
-}
-
-List<String> parseList(Object? input) {
-  if (input == null || input is! List) return [];
-  return input
-      .map((item) {
-        if (item is String) return item;
-        if (item is Map) {
-          if (item.containsKey('name')) return item['name'].toString();
-          if (item.containsKey('title')) return item['title'].toString();
-        }
-        return '';
-      })
-      .where((item) => item.isNotEmpty)
-      .toList();
 }
