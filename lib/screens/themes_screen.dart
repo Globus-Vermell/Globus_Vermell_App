@@ -5,6 +5,7 @@ import '../utils/lang_extensions.dart';
 import 'publication_detail_screen.dart';
 import '../providers/theme_provider.dart';
 import 'package:provider/provider.dart';
+import '../widgets/translated_text.dart';
 
 class ThemesScreen extends StatefulWidget {
   const ThemesScreen({super.key});
@@ -207,8 +208,8 @@ class _ThemesScreenState extends State<ThemesScreen> {
                       ],
                     ),
                     const SizedBox(height: 8),
-                    Text(
-                      item.description,
+                    TranslatedText(
+                      text: item.description,
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(

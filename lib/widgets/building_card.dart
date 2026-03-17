@@ -4,6 +4,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../models/building/building_entity.dart';
 import '../utils/get_distance.dart';
 import '../utils/lang_extensions.dart';
+import 'translated_text.dart';
 
 class BuildingCard extends StatelessWidget {
   final Building building;
@@ -84,7 +85,7 @@ class BuildingCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    Text( 
                       building.name,
                       style: TextStyle(
                         fontSize: 17,
@@ -115,25 +116,27 @@ class BuildingCard extends StatelessWidget {
                         ),
                         const SizedBox(width: 4),
                         Expanded(
-                          child: Text(
-                            (building.publications.isNotEmpty)
-                                ? building.publications.first
-                                : context.loc.noPublication,
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: (building.publications.isNotEmpty)
-                                  ? colores.onSurface
-                                  : colores.onSurfaceVariant,
-                              fontWeight: (building.publications.isNotEmpty)
-                                  ? FontWeight.bold
-                                  : FontWeight.normal,
-                              fontStyle: (building.publications.isNotEmpty)
-                                  ? FontStyle.normal
-                                  : FontStyle.italic,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                          child: (building.publications.isNotEmpty)
+                              ? TranslatedText( 
+                                  text: building.publications.first,
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: colores.onSurface,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                )
+                              : Text( 
+                                  context.loc.noPublication,
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: colores.onSurfaceVariant,
+                                    fontStyle: FontStyle.italic,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                         ),
                         const SizedBox(width: 8),
                         Icon(

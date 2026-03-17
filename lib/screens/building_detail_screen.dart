@@ -11,6 +11,7 @@ import '../utils/lang_extensions.dart';
 import '../widgets/info_chip.dart';
 import '../widgets/section_header.dart';
 import 'publication_detail_screen.dart';
+import '../widgets/translated_text.dart';
 
 class BuildingDetailScreen extends StatefulWidget {
   final Building building;
@@ -350,8 +351,8 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
 
                   (building.description.isNotEmpty &&
                           building.description != context.loc.noDescription)
-                      ? Text(
-                          building.description,
+                      ? TranslatedText(
+                          text: building.description,
                           textAlign: TextAlign.justify,
                           style: TextStyle(
                             fontSize: 16,
