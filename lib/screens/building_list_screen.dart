@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../providers/theme_provider.dart';
 import '../controllers/building_list_controller.dart';
 import '../models/building/building_entity.dart';
+import '../utils/app_constants.dart';
 import '../utils/map_utils.dart';
 import '../widgets/building_list_view.dart';
 import '../widgets/building_map_view.dart';
@@ -52,9 +53,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
   }
 
   Future<void> _cargarEstiloMapa() async {
-    final estilo = await rootBundle.loadString(
-      'assets/map_styles/dark_mode.json',
-    );
+    final estilo = await rootBundle.loadString(AppConstants.mapStyleDarkPath);
 
     if (mounted) {
       setState(() {
@@ -129,7 +128,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
         _googleMapController?.animateCamera(
           CameraUpdate.newLatLngZoom(
             LatLng(controller.location.latitude, controller.location.longitude),
-            17.0,
+            AppConstants.defaultMapZoom,
           ),
         );
       }
@@ -146,7 +145,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
       _googleMapController?.animateCamera(
         CameraUpdate.newLatLngZoom(
           LatLng(controller.location.latitude, controller.location.longitude),
-          17.0,
+          AppConstants.detailMapZoom,
         ),
       );
     } catch (e) {
@@ -194,7 +193,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
           _googleMapController?.animateCamera(
             CameraUpdate.newLatLngZoom(
               LatLng(edificio.latitude, edificio.longitude),
-              17.0,
+              AppConstants.detailMapZoom,
             ),
           );
         }

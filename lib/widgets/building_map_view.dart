@@ -3,6 +3,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../controllers/building_list_controller.dart';
 import '../models/building/building_entity.dart';
+import '../utils/app_constants.dart';
 import '../utils/lang_extensions.dart';
 
 class BuildingMapView extends StatelessWidget {
@@ -11,7 +12,8 @@ class BuildingMapView extends StatelessWidget {
   final BitmapDescriptor iconoYo;
   final BitmapDescriptor iconoEdificio;
   final void Function(GoogleMapController) onMapCreated;
-  final void Function(Building, BuildingListController) onNavigateToDetail;
+  final Future<void> Function(Building, BuildingListController)
+  onNavigateToDetail;
 
   const BuildingMapView({
     super.key,
@@ -38,13 +40,16 @@ class BuildingMapView extends StatelessWidget {
               controller.buildings.first.latitude,
               controller.buildings.first.longitude,
             )
-          : const LatLng(41.3879, 2.16992);
+          : AppConstants.defaultLocation;
     }
 
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return GoogleMap(
-      initialCameraPosition: CameraPosition(target: centro, zoom: 14.0),
+      initialCameraPosition: CameraPosition(
+        target: centro,
+        zoom: AppConstants.defaultMapZoom,
+      ),
       style: isDarkMode ? mapStyleDark : null,
       onMapCreated: onMapCreated,
       markers: {

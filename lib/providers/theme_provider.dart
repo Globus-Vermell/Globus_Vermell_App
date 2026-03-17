@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:globus_vermell_app/theme/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../utils/app_constants.dart';
+
 class ThemeProvider with ChangeNotifier {
   bool _isDark = false;
   bool _isHighContrast = false;
@@ -17,9 +19,9 @@ class ThemeProvider with ChangeNotifier {
 
   Future<void> _saveToPrefs() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('isDark', _isDark);
-    await prefs.setBool('isHighContrast', _isHighContrast);
-    await prefs.setBool('isColorBlind', _isColorBlind);
+    await prefs.setBool(AppConstants.prefsIsDark, _isDark);
+    await prefs.setBool(AppConstants.prefsIsHighContrast, _isHighContrast);
+    await prefs.setBool(AppConstants.prefsIsColorBlind, _isColorBlind);
   }
 
   /*
@@ -59,9 +61,9 @@ class ThemeProvider with ChangeNotifier {
 
   void _loadFromPrefs() async {
     final prefs = await SharedPreferences.getInstance();
-    _isDark = prefs.getBool('isDark') ?? false;
-    _isHighContrast = prefs.getBool('isHighContrast') ?? false;
-    _isColorBlind = prefs.getBool('isColorBlind') ?? false;
+    _isDark = prefs.getBool(AppConstants.prefsIsDark) ?? false;
+    _isHighContrast = prefs.getBool(AppConstants.prefsIsHighContrast) ?? false;
+    _isColorBlind = prefs.getBool(AppConstants.prefsIsColorBlind) ?? false;
     notifyListeners();
   }
 }

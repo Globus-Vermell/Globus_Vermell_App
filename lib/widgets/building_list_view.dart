@@ -7,8 +7,8 @@ import 'building_card.dart';
 class BuildingListView extends StatelessWidget {
   final BuildingListController controller;
   final ScrollController scrollController;
-  final void Function(Building, BuildingListController) onNavigateToDetail;
-
+  final Future<void> Function(Building, BuildingListController)
+  onNavigateToDetail;
   const BuildingListView({
     super.key,
     required this.controller,

@@ -8,8 +8,9 @@ class PushNotificationService {
   static String? token;
 
   @pragma('vm:entry-point')
-  static Future<void> _backgroundHandler(RemoteMessage message) async {
+  static Future<void> _backgroundHandler(RemoteMessage message) {
     debugPrint('Mensaje en segundo plano: ${message.messageId}');
+    return Future.value();
   }
 
   static void _onMessageHandler(RemoteMessage message) {
