@@ -4,13 +4,14 @@ import 'package:provider/provider.dart';
 import '../providers/theme_provider.dart';
 import '../controllers/building_list_controller.dart';
 import '../models/building/building_entity.dart';
+import '../utils/map_utils.dart';
 import '../widgets/building_card.dart';
+import '../widgets/building_list_view.dart';
+import '../widgets/building_map_view.dart';
 import '../widgets/toggle_button.dart';
 import 'building_detail_screen.dart';
 import 'publication_detail_screen.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'dart:ui' as ui;
-import 'dart:typed_data';
 import 'package:flutter/services.dart' show rootBundle;
 
 class BuildingsListScreen extends StatefulWidget {
@@ -27,7 +28,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
   bool _listView = false;
   BitmapDescriptor _iconoEdificio = BitmapDescriptor.defaultMarker;
   BitmapDescriptor _iconoYo = BitmapDescriptor.defaultMarker;
-  // Mapa en modo oscuro 
+  // Mapa en modo oscuro
   String? _mapStyleDark;
 
   @override
@@ -52,22 +53,14 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
   }
 
   Future<void> _cargarEstiloMapa() async {
-    final estilo = await rootBundle.loadString('assets/map_styles/dark_mode.json');
-    
+    final estilo = await rootBundle.loadString(
+      'assets/map_styles/dark_mode.json',
+    );
+
     if (mounted) {
       setState(() {
         _mapStyleDark = estilo;
       });
-      
-      final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-      
-      if (_googleMapController != null) {
-        if (isDarkMode) {
-          _googleMapController!.setMapStyle(_mapStyleDark); 
-        } else {
-          _googleMapController!.setMapStyle(null); 
-        }
-      }
     }
   }
 
@@ -75,20 +68,21 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     _cargarIconosPersonalizados();
-    if (_mapStyleDark != null) {
-      final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-      try {
-        _googleMapController?.setMapStyle(isDarkMode ? _mapStyleDark : null);
-      } catch (e) {
-        // Si el mapa es un fantasmita (estamos en la vista de lista), lo ignoramos 
-      }
-    }
   }
 
   Future<void> _cargarIconosPersonalizados() async {
     final colores = Theme.of(context).colorScheme;
-    final iconoEdificio = await _crearIconoDesdeFlutter(Icons.location_on, colores.primary);
-    final iconoYo = await _crearIconoDesdeFlutter(Icons.person_pin_circle, colores.primary);
+    final double pixelRatio = MediaQuery.of(context).devicePixelRatio;
+    final iconoEdificio = await crearIconoDesdeFlutter(
+      Icons.location_on,
+      colores.primary,
+      pixelRatio,
+    );
+    final iconoYo = await crearIconoDesdeFlutter(
+      Icons.person_pin_circle,
+      colores.primary,
+      pixelRatio,
+    );
 
     if (mounted) {
       setState(() {
@@ -96,32 +90,6 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
         _iconoYo = iconoYo;
       });
     }
-  }
-
-  Future<BitmapDescriptor> _crearIconoDesdeFlutter(IconData icono, Color color) async {
-    final double pixelRatio = MediaQuery.of(context).devicePixelRatio;
-    final ui.PictureRecorder pictureRecorder = ui.PictureRecorder();
-    final Canvas canvas = Canvas(pictureRecorder);
-    
-    final TextPainter textPainter = TextPainter(textDirection: TextDirection.ltr);
-    textPainter.text = TextSpan(
-      text: String.fromCharCode(icono.codePoint),
-      style: TextStyle(
-        fontSize: 120.0, 
-        fontFamily: icono.fontFamily,
-        package: icono.fontPackage,
-        color: color,
-      ),
-    );
-    textPainter.layout();
-    textPainter.paint(canvas, const Offset(0.0, 0.0));
-
-    final ui.Image image = await pictureRecorder.endRecording().toImage(
-      textPainter.width.toInt(), 
-      textPainter.height.toInt()
-    );
-    final ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-    return BitmapDescriptor.bytes(byteData!.buffer.asUint8List(), imagePixelRatio: pixelRatio);
   }
 
   Future<void> _initialData() async {
@@ -161,9 +129,9 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
       if (!_listView && controller.location.latitude != 0) {
         _googleMapController?.animateCamera(
           CameraUpdate.newLatLngZoom(
-            LatLng(controller.location.latitude, controller.location.longitude), 
-            17.0
-          )
+            LatLng(controller.location.latitude, controller.location.longitude),
+            17.0,
+          ),
         );
       }
     } catch (e) {
@@ -178,9 +146,9 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
 
       _googleMapController?.animateCamera(
         CameraUpdate.newLatLngZoom(
-          LatLng(controller.location.latitude, controller.location.longitude), 
-          17.0
-        )
+          LatLng(controller.location.latitude, controller.location.longitude),
+          17.0,
+        ),
       );
     } catch (e) {
       if (mounted) _errorNetwork();
@@ -201,7 +169,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
   void dispose() {
     context.read<BuildingListController>().stopTracking();
     _scrollController.dispose();
-    _googleMapController?.dispose(); 
+    _googleMapController?.dispose();
     super.dispose();
   }
 
@@ -226,14 +194,14 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
         if (edificio.latitude != 0 && edificio.longitude != 0) {
           _googleMapController?.animateCamera(
             CameraUpdate.newLatLngZoom(
-              LatLng(edificio.latitude, edificio.longitude), 
-              17.0
-            )
+              LatLng(edificio.latitude, edificio.longitude),
+              17.0,
+            ),
           );
         }
       });
     }
-  } 
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -398,8 +366,22 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                     const SizedBox(height: 12),
                     Expanded(
                       child: _listView
-                          ? _buildList(controller, colores)
-                          : _buildMap(controller, colores),
+                          ? BuildingListView(
+                              controller: controller,
+                              scrollController: _scrollController,
+                              onNavigateToDetail: _navegarADetalle,
+                            )
+                          : BuildingMapView(
+                              controller: controller,
+                              mapStyleDark: _mapStyleDark,
+                              iconoYo: _iconoYo,
+                              iconoEdificio: _iconoEdificio,
+                              onMapCreated:
+                                  (GoogleMapController googleController) {
+                                    _googleMapController = googleController;
+                                  },
+                              onNavigateToDetail: _navegarADetalle,
+                            ),
                     ),
                   ],
                 );
@@ -547,85 +529,6 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
     );
   }
 
-  Widget _buildList(BuildingListController controller, ColorScheme colores) {
-    if (controller.buildings.isEmpty && controller.isLoading) {
-      return Center(child: CircularProgressIndicator(color: colores.primary));
-    }
-    return ListView.builder(
-      controller: _scrollController,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      itemCount: controller.buildings.length + (controller.hasMoreData ? 1 : 0),
-      itemBuilder: (context, index) {
-        if (index == controller.buildings.length) {
-          return Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Center(
-              child: CircularProgressIndicator(color: colores.primary),
-            ),
-          );
-        }
-        final edificio = controller.buildings[index];
-        return BuildingCard(
-          building: edificio,
-          location: controller.location,
-          onTap: () => _navegarADetalle(edificio, controller),
-        );
-      },
-    );
-  }
-
-  Widget _buildMap(BuildingListController controller, ColorScheme colores) {
-    LatLng centro = LatLng(
-      controller.location.latitude, 
-      controller.location.longitude
-    );
-    
-    if (centro.latitude == 0 && centro.longitude == 0) {
-      centro = controller.buildings.isNotEmpty &&
-               controller.buildings.first.latitude != 0
-          ? LatLng(
-              controller.buildings.first.latitude,
-              controller.buildings.first.longitude,
-            )
-          : const LatLng(41.3879, 2.16992);
-    }
-
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    return GoogleMap(
-      initialCameraPosition: CameraPosition(
-        target: centro,
-        zoom: 14.0,
-      ),
-      onMapCreated: (GoogleMapController googleController) {
-        _googleMapController = googleController;
-        if (isDarkMode && _mapStyleDark != null) {
-          _googleMapController!.setMapStyle(_mapStyleDark);
-        } else {
-          _googleMapController!.setMapStyle(null);
-        }
-      },
-      markers: {
-        if (controller.location.latitude != 0)
-          Marker(
-            markerId: const MarkerId('yo'),
-            position: LatLng(controller.location.latitude, controller.location.longitude),
-            icon: _iconoYo,
-            infoWindow: InfoWindow(title: context.loc.me),
-          ),
-        ...controller.buildings
-            .where((e) => e.latitude != 0 && e.longitude != 0)
-            .map((edificio) {
-          return Marker(
-            markerId: MarkerId(edificio.hashCode.toString()), 
-            position: LatLng(edificio.latitude, edificio.longitude),
-            icon: _iconoEdificio,
-            onTap: () => _navegarADetalle(edificio, controller),
-          );
-        }),
-      },
-    );
-  }
-
   Widget _buildFilter({
     required String texto,
     IconData? icono,
@@ -686,4 +589,4 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
       ),
     );
   }
-} 
+}

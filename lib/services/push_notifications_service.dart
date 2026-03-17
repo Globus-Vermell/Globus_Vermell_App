@@ -5,7 +5,7 @@ import '../firebase_options.dart';
 
 class PushNotificationService {
   static final FirebaseMessaging messaging = FirebaseMessaging.instance;
-  static  String? token;
+  static String? token;
 
   @pragma('vm:entry-point')
   static Future<void> _backgroundHandler(RemoteMessage message) async {
@@ -33,7 +33,7 @@ class PushNotificationService {
           token = await FirebaseMessaging.instance.getToken();
           debugPrint('Token del dispositivo: $token');
         } else {
-          debugPrint(' No hay APNS Token');
+          debugPrint(' No hay Token');
         }
       } else {
         token = await FirebaseMessaging.instance.getToken();
@@ -58,6 +58,5 @@ class PushNotificationService {
       provisional: false,
       sound: true,
     );
-    debugPrint('Permisos de notificación: ${settings.authorizationStatus}');
   }
 }

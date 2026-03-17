@@ -31,10 +31,10 @@ class BuildingDto with _$BuildingDto {
     if (map['building_images'] != null && map['building_images'] is List) {
       extractedImages = (map['building_images'] as List)
           .map((item) {
-        if (item is Map) return item['image_url'] as String? ?? '';
-        if (item is String) return item;
-        return '';
-      })
+            if (item is Map) return item['image_url'] as String? ?? '';
+            if (item is String) return item;
+            return '';
+          })
           .where((s) => s.isNotEmpty)
           .toList();
     }
@@ -85,13 +85,13 @@ List<String> parseList(Object? input) {
   if (input == null || input is! List) return [];
   return input
       .map((item) {
-    if (item is String) return item;
-    if (item is Map) {
-      if (item.containsKey('name')) return item['name'].toString();
-      if (item.containsKey('title')) return item['title'].toString();
-    }
-    return '';
-  })
+        if (item is String) return item;
+        if (item is Map) {
+          if (item.containsKey('name')) return item['name'].toString();
+          if (item.containsKey('title')) return item['title'].toString();
+        }
+        return '';
+      })
       .where((item) => item.isNotEmpty)
       .toList();
 }
