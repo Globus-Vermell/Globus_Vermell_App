@@ -3,6 +3,7 @@ import '../models/publication/publication_entity.dart';
 import '../utils/lang_extensions.dart';
 import '../widgets/info_chip.dart';
 import '../widgets/section_header.dart';
+import '../widgets/translated_text.dart';
 
 class PublicationDetailScreen extends StatelessWidget {
   final Publication publication;
@@ -94,8 +95,8 @@ class PublicationDetailScreen extends StatelessWidget {
                     const SizedBox(height: 16),
 
                     (publication.description.isNotEmpty)
-                        ? Text(
-                            publication.description,
+                        ? TranslatedText(
+                            text : publication.description,
                             textAlign: TextAlign.justify,
                             style: TextStyle(
                               fontSize: 16,
