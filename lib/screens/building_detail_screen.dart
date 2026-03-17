@@ -33,7 +33,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
   @override
   void initState() {
     super.initState();
-    _controller = BuildingDetailController();
+    _controller = BuildingDetailController(building: widget.building);
   }
 
   @override

@@ -5,11 +5,11 @@ import '../services/publications_service.dart';
 import '../utils/service_locator.dart';
 
 class BuildingDetailController {
-  final Building building = getIt<Building>();
+  final Building building;
   final PublicationService _pubService = getIt<PublicationService>();
   final ValueNotifier<int> currentImageIndex = ValueNotifier(0);
 
-  BuildingDetailController();
+  BuildingDetailController({required this.building});
 
   // Método para actualizar el índice del carrusel
   void onPageChanged(int index) {
