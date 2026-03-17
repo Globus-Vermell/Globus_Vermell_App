@@ -6,6 +6,7 @@ import 'package:globus_vermell_app/providers/theme_provider.dart';
 import 'package:globus_vermell_app/services/building_service.dart';
 import 'package:globus_vermell_app/services/publications_service.dart';
 import 'package:globus_vermell_app/services/push_notifications_service.dart';
+import 'package:globus_vermell_app/utils/app_constants.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
@@ -27,7 +28,7 @@ Future<void> main() async {
   ], directory: dir.path);
 
   final prefs = await SharedPreferences.getInstance();
-  final bool isFirstTime = prefs.getBool('isFirstTime') ?? true;
+  final bool isFirstTime = prefs.getBool(AppConstants.prefsIsFirstTime) ?? true;
 
   runApp(
     MultiProvider(
