@@ -28,7 +28,7 @@ class TranslatedText extends StatelessWidget {
 
     final translator = GoogleTranslator();
 
-    if (text.isEmpty){
+    if (text.isEmpty) {
       return Text(
         text,
         style: style,

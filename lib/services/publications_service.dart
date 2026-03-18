@@ -58,6 +58,19 @@ class PublicationService {
       throw NetworkException();
     }
   }
+
+  Future<List<Publication>> getPublicationsByThemeKeyword(
+    String keyword,
+  ) async {
+    final localCount = await isar.publications.count();
+    if (localCount == 0) {
+      await getPublications();
+    }
+    return await isar.publications
+        .filter()
+        .themesContains(keyword, caseSensitive: false)
+        .findAll();
+  }
 }
 
 List<Publication> _parsePublication(String responseBody) {

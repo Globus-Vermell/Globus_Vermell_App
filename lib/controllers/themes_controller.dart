@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import '../models/publication/publication_entity.dart';
 import '../services/publications_service.dart';
 import '../utils/service_locator.dart';
@@ -7,32 +6,18 @@ class ThemesController {
   final PublicationService _service = getIt<PublicationService>();
 
   ThemesController();
-  Future<Map<String, List<Publication>>> getOrganizedPublications() async {
-    final allPubs = await _service.getPublications();
 
-    debugPrint(" REVISANDO NOMBRES DE TEMAS:");
-    for (var p in allPubs) {
-      debugPrint(" - Título: ${p.title} | Tema: '${p.themes}'");
-    }
+  Future<Map<String, List<Publication>>> getOrganizedPublications() async {
+    final publications = await Future.wait([
+      _service.getPublicationsByThemeKeyword('etap'),
+      _service.getPublicationsByThemeKeyword('tem'),
+      _service.getPublicationsByThemeKeyword('barris'),
+    ]);
 
     return {
-      // etapes
-      'etapes': allPubs.where((p) {
-        final t = p.themes.toLowerCase().trim();
-        return t.contains('etap');
-      }).toList(),
-
-      // tematica
-      'arquitectura tematica': allPubs.where((p) {
-        final t = p.themes.toLowerCase().trim();
-        return t.contains('tem');
-      }).toList(),
-
-      // barris
-      'barris': allPubs.where((p) {
-        final t = p.themes.toLowerCase().trim();
-        return t.contains('barris');
-      }).toList(),
+      'etapes': publications[0],
+      'arquitectura tematica': publications[1],
+      'barris': publications[2],
     };
   }
 }

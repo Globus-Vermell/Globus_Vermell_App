@@ -1,12 +1,12 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../models/building/building_entity.dart';
 import '../models/publication/publication_entity.dart';
 import '../services/building_service.dart';
+import '../services/location_service.dart';
 import '../services/publications_service.dart';
 import '../utils/service_locator.dart';
+import 'dart:async';
 
 enum SearchMode { all, publication, nearby }
 
@@ -14,6 +14,7 @@ class BuildingListController extends ChangeNotifier
     with WidgetsBindingObserver {
   final BuildingService _service = getIt<BuildingService>();
   final PublicationService _pubService = getIt<PublicationService>();
+  final LocationService _locationService = getIt<LocationService>();
 
   BuildingListController() {
     WidgetsBinding.instance.addObserver(this);
@@ -30,7 +31,7 @@ class BuildingListController extends ChangeNotifier
   LatLng location = const LatLng(0, 0);
 
   int _currentPage = 1;
-  StreamSubscription<Position>? _realPosition;
+  StreamSubscription<LatLng>? _realPosition;
 
   SearchMode get currentMode => _currentMode;
 
@@ -127,20 +128,13 @@ class BuildingListController extends ChangeNotifier
   }
 
   Future<void> activateGPS() async {
-    if (!await _checkPermissionsAndService()) return;
+    if (!await _locationService.checkPermissionsAndService()) return;
 
     isLoading = true;
     notifyListeners();
 
     try {
-      Position position = await Geolocator.getCurrentPosition(
-        locationSettings: const LocationSettings(
-          accuracy: LocationAccuracy.high,
-        ),
-      );
-
-      location = LatLng(position.latitude, position.longitude);
-
+      location = await _locationService.getCurrentPosition();
       isLoading = false;
       await _loadPage(reset: true);
 
@@ -149,22 +143,20 @@ class BuildingListController extends ChangeNotifier
       isLoading = false;
       notifyListeners();
       debugPrint("Error obteniendo GPS: $e");
-      rethrow;
     }
   }
 
   void _startListeningToPosition() {
     _realPosition?.cancel();
-    _realPosition =
-        Geolocator.getPositionStream(
-          locationSettings: const LocationSettings(
-            accuracy: LocationAccuracy.high,
-            distanceFilter: 10,
-          ),
-        ).listen((Position position) {
-          location = LatLng(position.latitude, position.longitude);
-          notifyListeners();
-        });
+    _realPosition = _locationService.getPositionStream().listen(
+      (LatLng newLocation) {
+        location = newLocation;
+        notifyListeners();
+      },
+      onError: (e) {
+        debugPrint("Error en el stream del GPS: $e");
+      },
+    );
   }
 
   void stopTracking() {
@@ -175,50 +167,21 @@ class BuildingListController extends ChangeNotifier
   //Función que busca edifcios cercanos a partir de la posición actual del usuario.
   //Mostramos un máximo de 20 edificios para que no se sature la pantalla del usuario.
   Future<void> nearbyBuildings() async {
-    if (!await _checkPermissionsAndService()) return;
+    if (!await _locationService.checkPermissionsAndService()) return;
 
     _currentMode = SearchMode.nearby;
     isLoading = true;
     notifyListeners();
 
     try {
-      Position? position = await Geolocator.getLastKnownPosition();
-      position ??= await Geolocator.getCurrentPosition(
-        locationSettings: const LocationSettings(
-          accuracy: LocationAccuracy.medium,
-        ),
-      );
-
-      location = LatLng(position.latitude, position.longitude);
+      location = await _locationService.getLastKnownPosition();
       isLoading = false;
       await _loadPage(reset: true, limit: 20);
     } catch (e) {
       isLoading = false;
       notifyListeners();
       debugPrint("Error obteniendo GPS en cercanos: $e");
-      rethrow;
     }
-  }
-
-  Future<bool> _checkPermissionsAndService() async {
-    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return false;
-    }
-
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return false;
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      return false;
-    }
-
-    return true;
   }
 
   @override
