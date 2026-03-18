@@ -1,5 +1,5 @@
-import 'publication_dto.dart';
-import 'publication_entity.dart';
+import '../dto/publication_dto.dart';
+import '../entity/publication_entity.dart';
 
 extension PublicationMapper on PublicationDto {
   Publication toEntity() {

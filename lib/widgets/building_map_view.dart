@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import '../controllers/building_list_controller.dart';
-import '../models/building/building_entity.dart';
+import '../controller/building_list_controller.dart';
+import '../entity/building_entity.dart';
 import '../utils/app_constants.dart';
 import '../utils/lang_extensions.dart';
 

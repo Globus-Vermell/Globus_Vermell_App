@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:isar/isar.dart';
-import '../models/building/building_entity.dart';
+import '../entity/building_entity.dart';
 
 class BuildingLocalDataSource {
   final Isar isar;

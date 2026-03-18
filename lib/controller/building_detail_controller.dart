@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../models/building/building_entity.dart';
-import '../models/publication/publication_entity.dart';
-import '../repositories/publication_repository.dart';
+import '../entity/building_entity.dart';
+import '../entity/publication_entity.dart';
+import '../repository/publication_repository.dart';
 import '../utils/service_locator.dart';
 
 class BuildingDetailController {

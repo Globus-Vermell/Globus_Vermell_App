@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import '../models/building/building_dto.dart';
+import '../dto/building_dto.dart';
 import '../utils/app_exceptions.dart';
 
 class BuildingRemoteDataSource {

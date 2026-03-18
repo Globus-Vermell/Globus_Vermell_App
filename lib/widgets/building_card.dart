@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import '../models/building/building_entity.dart';
+import '../entity/building_entity.dart';
 import '../utils/get_distance.dart';
 import '../utils/lang_extensions.dart';
 import 'translated_text.dart';

@@ -12,8 +12,8 @@ import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:globus_vermell_app/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'models/building/building_entity.dart';
-import 'models/publication/publication_entity.dart';
+import 'entity/building_entity.dart';
+import 'entity/publication_entity.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

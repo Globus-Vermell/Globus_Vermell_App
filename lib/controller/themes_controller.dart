@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import '../models/publication/publication_entity.dart';
-import '../repositories/publication_repository.dart';
+import '../entity/publication_entity.dart';
+import '../repository/publication_repository.dart';
 import '../utils/service_locator.dart';
 
 class ThemesController extends ChangeNotifier {

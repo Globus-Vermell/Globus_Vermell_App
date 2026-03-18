@@ -1,5 +1,5 @@
-import 'building_dto.dart';
-import 'building_entity.dart';
+import '../dto/building_dto.dart';
+import '../entity/building_entity.dart';
 
 extension BuildingMapper on BuildingDto {
   Building toEntity() {

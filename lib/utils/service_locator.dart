@@ -1,12 +1,12 @@
 import 'package:get_it/get_it.dart';
 import 'package:globus_vermell_app/services/location_service.dart';
 import 'package:isar/isar.dart';
-import '../data_sources/building_local_data_source.dart';
-import '../data_sources/building_remote_data_source.dart';
-import '../data_sources/publication_local_data_source.dart';
-import '../data_sources/publication_remote_data_source.dart';
-import '../repositories/building_repository.dart';
-import '../repositories/publication_repository.dart';
+import '../datasource/building_local_datasource.dart';
+import '../datasource/building_remote_datasource.dart';
+import '../datasource/publication_local_datasource.dart';
+import '../datasource/publication_remote_datasource.dart';
+import '../repository/building_repository.dart';
+import '../repository/publication_repository.dart';
 import 'package:http/http.dart' as http;
 
 final getIt = GetIt.instance;

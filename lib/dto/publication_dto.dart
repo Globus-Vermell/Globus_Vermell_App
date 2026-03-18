@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import '../../utils/json_helper.dart';
+import '../utils/json_helper.dart';
 
 part 'publication_dto.freezed.dart';
 

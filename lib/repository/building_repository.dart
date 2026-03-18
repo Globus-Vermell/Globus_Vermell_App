@@ -1,7 +1,7 @@
-import '../data_sources/building_local_data_source.dart';
-import '../data_sources/building_remote_data_source.dart';
-import '../models/building/building_entity.dart';
-import '../models/building/building_mapper.dart';
+import '../datasource/building_local_datasource.dart';
+import '../datasource/building_remote_datasource.dart';
+import '../entity/building_entity.dart';
+import '../mapper/building_mapper.dart';
 
 class BuildingRepository {
   final BuildingRemoteDataSource remoteDataSource;

@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import '../models/publication/publication_dto.dart';
+import '../dto/publication_dto.dart';
 import '../utils/app_exceptions.dart';
 
 class PublicationRemoteDataSource {

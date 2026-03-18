@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:globus_vermell_app/screens/settings_screen.dart';
 import 'package:provider/provider.dart';
-import '../controllers/themes_controller.dart';
+import '../controller/themes_controller.dart';
 import '../providers/theme_provider.dart';
-import '../controllers/building_list_controller.dart';
+import '../controller/building_list_controller.dart';
 import '../utils/lang_extensions.dart';
 import 'building_list_screen.dart';
 import 'themes_screen.dart';

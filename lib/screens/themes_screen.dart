@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../controllers/themes_controller.dart';
-import '../models/publication/publication_entity.dart';
+import '../controller/themes_controller.dart';
+import '../entity/publication_entity.dart';
 import '../utils/lang_extensions.dart';
 import 'publication_detail_screen.dart';
 import '../providers/theme_provider.dart';

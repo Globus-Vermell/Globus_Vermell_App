@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
-import '../data_sources/publication_local_data_source.dart';
-import '../data_sources/publication_remote_data_source.dart';
-import '../models/publication/publication_entity.dart';
-import '../models/publication/publication_mapper.dart';
+import '../datasource/publication_local_datasource.dart';
+import '../datasource/publication_remote_datasource.dart';
+import '../entity/publication_entity.dart';
+import '../mapper/publication_mapper.dart';
 import '../utils/app_exceptions.dart';
 
 class PublicationRepository {

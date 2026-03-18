@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import '../models/building/building_entity.dart';
-import '../models/publication/publication_entity.dart';
-import '../repositories/building_repository.dart';
+import '../entity/building_entity.dart';
+import '../entity/publication_entity.dart';
+import '../repository/building_repository.dart';
 import '../services/location_service.dart';
-import '../repositories/publication_repository.dart';
+import '../repository/publication_repository.dart';
 import '../utils/service_locator.dart';
 import 'dart:async';
 

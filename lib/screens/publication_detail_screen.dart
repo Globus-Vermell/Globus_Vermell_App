@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/publication/publication_entity.dart';
+import '../entity/publication_entity.dart';
 import '../utils/lang_extensions.dart';
 import '../widgets/info_chip.dart';
 import '../widgets/section_header.dart';

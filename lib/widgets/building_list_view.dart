@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../controllers/building_list_controller.dart';
-import '../models/building/building_entity.dart';
+import '../controller/building_list_controller.dart';
+import '../entity/building_entity.dart';
 import 'building_card.dart';
 
 class BuildingListView extends StatelessWidget {

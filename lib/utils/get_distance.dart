@@ -1,6 +1,6 @@
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import '../models/building/building_entity.dart';
+import '../entity/building_entity.dart';
 
 String getDistance(LatLng location, Building building) {
   String distance = '0.6 Km';

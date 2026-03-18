@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:isar/isar.dart';
-import '../models/publication/publication_entity.dart';
+import '../entity/publication_entity.dart';
 
 class PublicationLocalDataSource {
   final Isar isar;
