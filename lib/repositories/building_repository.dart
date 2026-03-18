@@ -2,7 +2,6 @@ import '../data_sources/building_local_data_source.dart';
 import '../data_sources/building_remote_data_source.dart';
 import '../models/building/building_entity.dart';
 import '../models/building/building_mapper.dart';
-import '../utils/app_exceptions.dart';
 
 class BuildingRepository {
   final BuildingRemoteDataSource remoteDataSource;
