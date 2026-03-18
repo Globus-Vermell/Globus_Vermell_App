@@ -1,65 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../controllers/themes_controller.dart';
 import '../models/publication/publication_entity.dart';
 import '../utils/lang_extensions.dart';
 import 'publication_detail_screen.dart';
 import '../providers/theme_provider.dart';
-import 'package:provider/provider.dart';
 import '../widgets/translated_text.dart';
 
-class ThemesScreen extends StatefulWidget {
+class ThemesScreen extends StatelessWidget {
   const ThemesScreen({super.key});
-
-  @override
-  State<ThemesScreen> createState() => _ThemesScreenState();
-}
-
-class _ThemesScreenState extends State<ThemesScreen> {
-  late ThemesController _controller;
-
-  Map<String, List<Publication>> _organizedData = {
-    'etapes': [],
-    'arquitectura tematica': [],
-    'barris': [],
-  };
-
-  bool _isLoading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = ThemesController();
-    _loadData();
-  }
-
-  Future<void> _loadData() async {
-    try {
-      final data = await _controller.getOrganizedPublications();
-      if (mounted) {
-        setState(() {
-          _organizedData = data;
-          _isLoading = false;
-        });
-      }
-    } catch (e) {
-      if (mounted) {
-        setState(() => _isLoading = false);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(context.loc.connectionError),
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-      }
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
     final isPureHighContrast =
         themeProvider.isHighContrast && !themeProvider.isDarkMode;
+
     return Scaffold(
       appBar: AppBar(
         title: Column(
@@ -80,43 +36,71 @@ class _ThemesScreenState extends State<ThemesScreen> {
         ),
       ),
       backgroundColor: Theme.of(context).colorScheme.surface,
-      body: _isLoading
-          ? Center(
+      body: Consumer<ThemesController>(
+        builder: (context, controller, child) {
+          if (controller.isLoading) {
+            return Center(
               child: CircularProgressIndicator(
                 color: Theme.of(context).colorScheme.primary,
               ),
-            )
-          : ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-              children: [
-                _buildSectionHeader(context.loc.stages, Icons.timeline),
-                const SizedBox(height: 12),
-                _buildPublicationList(_organizedData['etapes'] ?? []),
-                const SizedBox(height: 32),
+            );
+          }
 
-                _buildSectionHeader(
-                  context.loc.thematicArchitecture,
-                  Icons.architecture,
-                ),
-                const SizedBox(height: 12),
-                _buildPublicationList(
-                  _organizedData['arquitectura tematica'] ?? [],
-                ),
-                const SizedBox(height: 32),
+          if (controller.hasError) {
+            return Center(
+              child: Text(
+                context.loc.connectionError,
+                style: TextStyle(color: Theme.of(context).colorScheme.error),
+              ),
+            );
+          }
 
-                _buildSectionHeader(
-                  context.loc.neighborhoods,
-                  Icons.location_city,
-                ),
-                const SizedBox(height: 12),
-                _buildPublicationList(_organizedData['barris'] ?? []),
-                const SizedBox(height: 40),
-              ],
-            ),
+          return ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+            children: [
+              _buildSectionHeader(context, context.loc.stages, Icons.timeline),
+              const SizedBox(height: 12),
+              _buildPublicationList(
+                context,
+                controller.organizedData['etapes'] ?? [],
+              ),
+              const SizedBox(height: 32),
+
+              _buildSectionHeader(
+                context,
+                context.loc.thematicArchitecture,
+                Icons.architecture,
+              ),
+              const SizedBox(height: 12),
+              _buildPublicationList(
+                context,
+                controller.organizedData['arquitectura tematica'] ?? [],
+              ),
+              const SizedBox(height: 32),
+
+              _buildSectionHeader(
+                context,
+                context.loc.neighborhoods,
+                Icons.location_city,
+              ),
+              const SizedBox(height: 12),
+              _buildPublicationList(
+                context,
+                controller.organizedData['barris'] ?? [],
+              ),
+              const SizedBox(height: 40),
+            ],
+          );
+        },
+      ),
     );
   }
 
-  Widget _buildSectionHeader(String title, IconData icon) {
+  Widget _buildSectionHeader(
+    BuildContext context,
+    String title,
+    IconData icon,
+  ) {
     return Row(
       children: [
         Icon(
@@ -138,8 +122,8 @@ class _ThemesScreenState extends State<ThemesScreen> {
     );
   }
 
-  Widget _buildPublicationList(List<Publication> items) {
-    if (items.isEmpty) return _buildEmptyMessage();
+  Widget _buildPublicationList(BuildContext context, List<Publication> items) {
+    if (items.isEmpty) return _buildEmptyMessage(context);
 
     return ListView.separated(
       shrinkWrap: true,
@@ -247,7 +231,7 @@ class _ThemesScreenState extends State<ThemesScreen> {
     );
   }
 
-  Widget _buildEmptyMessage() {
+  Widget _buildEmptyMessage(BuildContext context) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(24),

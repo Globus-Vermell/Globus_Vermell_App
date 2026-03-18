@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:globus_vermell_app/screens/settings_screen.dart';
 import 'package:provider/provider.dart';
+import '../controllers/themes_controller.dart';
 import '../providers/theme_provider.dart';
 import '../controllers/building_list_controller.dart';
 import '../utils/lang_extensions.dart';
@@ -27,7 +28,10 @@ class BottomBarState extends State<BottomBar> {
       create: (context) => BuildingListController(),
       child: const BuildingsListScreen(),
     ),
-    const ThemesScreen(),
+    ChangeNotifierProvider(
+      create: (context) => ThemesController(),
+      child: const ThemesScreen(),
+    ),
     const SettingsScreen(),
   ];
 

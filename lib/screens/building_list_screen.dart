@@ -128,7 +128,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
         _googleMapController?.animateCamera(
           CameraUpdate.newLatLngZoom(
             LatLng(controller.location.latitude, controller.location.longitude),
-            AppConstants.defaultMapZoom,
+            AppConstants.detailMapZoom,
           ),
         );
       }

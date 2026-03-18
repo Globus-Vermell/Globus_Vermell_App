@@ -148,12 +148,15 @@ class BuildingListController extends ChangeNotifier
 
   void _startListeningToPosition() {
     _realPosition?.cancel();
-    _realPosition = _locationService.getPositionStream().listen((LatLng newLocation) {
-      location = newLocation;
-      notifyListeners();
-    }, onError: (e) {
-      debugPrint("Error en el stream del GPS: $e");
-    });
+    _realPosition = _locationService.getPositionStream().listen(
+      (LatLng newLocation) {
+        location = newLocation;
+        notifyListeners();
+      },
+      onError: (e) {
+        debugPrint("Error en el stream del GPS: $e");
+      },
+    );
   }
 
   void stopTracking() {
