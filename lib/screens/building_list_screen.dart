@@ -142,12 +142,14 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
       final controller = context.read<BuildingListController>();
       await controller.nearbyBuildings();
 
-      _googleMapController?.animateCamera(
-        CameraUpdate.newLatLngZoom(
-          LatLng(controller.location.latitude, controller.location.longitude),
-          AppConstants.detailMapZoom,
-        ),
-      );
+      if (!_listView && controller.location.latitude != 0) {
+        _googleMapController?.animateCamera(
+          CameraUpdate.newLatLngZoom(
+            LatLng(controller.location.latitude, controller.location.longitude),
+            AppConstants.detailMapZoom,
+          ),
+        );
+      }
     } catch (e) {
       if (mounted) _errorNetwork();
     }

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../models/building/building_entity.dart';
 import '../models/publication/publication_entity.dart';
-import '../services/building_service.dart';
+import '../repositories/building_repository.dart';
 import '../services/location_service.dart';
-import '../services/publications_service.dart';
+import '../repositories/publication_repository.dart';
 import '../utils/service_locator.dart';
 import 'dart:async';
 
@@ -12,8 +12,8 @@ enum SearchMode { all, publication, nearby }
 
 class BuildingListController extends ChangeNotifier
     with WidgetsBindingObserver {
-  final BuildingService _service = getIt<BuildingService>();
-  final PublicationService _pubService = getIt<PublicationService>();
+  final BuildingRepository _service = getIt<BuildingRepository>();
+  final PublicationRepository _pubService = getIt<PublicationRepository>();
   final LocationService _locationService = getIt<LocationService>();
 
   BuildingListController() {
@@ -181,6 +181,7 @@ class BuildingListController extends ChangeNotifier
       isLoading = false;
       notifyListeners();
       debugPrint("Error obteniendo GPS en cercanos: $e");
+      rethrow;
     }
   }
 

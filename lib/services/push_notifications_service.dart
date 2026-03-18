@@ -30,7 +30,7 @@ class PushNotificationService {
     try {
       if (defaultTargetPlatform == TargetPlatform.iOS) {
         String? apnsToken = await FirebaseMessaging.instance.getAPNSToken();
-        if (apnsToken != null) {
+        if (apnsToken != null && kDebugMode) {
           token = await FirebaseMessaging.instance.getToken();
           debugPrint('Token del dispositivo: $token');
         } else {

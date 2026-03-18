@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import '../models/publication/publication_entity.dart';
-import '../services/publications_service.dart';
+import '../repositories/publication_repository.dart';
 import '../utils/service_locator.dart';
 
 class ThemesController extends ChangeNotifier {
-  final PublicationService _service = getIt<PublicationService>();
+  final PublicationRepository _service = getIt<PublicationRepository>();
 
   Map<String, List<Publication>> organizedData = {
     'etapes': [],

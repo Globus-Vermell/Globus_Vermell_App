@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import '../models/building/building_entity.dart';
 import '../models/publication/publication_entity.dart';
-import '../services/publications_service.dart';
+import '../repositories/publication_repository.dart';
 import '../utils/service_locator.dart';
 
 class BuildingDetailController {
   final Building building;
-  final PublicationService _pubService = getIt<PublicationService>();
+  final PublicationRepository _pubService = getIt<PublicationRepository>();
   final ValueNotifier<int> currentImageIndex = ValueNotifier(0);
 
   BuildingDetailController({required this.building});
