@@ -44,7 +44,6 @@ class PushNotificationService {
     } catch (e) {
       debugPrint('Error al obtener el token FCM: $e');
     }
-
     FirebaseMessaging.onBackgroundMessage(_backgroundHandler);
     FirebaseMessaging.onMessage.listen(_onMessageHandler);
     FirebaseMessaging.onMessageOpenedApp.listen(_onMessageOpenApp);
