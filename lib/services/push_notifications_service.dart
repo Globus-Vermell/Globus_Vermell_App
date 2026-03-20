@@ -32,13 +32,14 @@ class PushNotificationService {
         String? apnsToken = await FirebaseMessaging.instance.getAPNSToken();
         if (apnsToken != null && kDebugMode) {
           token = await FirebaseMessaging.instance.getToken();
-          debugPrint('Token del dispositivo: $token');
         } else {
           debugPrint(' No hay Token');
         }
       } else {
         token = await FirebaseMessaging.instance.getToken();
-        debugPrint('Token del dispositivo: $token');
+      }
+      if(kDebugMode && token != null){
+        debugPrint('Token: $token');
       }
     } catch (e) {
       debugPrint('Error al obtener el token FCM: $e');
