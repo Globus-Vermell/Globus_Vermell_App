@@ -38,7 +38,7 @@ class PushNotificationService {
       } else {
         token = await FirebaseMessaging.instance.getToken();
       }
-      if(kDebugMode && token != null){
+      if (kDebugMode && token != null) {
         debugPrint('Token: $token');
       }
     } catch (e) {
