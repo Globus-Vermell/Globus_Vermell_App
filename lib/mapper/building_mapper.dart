@@ -1,8 +1,14 @@
 import '../dto/building_dto.dart';
 import '../entity/building_entity.dart';
+import '../utils/app_constants.dart';
 
 extension BuildingMapper on BuildingDto {
   Building toEntity() {
+    final List<String> formattedImages = images.map((path) {
+      if (path.startsWith('http')) return path;
+      return '${AppConstants.baseUrl}$path';
+    }).toList();
+
     return Building(
       idBuilding: idBuilding,
       name: name,
@@ -13,7 +19,7 @@ extension BuildingMapper on BuildingDto {
       idTypology: idTypology,
       idProtection: idProtection,
       validate: validate,
-      images: images,
+      images: formattedImages,
       typologyName: typologyName,
       protectionName: protectionName,
       latitude: latitude,

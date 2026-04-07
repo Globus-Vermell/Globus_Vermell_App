@@ -3,13 +3,10 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import '../dto/building_dto.dart';
 import '../utils/app_exceptions.dart';
+import '../utils/app_constants.dart';
 
 class BuildingRemoteDataSource {
   final http.Client client;
-  static const String _baseUrl = String.fromEnvironment(
-    'API_URL',
-    defaultValue: 'Error',
-  );
 
   BuildingRemoteDataSource({required this.client});
 
@@ -34,7 +31,7 @@ class BuildingRemoteDataSource {
     }
 
     final uri = Uri.parse(
-      '$_baseUrl/buildings/api/list',
+      '${AppConstants.baseUrl}/buildings/api/list',
     ).replace(queryParameters: queryParams);
     debugPrint("Llamando a la API: $uri");
 

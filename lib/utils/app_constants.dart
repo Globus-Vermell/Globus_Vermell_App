@@ -17,4 +17,9 @@ class AppConstants {
   static const String prefsIsHighContrast = 'isHighContrast';
   static const String prefsIsColorBlind = 'isColorBlind';
   static const String prefsLanguageCode = 'languageCode';
+
+  static const String baseUrl = String.fromEnvironment(
+    'API_URL',
+    defaultValue: 'Error',
+  );
 }

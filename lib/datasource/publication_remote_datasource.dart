@@ -2,19 +2,16 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import '../dto/publication_dto.dart';
+import '../utils/app_constants.dart';
 import '../utils/app_exceptions.dart';
 
 class PublicationRemoteDataSource {
   final http.Client client;
-  static const String _baseUrl = String.fromEnvironment(
-    'API_URL',
-    defaultValue: 'Error',
-  );
 
   PublicationRemoteDataSource({required this.client});
 
   Future<List<PublicationDto>> fetchPublications() async {
-    final uri = Uri.parse('$_baseUrl/publications/api/list');
+    final uri = Uri.parse('${AppConstants.baseUrl}/publications/api/list');
     debugPrint("Llamando a la API: $uri");
 
     try {
