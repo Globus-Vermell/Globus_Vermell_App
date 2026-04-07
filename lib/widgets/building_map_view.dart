@@ -33,14 +33,14 @@ class BuildingMapView extends StatelessWidget {
     );
 
     if (centro.latitude == 0 && centro.longitude == 0) {
-      centro =
-          controller.buildings.isNotEmpty &&
-              controller.buildings.first.latitude != 0
-          ? LatLng(
-              controller.buildings.first.latitude,
-              controller.buildings.first.longitude,
-            )
-          : AppConstants.defaultLocation;
+      try {
+        final validBuilding = controller.buildings.firstWhere(
+              (b) => b.latitude != 0 && b.longitude != 0,
+        );
+        centro = LatLng(validBuilding.latitude, validBuilding.longitude);
+      } catch (e) {
+        centro = AppConstants.defaultLocation;
+      }
     }
 
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
