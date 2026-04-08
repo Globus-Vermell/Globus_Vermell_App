@@ -35,7 +35,7 @@ class BuildingMapView extends StatelessWidget {
     if (centro.latitude == 0 && centro.longitude == 0) {
       try {
         final validBuilding = controller.buildings.firstWhere(
-              (b) => b.latitude != 0 && b.longitude != 0,
+          (b) => b.latitude != 0 && b.longitude != 0,
         );
         centro = LatLng(validBuilding.latitude, validBuilding.longitude);
       } catch (e) {
