@@ -31,6 +31,29 @@ class BuildingListController extends ChangeNotifier
   LatLng location = const LatLng(0, 0);
 
   int _currentPage = 1;
+
+  String _searchQuery = '';
+  String get searchQuery => _searchQuery;
+
+  void setSearchQuery(String query) {
+    _searchQuery = query;
+    notifyListeners();
+  }
+
+  List<Building> get filteredBuildings {
+    if (_searchQuery.isEmpty) return buildings;
+
+    return buildings.where((b) {
+      final nameMatch = b.name.toLowerCase().contains(
+        _searchQuery.toLowerCase(),
+      );
+      final locMatch = b.location.toLowerCase().contains(
+        _searchQuery.toLowerCase(),
+      );
+      return nameMatch || locMatch;
+    }).toList();
+  }
+
   StreamSubscription<LatLng>? _realPosition;
 
   SearchMode get currentMode => _currentMode;
@@ -68,7 +91,7 @@ class BuildingListController extends ChangeNotifier
       final hasValidLocation =
           location.latitude != 0 && location.longitude != 0;
 
-      final int? activeLimit = isNearby ? (limit ?? 20) : limit;
+      final int activeLimit = isNearby ? (limit ?? 20) : (limit ?? 100);
 
       final newBuildings = await _service.getBuildings(
         page: _currentPage,
@@ -85,7 +108,7 @@ class BuildingListController extends ChangeNotifier
         hasMoreData = false;
       } else {
         if (isNearby) {
-          buildings = newBuildings.take(activeLimit!).toList();
+          buildings = newBuildings.take(activeLimit).toList();
           hasMoreData = false;
         } else {
           buildings.addAll(newBuildings);

@@ -293,9 +293,54 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                 return Column(
                   children: [
                     Padding(
+                      padding: const EdgeInsets.only(
+                        left: 8.0,
+                        right: 8.0,
+                        top: 8.0,
+                      ),
+                      child: Consumer<BuildingListController>(
+                        builder: (context, controller, child) {
+                          return TextField(
+                            onChanged: (value) =>
+                                controller.setSearchQuery(value),
+                            style: TextStyle(
+                              color: isHighContrast
+                                  ? colores.onSurface
+                                  : colores.onSurface,
+                            ),
+                            decoration: InputDecoration(
+                              hintText: '${context.loc.searchBuilding}...',
+                              prefixIcon: Icon(
+                                Icons.search,
+                                color: colores.primary,
+                              ),
+                              filled: true,
+                              fillColor: isHighContrast
+                                  ? colores.surface
+                                  : colores.surfaceContainerHighest.withValues(
+                                      alpha: 0.3,
+                                    ),
+                              contentPadding: const EdgeInsets.symmetric(
+                                vertical: 0,
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30),
+                                borderSide: isHighContrast
+                                    ? BorderSide(
+                                        color: colores.onSurface,
+                                        width: 2.0,
+                                      )
+                                    : BorderSide.none,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 16.0,
-                        vertical: 8.0,
+                        vertical: 16.0,
                       ),
                       child: Row(
                         children: [
@@ -354,7 +399,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          '${controller.buildings.length} ${context.loc.buildingsByDistance}',
+                          '${controller.filteredBuildings.length} ${context.loc.buildingsByDistance}',
                           style: TextStyle(
                             fontSize: 14,
                             color: colores.onSurfaceVariant,

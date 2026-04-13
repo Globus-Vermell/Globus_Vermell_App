@@ -62,5 +62,6 @@
   "onboardingTitle3": "Explora cada detalle",
   "onboardingDesc3": "Haz clic en los marcadores del mapa para ver información completa, historia, horarios y cómo llegar a cada edificación.",
   "adaptability": "Adaptabilidad",
-  "general": "General"
+  "general": "General",
+  "searchBuilding": "Buscar edificio por nombre"
 }

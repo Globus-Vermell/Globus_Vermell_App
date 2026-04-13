@@ -34,7 +34,7 @@ class BuildingMapView extends StatelessWidget {
 
     if (centro.latitude == 0 && centro.longitude == 0) {
       try {
-        final validBuilding = controller.buildings.firstWhere(
+        final validBuilding = controller.filteredBuildings.firstWhere(
           (b) => b.latitude != 0 && b.longitude != 0,
         );
         centro = LatLng(validBuilding.latitude, validBuilding.longitude);
@@ -64,7 +64,7 @@ class BuildingMapView extends StatelessWidget {
             infoWindow: InfoWindow(title: context.loc.me),
           ),
 
-        ...controller.buildings
+        ...controller.filteredBuildings
             .where((e) => e.latitude != 0 && e.longitude != 0)
             .map((edificio) {
               return Marker(

@@ -62,5 +62,6 @@
   "onboardingTitle3": "Explora cada detall",
   "onboardingDesc3": "Fes clic als marcadors del mapa per veure informació completa, història, horaris i com arribar a cada edificació.",
   "adaptability": "Adaptabilitat",
-  "general": "General"
+  "general": "General",
+  "searchBuilding": "Cercar edifici per nom"
 }
