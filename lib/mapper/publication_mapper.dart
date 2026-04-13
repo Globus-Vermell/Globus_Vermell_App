@@ -6,7 +6,17 @@ extension PublicationMapper on PublicationDto {
     return Publication(
       idPublication: idPublication,
       title: title,
+      titleEs: titleEs,
+      titleEn: titleEn,
+      titleFr: titleFr,
+      titleAr: titleAr,
+
       description: description,
+      descriptionEs: descriptionEs,
+      descriptionEn: descriptionEn,
+      descriptionFr: descriptionFr,
+      descriptionAr: descriptionAr,
+
       themes: themes,
       publicationEdition: publicationEdition,
     );

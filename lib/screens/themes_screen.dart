@@ -5,7 +5,7 @@ import '../entity/publication_entity.dart';
 import '../utils/lang_extensions.dart';
 import 'publication_detail_screen.dart';
 import '../providers/theme_provider.dart';
-import '../widgets/translated_text.dart';
+import '../providers/language_provider.dart'; // ✨ IMPORTANTE
 
 class ThemesScreen extends StatelessWidget {
   const ThemesScreen({super.key});
@@ -15,6 +15,9 @@ class ThemesScreen extends StatelessWidget {
     final themeProvider = Provider.of<ThemeProvider>(context);
     final isPureHighContrast =
         themeProvider.isHighContrast && !themeProvider.isDarkMode;
+
+    // ✨ Atrapamos el idioma principal
+    final langCode = context.watch<LanguageProvider>().currentLocale.languageCode;
 
     return Scaffold(
       appBar: AppBar(
@@ -63,6 +66,7 @@ class ThemesScreen extends StatelessWidget {
               _buildPublicationList(
                 context,
                 controller.organizedData['etapes'] ?? [],
+                langCode, // ✨ Le pasamos el idioma a la lista
               ),
               const SizedBox(height: 32),
 
@@ -75,6 +79,7 @@ class ThemesScreen extends StatelessWidget {
               _buildPublicationList(
                 context,
                 controller.organizedData['arquitectura tematica'] ?? [],
+                langCode, // ✨ 
               ),
               const SizedBox(height: 32),
 
@@ -87,6 +92,7 @@ class ThemesScreen extends StatelessWidget {
               _buildPublicationList(
                 context,
                 controller.organizedData['barris'] ?? [],
+                langCode, // ✨
               ),
               const SizedBox(height: 40),
             ],
@@ -122,7 +128,8 @@ class ThemesScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildPublicationList(BuildContext context, List<Publication> items) {
+  // ✨ Añadimos langCode a la función ✨
+  Widget _buildPublicationList(BuildContext context, List<Publication> items, String langCode) {
     if (items.isEmpty) return _buildEmptyMessage(context);
 
     return ListView.separated(
@@ -132,6 +139,11 @@ class ThemesScreen extends StatelessWidget {
       separatorBuilder: (context, index) => const SizedBox(height: 16),
       itemBuilder: (context, index) {
         final item = items[index];
+        
+        // ✨ Extraemos la data traducida de cada item UwU
+        final localTitle = item.getLocalizedTitle(langCode);
+        final localDesc = item.getLocalizedDescription(langCode);
+
         return Container(
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
@@ -174,7 +186,7 @@ class ThemesScreen extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Text(
-                            item.title,
+                            localTitle, // ✨ Título traducido
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 17,
@@ -192,8 +204,8 @@ class ThemesScreen extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 8),
-                    TranslatedText(
-                      text: item.description,
+                    Text( // ✨ Adiós TranslatedText
+                      localDesc,
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(

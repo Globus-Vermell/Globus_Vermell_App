@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart'; // ✨ IMPORTANTE
 import '../entity/publication_entity.dart';
 import '../utils/lang_extensions.dart';
 import '../widgets/info_chip.dart';
 import '../widgets/section_header.dart';
-import '../widgets/translated_text.dart';
+import '../providers/language_provider.dart'; // ✨ IMPORTANTE
 
 class PublicationDetailScreen extends StatelessWidget {
   final Publication publication;
@@ -12,6 +13,11 @@ class PublicationDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ✨ Atrapamos el idioma actual y sacamos la info traducida UwU ✨
+    final langCode = context.watch<LanguageProvider>().currentLocale.languageCode;
+    final localTitle = publication.getLocalizedTitle(langCode);
+    final localDesc = publication.getLocalizedDescription(langCode);
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
@@ -32,7 +38,7 @@ class PublicationDetailScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                publication.title,
+                localTitle, // ✨ ¡Título bilingüe instantáneo!
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 34,
@@ -63,7 +69,6 @@ class PublicationDetailScreen extends StatelessWidget {
               ),
               const SizedBox(height: 32),
 
-              // Contenedor para volver a alinear el resto de la información a la izquierda
               Align(
                 alignment: Alignment.centerLeft,
                 child: Column(
@@ -94,9 +99,9 @@ class PublicationDetailScreen extends StatelessWidget {
                     SectionHeader(title: context.loc.description),
                     const SizedBox(height: 16),
 
-                    (publication.description.isNotEmpty)
-                        ? TranslatedText(
-                            text: publication.description,
+                    (localDesc.isNotEmpty)
+                        ? Text( // ✨ ¡Adiós TranslatedText! Vuela rapidísimo
+                            localDesc,
                             textAlign: TextAlign.justify,
                             style: TextStyle(
                               fontSize: 16,

@@ -1,10 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart'; // ✨ IMPORTANTE
 import '../entity/building_entity.dart';
 import '../utils/get_distance.dart';
 import '../utils/lang_extensions.dart';
-import 'translated_text.dart';
+import '../providers/language_provider.dart'; // ✨ IMPORTANTE
 
 class BuildingCard extends StatelessWidget {
   final Building building;
@@ -22,6 +23,10 @@ class BuildingCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final String distance = getDistance(location, building);
     final colores = Theme.of(context).colorScheme;
+
+    // ✨ Atrapamos el idioma y la publicación traducida UwU
+    final langCode = context.watch<LanguageProvider>().currentLocale.languageCode;
+    final localPubs = building.getLocalizedPublications(langCode);
 
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
@@ -116,9 +121,9 @@ class BuildingCard extends StatelessWidget {
                         ),
                         const SizedBox(width: 4),
                         Expanded(
-                          child: (building.publications.isNotEmpty)
-                              ? TranslatedText(
-                                  text: building.publications.first,
+                          child: (localPubs.isNotEmpty) // ✨ Usamos la traducida
+                              ? Text( // ✨ Adios TranslatedText
+                                  localPubs.first,
                                   style: TextStyle(
                                     fontSize: 13,
                                     color: colores.onSurface,

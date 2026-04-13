@@ -14,7 +14,13 @@ extension BuildingMapper on BuildingDto {
       name: name,
       location: location,
       constructionYear: constructionYear,
+      
       description: description,
+      descriptionEs: descriptionEs,
+      descriptionEn: descriptionEn,
+      descriptionAr: descriptionAr,
+      descriptionFr: descriptionFr,
+
       surfaceArea: surfaceArea,
       idTypology: idTypology,
       idProtection: idProtection,
@@ -27,8 +33,18 @@ extension BuildingMapper on BuildingDto {
       architects: architects,
       reforms: reforms,
       prizes: prizes,
+      
       publications: publications,
+      publicationsEs: publicationsEs,
+      publicationsEn: publicationsEn,
+      publicationsAr: publicationsAr,
+      publicationsFr: publicationsFr,
+
       uses: uses,
+      usesEs: usesEs,
+      usesEn: usesEn,
+      usesAr: usesAr,
+      usesFr: usesFr,
     );
   }
 }

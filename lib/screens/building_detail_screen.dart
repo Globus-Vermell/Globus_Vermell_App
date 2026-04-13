@@ -11,7 +11,7 @@ import '../utils/lang_extensions.dart';
 import '../widgets/info_chip.dart';
 import '../widgets/section_header.dart';
 import 'publication_detail_screen.dart';
-import '../widgets/translated_text.dart';
+import '../providers/language_provider.dart'; // ✨ IMPORTANTE
 
 class BuildingDetailScreen extends StatefulWidget {
   final Building building;
@@ -111,7 +111,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                 context.loc.publication,
                 colores.primary,
                 colores,
-                isHighContrast, // ¡Pasamos la variable universal!
+                isHighContrast,
               ),
               const SizedBox(height: 12),
               _buildLegendItem(
@@ -190,6 +190,14 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
     final themeProvider = Provider.of<ThemeProvider>(context);
     final isHighContrast = themeProvider.isHighContrast;
 
+    // ✨ 1. Atrapamos el idioma actual UwU ✨
+    final langCode = context.watch<LanguageProvider>().currentLocale.languageCode;
+
+    // ✨ 2. Sacamos las listas traducidas ✨
+    final localPubs = building.getLocalizedPublications(langCode);
+    final localUses = building.getLocalizedUses(langCode);
+    final localDesc = building.getLocalizedDescription(langCode);
+
     String distanciaPorDefecto = getDistance(location, building);
 
     return Scaffold(
@@ -240,11 +248,11 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
 
                   const SizedBox(height: 20),
 
-                  if (building.publications.isNotEmpty)
+                  if (localPubs.isNotEmpty) // ✨
                     InkWell(
                       borderRadius: BorderRadius.circular(50),
                       onTap: () =>
-                          _openPublication(building.publications.first),
+                          _openPublication(localPubs.first), // ✨
                       child: Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 14,
@@ -272,7 +280,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                             const SizedBox(width: 8),
                             Flexible(
                               child: Text(
-                                building.publications.first,
+                                localPubs.first, // ✨ Título traducido
                                 style: TextStyle(
                                   color: isHighContrast
                                       ? colores.onSurface
@@ -349,10 +357,9 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                   SectionHeader(title: context.loc.description),
                   const SizedBox(height: 16),
 
-                  (building.description.isNotEmpty &&
-                          building.description != context.loc.noDescription)
-                      ? TranslatedText(
-                          text: building.description,
+                  (localDesc.isNotEmpty && localDesc != context.loc.noDescription)
+                      ? Text( // ✨ ¡Adios TranslatedText!
+                          localDesc,
                           textAlign: TextAlign.justify,
                           style: TextStyle(
                             fontSize: 16,
@@ -378,11 +385,11 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
 
                   const SizedBox(height: 16),
 
-                  if (building.uses.isNotEmpty)
+                  if (localUses.isNotEmpty) // ✨ Usos traducidos
                     _buildExpandableSection(
                       title: context.loc.uses,
                       icon: Icons.domain_rounded,
-                      items: building.uses,
+                      items: localUses, // ✨
                       colores: colores,
                       isHighContrast: isHighContrast,
                     ),
