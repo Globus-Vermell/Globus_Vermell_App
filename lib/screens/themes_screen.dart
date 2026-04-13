@@ -5,7 +5,7 @@ import '../entity/publication_entity.dart';
 import '../utils/lang_extensions.dart';
 import 'publication_detail_screen.dart';
 import '../providers/theme_provider.dart';
-import '../providers/language_provider.dart'; // ✨ IMPORTANTE
+import '../providers/language_provider.dart'; 
 
 class ThemesScreen extends StatelessWidget {
   const ThemesScreen({super.key});
@@ -13,10 +13,9 @@ class ThemesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
-    final isPureHighContrast =
-        themeProvider.isHighContrast && !themeProvider.isDarkMode;
+    final isPureHighContrast = themeProvider.isHighContrast && !themeProvider.isDarkMode;
 
-    // ✨ Atrapamos el idioma principal
+    // ✨ 1. Atrapamos el idioma actual de la app UwU ✨
     final langCode = context.watch<LanguageProvider>().currentLocale.languageCode;
 
     return Scaffold(
@@ -30,9 +29,7 @@ class ThemesScreen extends StatelessWidget {
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: isPureHighContrast
-                    ? Colors.black
-                    : Theme.of(context).appBarTheme.foregroundColor,
+                color: isPureHighContrast ? Colors.black : Theme.of(context).appBarTheme.foregroundColor,
               ),
             ),
           ],
@@ -42,20 +39,10 @@ class ThemesScreen extends StatelessWidget {
       body: Consumer<ThemesController>(
         builder: (context, controller, child) {
           if (controller.isLoading) {
-            return Center(
-              child: CircularProgressIndicator(
-                color: Theme.of(context).colorScheme.primary,
-              ),
-            );
+            return Center(child: CircularProgressIndicator(color: Theme.of(context).colorScheme.primary));
           }
-
           if (controller.hasError) {
-            return Center(
-              child: Text(
-                context.loc.connectionError,
-                style: TextStyle(color: Theme.of(context).colorScheme.error),
-              ),
-            );
+            return Center(child: Text(context.loc.connectionError, style: TextStyle(color: Theme.of(context).colorScheme.error)));
           }
 
           return ListView(
@@ -63,37 +50,18 @@ class ThemesScreen extends StatelessWidget {
             children: [
               _buildSectionHeader(context, context.loc.stages, Icons.timeline),
               const SizedBox(height: 12),
-              _buildPublicationList(
-                context,
-                controller.organizedData['etapes'] ?? [],
-                langCode, // ✨ Le pasamos el idioma a la lista
-              ),
+              // ✨ 2. Le pasamos el langCode a la lista UwU
+              _buildPublicationList(context, controller.organizedData['etapes'] ?? [], langCode),
               const SizedBox(height: 32),
 
-              _buildSectionHeader(
-                context,
-                context.loc.thematicArchitecture,
-                Icons.architecture,
-              ),
+              _buildSectionHeader(context, context.loc.thematicArchitecture, Icons.architecture),
               const SizedBox(height: 12),
-              _buildPublicationList(
-                context,
-                controller.organizedData['arquitectura tematica'] ?? [],
-                langCode, // ✨ 
-              ),
+              _buildPublicationList(context, controller.organizedData['arquitectura tematica'] ?? [], langCode),
               const SizedBox(height: 32),
 
-              _buildSectionHeader(
-                context,
-                context.loc.neighborhoods,
-                Icons.location_city,
-              ),
+              _buildSectionHeader(context, context.loc.neighborhoods, Icons.location_city),
               const SizedBox(height: 12),
-              _buildPublicationList(
-                context,
-                controller.organizedData['barris'] ?? [],
-                langCode, // ✨
-              ),
+              _buildPublicationList(context, controller.organizedData['barris'] ?? [], langCode),
               const SizedBox(height: 40),
             ],
           );
@@ -102,18 +70,10 @@ class ThemesScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSectionHeader(
-    BuildContext context,
-    String title,
-    IconData icon,
-  ) {
+  Widget _buildSectionHeader(BuildContext context, String title, IconData icon) {
     return Row(
       children: [
-        Icon(
-          icon,
-          size: 18,
-          color: Theme.of(context).colorScheme.onSurfaceVariant,
-        ),
+        Icon(icon, size: 18, color: Theme.of(context).colorScheme.onSurfaceVariant),
         const SizedBox(width: 8),
         Text(
           title,
@@ -128,7 +88,6 @@ class ThemesScreen extends StatelessWidget {
     );
   }
 
-  // ✨ Añadimos langCode a la función ✨
   Widget _buildPublicationList(BuildContext context, List<Publication> items, String langCode) {
     if (items.isEmpty) return _buildEmptyMessage(context);
 
@@ -139,8 +98,6 @@ class ThemesScreen extends StatelessWidget {
       separatorBuilder: (context, index) => const SizedBox(height: 16),
       itemBuilder: (context, index) {
         final item = items[index];
-        
-        // ✨ Extraemos la data traducida de cada item UwU
         final localTitle = item.getLocalizedTitle(langCode);
         final localDesc = item.getLocalizedDescription(langCode);
 
@@ -148,19 +105,9 @@ class ThemesScreen extends StatelessWidget {
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: Theme.of(
-                context,
-              ).colorScheme.outline.withValues(alpha: 0.2),
-            ),
+            border: Border.all(color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2)),
             boxShadow: [
-              BoxShadow(
-                color: Theme.of(
-                  context,
-                ).colorScheme.shadow.withValues(alpha: 0.04),
-                blurRadius: 12,
-                offset: const Offset(0, 4),
-              ),
+              BoxShadow(color: Theme.of(context).colorScheme.shadow.withValues(alpha: 0.04), blurRadius: 12, offset: const Offset(0, 4)),
             ],
           ),
           child: Material(
@@ -168,13 +115,7 @@ class ThemesScreen extends StatelessWidget {
             child: InkWell(
               borderRadius: BorderRadius.circular(16),
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        PublicationDetailScreen(publication: item),
-                  ),
-                );
+                Navigator.push(context, MaterialPageRoute(builder: (context) => PublicationDetailScreen(publication: item)));
               },
               child: Padding(
                 padding: const EdgeInsets.all(16),
@@ -186,51 +127,25 @@ class ThemesScreen extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Text(
-                            localTitle, // ✨ Título traducido
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 17,
-                              color: Theme.of(context).colorScheme.onSurface,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 4,
+                            localTitle, 
+                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17, color: Theme.of(context).colorScheme.onSurface),
                           ),
                         ),
                       ],
                     ),
                     const SizedBox(height: 8),
-                    Text( // ✨ Adiós TranslatedText
-                      localDesc,
+                    Text(
+                      localDesc, 
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        fontSize: 14,
-                        height: 1.4,
-                      ),
+                      style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant, fontSize: 14, height: 1.4),
                     ),
                     const SizedBox(height: 12),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Text(
-                          context.loc.viewMore,
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 13,
-                          ),
-                        ),
-                        Icon(
-                          Icons.chevron_right,
-                          size: 18,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
+                        Text(context.loc.viewMore, style: TextStyle(color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.bold, fontSize: 13)),
+                        Icon(Icons.chevron_right, size: 18, color: Theme.of(context).colorScheme.primary),
                       ],
                     ),
                   ],
@@ -250,20 +165,10 @@ class ThemesScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.1),
-          style: BorderStyle.none,
-        ),
+        border: Border.all(color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.1), style: BorderStyle.none),
       ),
       child: Center(
-        child: Text(
-          context.loc.noPublicationsAvailable,
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.onSurfaceVariant,
-            fontSize: 14,
-            fontStyle: FontStyle.italic,
-          ),
-        ),
+        child: Text(context.loc.noPublicationsAvailable, style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant, fontSize: 14, fontStyle: FontStyle.italic)),
       ),
     );
   }

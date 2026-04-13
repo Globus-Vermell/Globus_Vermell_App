@@ -13,6 +13,7 @@ import 'building_detail_screen.dart';
 import 'publication_detail_screen.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import '../providers/language_provider.dart';
 
 class BuildingsListScreen extends StatefulWidget {
   const BuildingsListScreen({super.key});
@@ -209,6 +210,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
 
     final themeProvider = Provider.of<ThemeProvider>(context);
     final isHighContrast = themeProvider.isHighContrast;
+    final langCode = context.watch<LanguageProvider>().currentLocale.languageCode;
 
     return Scaffold(
       backgroundColor: colores.surface,
@@ -370,6 +372,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                                   controller,
                                   colores,
                                   isHighContrast,
+                                  langCode,
                                 );
                               },
                               colores: colores,
@@ -442,6 +445,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
     BuildingListController controller,
     ColorScheme colores,
     bool isHighContrast,
+    String langCode, 
   ) {
     showGeneralDialog(
       context: context,
@@ -487,7 +491,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                         final pub = controller.publicationsFilter[index];
                         return ListTile(
                           title: Text(
-                            pub.title,
+                            pub.getLocalizedTitle(langCode),
                             style: TextStyle(
                               fontSize: 14,
                               color: isHighContrast
