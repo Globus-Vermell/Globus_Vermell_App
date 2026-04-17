@@ -17,7 +17,6 @@ Future<void> initializeBackgroundService() async {
     'Servicio de Ubicación',
     description: 'Este canal se usa para rastrear edificios en segundo plano.',
     importance: Importance.low,
-
   );
 
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -133,7 +132,7 @@ Future<void> _processProximity({
 
         await notificationsPlugin.show(
           id: building.idBuilding,
-          title: '¡Estás cerca de ${building.name}!',
+          title: 'Estás cerca de ${building.name}',
           body: 'Estoy probando esto',
           payload: building.idBuilding.toString(),
           notificationDetails: NotificationDetails(android: androidDetails),
