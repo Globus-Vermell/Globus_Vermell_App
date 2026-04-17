@@ -52,18 +52,12 @@ class BuildingMapView extends StatelessWidget {
       ),
       style: isDarkMode ? mapStyleDark : null,
       onMapCreated: onMapCreated,
+      myLocationEnabled: true, 
+      myLocationButtonEnabled: false, 
+      mapToolbarEnabled: false,
+      zoomControlsEnabled: false,
+      compassEnabled: false,
       markers: {
-        if (controller.location.latitude != 0)
-          Marker(
-            markerId: const MarkerId('yo'),
-            position: LatLng(
-              controller.location.latitude,
-              controller.location.longitude,
-            ),
-            icon: iconoYo,
-            infoWindow: InfoWindow(title: context.loc.me),
-          ),
-
         ...controller.filteredBuildings
             .where((e) => e.latitude != 0 && e.longitude != 0)
             .map((edificio) {
