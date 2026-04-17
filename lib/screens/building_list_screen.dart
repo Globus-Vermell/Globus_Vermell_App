@@ -210,7 +210,10 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
 
     final themeProvider = Provider.of<ThemeProvider>(context);
     final isHighContrast = themeProvider.isHighContrast;
-    final langCode = context.watch<LanguageProvider>().currentLocale.languageCode;
+    final langCode = context
+        .watch<LanguageProvider>()
+        .currentLocale
+        .languageCode;
 
     return Scaffold(
       backgroundColor: colores.surface,
@@ -445,7 +448,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
     BuildingListController controller,
     ColorScheme colores,
     bool isHighContrast,
-    String langCode, 
+    String langCode,
   ) {
     showGeneralDialog(
       context: context,

@@ -191,7 +191,10 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
     final isHighContrast = themeProvider.isHighContrast;
 
     // ✨ 1. Atrapamos el idioma actual UwU ✨
-    final langCode = context.watch<LanguageProvider>().currentLocale.languageCode;
+    final langCode = context
+        .watch<LanguageProvider>()
+        .currentLocale
+        .languageCode;
 
     // ✨ 2. Sacamos las listas traducidas ✨
     final localPubs = building.getLocalizedPublications(langCode);
@@ -251,8 +254,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                   if (localPubs.isNotEmpty) // ✨
                     InkWell(
                       borderRadius: BorderRadius.circular(50),
-                      onTap: () =>
-                          _openPublication(localPubs.first), // ✨
+                      onTap: () => _openPublication(localPubs.first), // ✨
                       child: Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 14,
@@ -357,8 +359,10 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                   SectionHeader(title: context.loc.description),
                   const SizedBox(height: 16),
 
-                  (localDesc.isNotEmpty && localDesc != context.loc.noDescription)
-                      ? Text( // ✨ ¡Adios TranslatedText!
+                  (localDesc.isNotEmpty &&
+                          localDesc != context.loc.noDescription)
+                      ? Text(
+                          // ✨ ¡Adios TranslatedText!
                           localDesc,
                           textAlign: TextAlign.justify,
                           style: TextStyle(

@@ -37,7 +37,7 @@ class Publication {
     required this.publicationEdition,
   });
 
-  // Traductores de Publicaciones 
+  // Traductores de Publicaciones
   String getLocalizedTitle(String langCode) {
     if (langCode == 'es' && titleEs?.isNotEmpty == true) return titleEs!;
     if (langCode == 'en' && titleEn?.isNotEmpty == true) return titleEn!;
@@ -47,10 +47,18 @@ class Publication {
   }
 
   String getLocalizedDescription(String langCode) {
-    if (langCode == 'es' && descriptionEs?.isNotEmpty == true) return descriptionEs!;
-    if (langCode == 'en' && descriptionEn?.isNotEmpty == true) return descriptionEn!;
-    if (langCode == 'fr' && descriptionFr?.isNotEmpty == true) return descriptionFr!;
-    if (langCode == 'ar' && descriptionAr?.isNotEmpty == true) return descriptionAr!;
+    if (langCode == 'es' && descriptionEs?.isNotEmpty == true) {
+      return descriptionEs!;
+    }
+    if (langCode == 'en' && descriptionEn?.isNotEmpty == true) {
+      return descriptionEn!;
+    }
+    if (langCode == 'fr' && descriptionFr?.isNotEmpty == true) {
+      return descriptionFr!;
+    }
+    if (langCode == 'ar' && descriptionAr?.isNotEmpty == true) {
+      return descriptionAr!;
+    }
     return description;
   }
 }

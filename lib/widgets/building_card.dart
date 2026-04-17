@@ -25,7 +25,10 @@ class BuildingCard extends StatelessWidget {
     final colores = Theme.of(context).colorScheme;
 
     // ✨ Atrapamos el idioma y la publicación traducida UwU
-    final langCode = context.watch<LanguageProvider>().currentLocale.languageCode;
+    final langCode = context
+        .watch<LanguageProvider>()
+        .currentLocale
+        .languageCode;
     final localPubs = building.getLocalizedPublications(langCode);
 
     return Card(
@@ -121,8 +124,10 @@ class BuildingCard extends StatelessWidget {
                         ),
                         const SizedBox(width: 4),
                         Expanded(
-                          child: (localPubs.isNotEmpty) // ✨ Usamos la traducida
-                              ? Text( // ✨ Adios TranslatedText
+                          child:
+                              (localPubs.isNotEmpty) // ✨ Usamos la traducida
+                              ? Text(
+                                  // ✨ Adios TranslatedText
                                   localPubs.first,
                                   style: TextStyle(
                                     fontSize: 13,

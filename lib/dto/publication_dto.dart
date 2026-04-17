@@ -29,13 +29,13 @@ class PublicationDto with _$PublicationDto {
       titleEn: map['title_en']?.toString(),
       titleFr: map['title_fr']?.toString(),
       titleAr: map['title_ar']?.toString(),
-      
+
       description: map['description']?.toString() ?? '',
       descriptionEs: map['description_es']?.toString(),
       descriptionEn: map['description_en']?.toString(),
       descriptionFr: map['description_fr']?.toString(),
       descriptionAr: map['description_ar']?.toString(),
-      
+
       themes: JsonHelper.parseStringOrList(map['themes']),
       publicationEdition: map['publication_edition']?.toString() ?? '',
     );

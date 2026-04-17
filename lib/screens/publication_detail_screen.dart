@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart'; 
+import 'package:provider/provider.dart';
 import '../entity/publication_entity.dart';
 import '../utils/lang_extensions.dart';
 import '../widgets/info_chip.dart';
 import '../widgets/section_header.dart';
-import '../providers/language_provider.dart'; 
+import '../providers/language_provider.dart';
 
 class PublicationDetailScreen extends StatelessWidget {
   final Publication publication;
@@ -13,7 +13,10 @@ class PublicationDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final langCode = context.watch<LanguageProvider>().currentLocale.languageCode;
+    final langCode = context
+        .watch<LanguageProvider>()
+        .currentLocale
+        .languageCode;
     final localTitle = publication.getLocalizedTitle(langCode);
     final localDesc = publication.getLocalizedDescription(langCode);
 
@@ -23,7 +26,10 @@ class PublicationDetailScreen extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.surface,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_rounded, color: Theme.of(context).colorScheme.onSurface),
+          icon: Icon(
+            Icons.arrow_back_rounded,
+            color: Theme.of(context).colorScheme.onSurface,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -36,18 +42,32 @@ class PublicationDetailScreen extends StatelessWidget {
               Text(
                 localTitle,
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 34, fontWeight: FontWeight.w900, height: 1.2, color: Theme.of(context).colorScheme.onSurface),
+                style: TextStyle(
+                  fontSize: 34,
+                  fontWeight: FontWeight.w900,
+                  height: 1.2,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
               ),
               const SizedBox(height: 16),
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.bookmark_outline_rounded, color: Theme.of(context).colorScheme.onSurface, size: 18),
+                  Icon(
+                    Icons.bookmark_outline_rounded,
+                    color: Theme.of(context).colorScheme.onSurface,
+                    size: 18,
+                  ),
                 ],
               ),
               const SizedBox(height: 24),
-              Divider(color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2), thickness: 1),
+              Divider(
+                color: Theme.of(
+                  context,
+                ).colorScheme.outline.withValues(alpha: 0.2),
+                thickness: 1,
+              ),
               const SizedBox(height: 32),
 
               Align(
@@ -55,21 +75,24 @@ class PublicationDetailScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (publication.themes.isNotEmpty && 
-                        publication.themes != '{}' && 
+                    if (publication.themes.isNotEmpty &&
+                        publication.themes != '{}' &&
                         publication.themes != '[]') ...[
                       SectionHeader(title: context.loc.themesTitle),
                       const SizedBox(height: 16),
                       Wrap(
                         spacing: 10,
                         runSpacing: 10,
-                        children: publication.themes.split(',').map((tema) => 
-                          InfoChip(
-                            icon: Icons.label_important_rounded, 
-                            label: tema.trim(), 
-                            color: Theme.of(context).colorScheme.primary
-                          )
-                        ).toList(),
+                        children: publication.themes
+                            .split(',')
+                            .map(
+                              (tema) => InfoChip(
+                                icon: Icons.label_important_rounded,
+                                label: tema.trim(),
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                            )
+                            .toList(),
                       ),
                       const SizedBox(height: 40),
                     ],
@@ -79,22 +102,43 @@ class PublicationDetailScreen extends StatelessWidget {
 
                     (localDesc.isNotEmpty)
                         ? Text(
-                            localDesc, 
+                            localDesc,
                             textAlign: TextAlign.justify,
-                            style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.onSurface, height: 1.6),
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Theme.of(context).colorScheme.onSurface,
+                              height: 1.6,
+                            ),
                           )
                         : Container(
                             width: double.infinity,
                             padding: const EdgeInsets.all(24),
                             decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.05),
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.outline.withValues(alpha: 0.05),
                               borderRadius: BorderRadius.circular(16),
                             ),
                             child: Column(
                               children: [
-                                Icon(Icons.description_outlined, size: 40, color: Theme.of(context).colorScheme.onSurfaceVariant.withValues(alpha: 0.5)),
+                                Icon(
+                                  Icons.description_outlined,
+                                  size: 40,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurfaceVariant
+                                      .withValues(alpha: 0.5),
+                                ),
                                 const SizedBox(height: 12),
-                                Text(context.loc.noDescription, style: TextStyle(color: Theme.of(context).colorScheme.onSurface, fontStyle: FontStyle.italic)),
+                                Text(
+                                  context.loc.noDescription,
+                                  style: TextStyle(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurface,
+                                    fontStyle: FontStyle.italic,
+                                  ),
+                                ),
                               ],
                             ),
                           ),

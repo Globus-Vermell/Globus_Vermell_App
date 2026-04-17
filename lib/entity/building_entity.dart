@@ -9,7 +9,7 @@ class Building {
   final String name;
   final String location;
   final int constructionYear;
-  
+
   final String description;
   final String? descriptionEs;
   final String? descriptionEn;
@@ -28,7 +28,7 @@ class Building {
   final List<String> architects;
   final List<String> reforms;
   final List<String> prizes;
-  
+
   final List<String> publications;
   final List<String>? publicationsEs;
   final List<String>? publicationsEn;
@@ -79,10 +79,18 @@ class Building {
 
   // ✨ Robotitos Traductores de Edificios UwU ✨
   String getLocalizedDescription(String langCode) {
-    if (langCode == 'es' && descriptionEs?.isNotEmpty == true) return descriptionEs!;
-    if (langCode == 'en' && descriptionEn?.isNotEmpty == true) return descriptionEn!;
-    if (langCode == 'fr' && descriptionFr?.isNotEmpty == true) return descriptionFr!;
-    if (langCode == 'ar' && descriptionAr?.isNotEmpty == true) return descriptionAr!;
+    if (langCode == 'es' && descriptionEs?.isNotEmpty == true) {
+      return descriptionEs!;
+    }
+    if (langCode == 'en' && descriptionEn?.isNotEmpty == true) {
+      return descriptionEn!;
+    }
+    if (langCode == 'fr' && descriptionFr?.isNotEmpty == true) {
+      return descriptionFr!;
+    }
+    if (langCode == 'ar' && descriptionAr?.isNotEmpty == true) {
+      return descriptionAr!;
+    }
     return description;
   }
 
@@ -95,10 +103,18 @@ class Building {
   }
 
   List<String> getLocalizedPublications(String langCode) {
-    if (langCode == 'es' && publicationsEs?.isNotEmpty == true) return publicationsEs!;
-    if (langCode == 'en' && publicationsEn?.isNotEmpty == true) return publicationsEn!;
-    if (langCode == 'fr' && publicationsFr?.isNotEmpty == true) return publicationsFr!;
-    if (langCode == 'ar' && publicationsAr?.isNotEmpty == true) return publicationsAr!;
+    if (langCode == 'es' && publicationsEs?.isNotEmpty == true) {
+      return publicationsEs!;
+    }
+    if (langCode == 'en' && publicationsEn?.isNotEmpty == true) {
+      return publicationsEn!;
+    }
+    if (langCode == 'fr' && publicationsFr?.isNotEmpty == true) {
+      return publicationsFr!;
+    }
+    if (langCode == 'ar' && publicationsAr?.isNotEmpty == true) {
+      return publicationsAr!;
+    }
     return publications;
   }
 }
