@@ -213,44 +213,34 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
   }
 
   // Función para la barra de búsqueda para acercar a la edifiación deseada
-  void _ajustarMapaBusqueda(
-    List<Building> edificios,
-    LatLng userLocation, {
-    bool isClear = false,
-  }) {
+  void _ajustarMapaBusqueda(List<Building> edificios, LatLng userLocation, {bool isClear = false}) {
     if (_googleMapController == null || _listView) return;
 
-    // Si borramos búsqueda o no hay resultados, priorizamos ubicación del usuario
     if (isClear || edificios.isEmpty) {
       if (userLocation.latitude != 0 && userLocation.longitude != 0) {
         _googleMapController!.animateCamera(
           CameraUpdate.newLatLngZoom(userLocation, AppConstants.detailMapZoom),
         );
       } else {
-        // Fallback al centro de Barcelona si no hay GPS
         _googleMapController!.animateCamera(
-          CameraUpdate.newLatLngZoom(const LatLng(41.3851, 2.1734), 12.25),
+          CameraUpdate.newLatLngZoom(const LatLng(41.3851, 2.1734), 13.0),
         );
       }
       return;
     }
 
-    if (edificios.length == 1) {
-      // Si solo hay uno, hacemos zoom súper cerquita
+    // ✨ Filtramos a los edificios rebeldes sin coordenadas UwU ✨
+    final validBuildings = edificios.where((b) => b.latitude != 0 && b.longitude != 0).toList();
+    if (validBuildings.isEmpty) return;
+
+    if (validBuildings.length == 1) {
       _googleMapController!.animateCamera(
         CameraUpdate.newLatLngZoom(
-          LatLng(edificios.first.latitude, edificios.first.longitude),
+          LatLng(validBuildings.first.latitude, validBuildings.first.longitude),
           AppConstants.detailMapZoom,
         ),
       );
     } else {
-      // Filtramos edificios con coordenadas "0.0" (por si acaso hay alguno vacío)
-      final validBuildings = edificios
-          .where((b) => b.latitude != 0 && b.longitude != 0)
-          .toList();
-
-      if (validBuildings.isEmpty) return;
-
       double minLat = validBuildings.first.latitude;
       double maxLat = validBuildings.first.latitude;
       double minLng = validBuildings.first.longitude;
@@ -279,21 +269,195 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
       );
 
       _googleMapController!.animateCamera(
-        CameraUpdate.newLatLngBounds(bounds, 50.0),
+        CameraUpdate.newLatLngBounds(bounds, 50.0), 
       );
     }
+  }
+
+  Widget _buildFloatingUI(
+    ColorScheme colores, 
+    bool isHighContrast, 
+    String langCode, 
+    BuildingListController controller,
+    LatLng userPos // <--- ¡AQUÍ ESTÁ!
+  ) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0, bottom: 8.0),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: _searchController,
+                  textInputAction: TextInputAction.search,
+                  onChanged: (value) {
+                    controller.setSearchQuery(value);
+                    setState(() {}); 
+                    
+                    if (_debounceSearch?.isActive ?? false) {
+                      _debounceSearch!.cancel();
+                    }
+                    
+                    _debounceSearch = Timer(const Duration(milliseconds: 600), () {
+                      if (mounted && !_listView) {
+                        _ajustarMapaBusqueda(controller.filteredBuildings, userPos);
+                      }
+                    });
+                  },
+                  onSubmitted: (value) {
+                    if (_debounceSearch?.isActive ?? false) _debounceSearch!.cancel();
+                    if (mounted && !_listView) {
+                      _ajustarMapaBusqueda(controller.filteredBuildings, userPos);
+                    }
+                  },
+                  style: TextStyle(
+                    color: isHighContrast ? colores.onSurface : colores.onSurface,
+                    fontWeight: isHighContrast ? FontWeight.bold : FontWeight.normal,
+                  ),
+                  cursorColor: isHighContrast ? colores.onSurface : colores.primary,
+                  decoration: InputDecoration(
+                    hintText: '${context.loc.searchBuilding}...',
+                    hintStyle: TextStyle(
+                      color: isHighContrast ? colores.onSurface.withValues(alpha: 0.6) : colores.onSurfaceVariant,
+                      fontWeight: isHighContrast ? FontWeight.w600 : FontWeight.normal,
+                    ),
+                    prefixIcon: Icon(
+                      Icons.search,
+                      color: isHighContrast ? colores.onSurface : colores.primary,
+                    ),
+                    suffixIcon: _searchController.text.isNotEmpty 
+                      ? IconButton(
+                          icon: Icon(Icons.clear_rounded, color: isHighContrast ? colores.onSurface : colores.onSurfaceVariant),
+                          onPressed: () {
+                            _searchController.clear();
+                            controller.setSearchQuery('');
+                            FocusScope.of(context).unfocus();
+                            setState(() {});
+
+                            if (_debounceSearch?.isActive ?? false) _debounceSearch!.cancel();
+                            if (mounted && !_listView) {
+                              // ✨ Al borrar, le decimos que vuelva al usuario UwU ✨
+                              _ajustarMapaBusqueda(controller.filteredBuildings, userPos, isClear: true);
+                            }
+                          },
+                        ) 
+                      : null,
+                    filled: true,
+                    fillColor: isHighContrast
+                        ? colores.surface
+                        : colores.surfaceContainerHighest.withValues(alpha: 1),
+                    contentPadding: const EdgeInsets.symmetric(vertical: 0),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30),
+                      borderSide: isHighContrast
+                          ? BorderSide(color: colores.onSurface, width: 2.0)
+                          : const BorderSide(color: Colors.transparent),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30),
+                      borderSide: isHighContrast
+                          ? BorderSide(color: colores.onSurface, width: 3.0)
+                          : BorderSide(color: colores.primary, width: 2.0),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              _buildFilterToggle(colores, isHighContrast),
+            ],
+          ),
+        ),
+        AnimatedSize(
+          duration: const Duration(milliseconds: 400),
+          curve: Curves.easeOutQuart,
+          child: _isFiltersExpanded
+              ? Padding(
+                  padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 12.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: _buildFilter(
+                          texto: context.loc.all,
+                          isSelected: controller.currentMode == SearchMode.all,
+                          onTap: () {
+                            _filterByPublication(0);
+                            Future.delayed(const Duration(milliseconds: 300), () {
+                              // ✨ Al quitar filtros, vuelve al usuario si no hay búsqueda ✨
+                              if (mounted && !_listView) {
+                                _ajustarMapaBusqueda(controller.filteredBuildings, userPos, isClear: _searchController.text.isEmpty);
+                              }
+                            });
+                          },
+                          colores: colores,
+                          isHighContrast: isHighContrast,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        flex: 2,
+                        child: _buildFilter(
+                          texto: context.loc.publications,
+                          icono: Icons.keyboard_arrow_down_rounded,
+                          isSelected: controller.currentMode == SearchMode.publication,
+                          // ✨ Pasamos userPos también aquí UwU ✨
+                          onTap: () => _showPublicationsMenu(controller, colores, isHighContrast, langCode, userPos),
+                          colores: colores,
+                          isHighContrast: isHighContrast,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        flex: 2,
+                        child: _buildFilter(
+                          texto: context.loc.nearby,
+                          icono: Icons.location_on_outlined,
+                          isSelected: controller.currentMode == SearchMode.nearby,
+                          onTap: () => _onNearbyButtonPressed(),
+                          colores: colores,
+                          isHighContrast: isHighContrast,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : const SizedBox.shrink(),
+        ),
+        
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
+              decoration: BoxDecoration(
+                color: isHighContrast ? colores.surface : colores.surface.withValues(alpha: 1),
+                borderRadius: BorderRadius.circular(20),
+                border: isHighContrast ? Border.all(color: colores.onSurface, width: 2) : null,
+              ),
+              child: Text(
+                '${controller.filteredBuildings.length} ${context.loc.buildingsByDistance}',
+                style: TextStyle(
+                  fontSize: 13,
+                  color: isHighContrast ? colores.onSurface : colores.onSurfaceVariant,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 8), 
+      ],
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final colores = Theme.of(context).colorScheme;
-
     final themeProvider = Provider.of<ThemeProvider>(context);
     final isHighContrast = themeProvider.isHighContrast;
-    final langCode = context
-        .watch<LanguageProvider>()
-        .currentLocale
-        .languageCode;
+    final langCode = context.watch<LanguageProvider>().currentLocale.languageCode;
 
     return Scaffold(
       backgroundColor: colores.surface,
@@ -375,279 +539,53 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
           Expanded(
             child: Consumer<BuildingListController>(
               builder: (context, controller, child) {
-                final userPos = LatLng(
-                  controller.location.latitude,
-                  controller.location.longitude,
-                );
-                return Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: 8.0,
-                        right: 8.0,
-                        top: 8.0,
-                        bottom: 8.0,
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: TextField(
-                              controller: _searchController,
-                              textInputAction: TextInputAction.search,
-                              onChanged: (value) {
-                                controller.setSearchQuery(value);
-                                setState(() {}); // Mostramos la X al instante
+                final userPos = LatLng(controller.location.latitude, controller.location.longitude);
 
-                                // Cancelamos el temporizador anterior si sigue escribiendo
-                                if (_debounceSearch?.isActive ?? false) {
-                                  _debounceSearch!.cancel();
-                                }
-
-                                // Creamos un nuevo temporizador de 600 milisegundos
-                                _debounceSearch = Timer(
-                                  const Duration(milliseconds: 600),
-                                  () {
-                                    if (mounted && !_listView) {
-                                      _ajustarMapaBusqueda(
-                                        controller.filteredBuildings,
-                                        userPos,
-                                      );
-                                    }
-                                  },
-                                );
-                              },
-                              onSubmitted: (value) {
-                                // Si el usuario le da a "Buscar" en su teclado, vuela al instante
-                                if (_debounceSearch?.isActive ?? false)
-                                  _debounceSearch!.cancel();
-                                if (mounted && !_listView) {
-                                  _ajustarMapaBusqueda(
-                                    controller.filteredBuildings,
-                                    userPos,
-                                  );
-                                }
-                              },
-                              style: TextStyle(
-                                color: isHighContrast
-                                    ? colores.onSurface
-                                    : colores.onSurface,
-                                fontWeight: isHighContrast
-                                    ? FontWeight.bold
-                                    : FontWeight.normal,
-                              ),
-                              cursorColor: isHighContrast
-                                  ? colores.onSurface
-                                  : colores.primary,
-                              decoration: InputDecoration(
-                                hintText: '${context.loc.searchBuilding}...',
-                                hintStyle: TextStyle(
-                                  color: isHighContrast
-                                      ? colores.onSurface.withValues(alpha: 0.6)
-                                      : colores.onSurfaceVariant,
-                                  fontWeight: isHighContrast
-                                      ? FontWeight.w600
-                                      : FontWeight.normal,
-                                ),
-                                prefixIcon: Icon(
-                                  Icons.search,
-                                  color: isHighContrast
-                                      ? colores.onSurface
-                                      : colores.primary,
-                                ),
-                                // Limpiar texto si hay algo escrito
-                                suffixIcon: _searchController.text.isNotEmpty
-                                    ? IconButton(
-                                        icon: Icon(
-                                          Icons.clear_rounded,
-                                          color: isHighContrast
-                                              ? colores.onSurface
-                                              : colores.onSurfaceVariant,
-                                        ),
-                                        onPressed: () {
-                                          _searchController.clear();
-                                          controller.setSearchQuery('');
-                                          FocusScope.of(context).unfocus();
-                                          setState(() {});
-
-                                          if (_debounceSearch?.isActive ??
-                                              false)
-                                            _debounceSearch!.cancel();
-                                          if (mounted && !_listView) {
-                                            // Le pasamos isClear: true para que vuelva a Barcelona
-                                            _ajustarMapaBusqueda(
-                                              controller.filteredBuildings,
-                                              userPos,
-                                              isClear: true,
-                                            );
-                                          }
-                                        },
-                                      )
-                                    : null,
-                                filled: true,
-                                fillColor: isHighContrast
-                                    ? colores.surface
-                                    : colores.surfaceContainerHighest
-                                          .withValues(alpha: 0.3),
-                                contentPadding: const EdgeInsets.symmetric(
-                                  vertical: 0,
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(30),
-                                  borderSide: isHighContrast
-                                      ? BorderSide(
-                                          color: colores.onSurface,
-                                          width: 2.0,
-                                        )
-                                      : const BorderSide(
-                                          color: Colors.transparent,
-                                        ),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(30),
-                                  borderSide: isHighContrast
-                                      ? BorderSide(
-                                          color: colores.onSurface,
-                                          width: 3.0,
-                                        )
-                                      : BorderSide(
-                                          color: colores.primary,
-                                          width: 2.0,
-                                        ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          _buildFilterToggle(colores, isHighContrast),
-                        ],
-                      ),
-                    ),
-                    AnimatedSize(
-                      duration: const Duration(
-                        milliseconds: 400,
-                      ), // Un poquito más lento para que sea más elegante
-                      curve: Curves.easeOutQuart,
-                      child: _isFiltersExpanded
-                          ? Padding(
-                              padding: const EdgeInsets.only(
-                                left: 16.0,
-                                right: 16.0,
-                                bottom: 12.0,
-                              ),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: _buildFilter(
-                                      texto: context.loc.all,
-                                      isSelected:
-                                          controller.currentMode ==
-                                          SearchMode.all,
-                                      onTap: () {
-                                        _filterByPublication(0);
-                                        // Que el mapa se ajuste cuando limpies los filtros
-                                        Future.delayed(
-                                          const Duration(milliseconds: 300),
-                                          () {
-                                            if (mounted && !_listView)
-                                              _ajustarMapaBusqueda(
-                                                controller.filteredBuildings,
-                                                userPos,
-                                              );
-                                          },
-                                        );
-                                      },
-                                      colores: colores,
-                                      isHighContrast: isHighContrast,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Expanded(
-                                    flex: 2,
-                                    child: _buildFilter(
-                                      texto: context.loc.publications,
-                                      icono: Icons.keyboard_arrow_down_rounded,
-                                      isSelected:
-                                          controller.currentMode ==
-                                          SearchMode.publication,
-                                      onTap: () => _showPublicationsMenu(
-                                        controller,
-                                        colores,
-                                        isHighContrast,
-                                        langCode,
-                                        userPos,
-                                      ),
-                                      colores: colores,
-                                      isHighContrast: isHighContrast,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Expanded(
-                                    flex: 2,
-                                    child: _buildFilter(
-                                      texto: context.loc.nearby,
-                                      icono: Icons.location_on_outlined,
-                                      isSelected:
-                                          controller.currentMode ==
-                                          SearchMode.nearby,
-                                      onTap: () => _onNearbyButtonPressed(),
-                                      colores: colores,
-                                      isHighContrast: isHighContrast,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
-                          : const SizedBox.shrink(),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          '${controller.filteredBuildings.length} ${context.loc.buildingsByDistance}',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: colores.onSurfaceVariant,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    Expanded(
-                      child: AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 350),
-                        switchInCurve: Curves.easeIn,
-                        switchOutCurve: Curves.easeOut,
-                        transitionBuilder:
-                            (Widget child, Animation<double> animation) {
-                              return FadeTransition(
-                                opacity: animation,
-                                child: child,
-                              );
-                            },
-                        child: _listView
-                            ? BuildingListView(
-                                key: const ValueKey('ListaEdificios'),
+                return AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 350),
+                  switchInCurve: Curves.easeIn,
+                  switchOutCurve: Curves.easeOut,
+                  transitionBuilder: (Widget child, Animation<double> animation) {
+                    return FadeTransition(opacity: animation, child: child);
+                  },
+                  child: _listView
+                      ? Column(
+                          key: const ValueKey('ListaLayout'),
+                          children: [
+                            // ✨ AJUSTE 3: Pasamos userPos a la UI ✨
+                            _buildFloatingUI(colores, isHighContrast, langCode, controller, userPos),
+                            Expanded(
+                              child: BuildingListView(
                                 controller: controller,
                                 scrollController: _scrollController,
                                 onNavigateToDetail: _navegarADetalle,
-                              )
-                            : BuildingMapView(
-                                key: const ValueKey('MapaEdificios'),
+                              ),
+                            ),
+                          ],
+                        )
+                      : Stack(
+                          key: const ValueKey('MapaLayout'),
+                          children: [
+                            Positioned.fill(
+                              child: BuildingMapView(
                                 controller: controller,
                                 mapStyleDark: _mapStyleDark,
                                 iconoYo: _iconoYo,
                                 iconoEdificio: _iconoEdificio,
-                                onMapCreated:
-                                    (GoogleMapController googleController) {
-                                      _googleMapController = googleController;
-                                    },
+                                onMapCreated: (GoogleMapController googleController) {
+                                  _googleMapController = googleController;
+                                },
                                 onNavigateToDetail: _navegarADetalle,
                               ),
-                      ),
-                    ),
-                  ],
+                            ),
+                            Positioned(
+                              top: 0,
+                              left: 0,
+                              right: 0,
+                              child: _buildFloatingUI(colores, isHighContrast, langCode, controller, userPos),
+                            ),
+                          ],
+                        ),
                 );
               },
             ),
@@ -719,17 +657,9 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                           onTap: () {
                             Navigator.pop(context);
                             _filterByPublication(pub.idPublication);
-                            // También hacemos que el mapa viaje al elegir publicación
-                            Future.delayed(
-                              const Duration(milliseconds: 300),
-                              () {
-                                if (mounted && !_listView)
-                                  _ajustarMapaBusqueda(
-                                    controller.filteredBuildings,
-                                    userPos,
-                                  );
-                              },
-                            );
+                            Future.delayed(const Duration(milliseconds: 300), () {
+                              if (mounted && !_listView) _ajustarMapaBusqueda(controller.filteredBuildings, userPos);
+                            });
                           },
                           trailing: IconButton(
                             icon: Icon(
@@ -813,7 +743,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
         ? colores.surface
         : (isSelected
               ? colores.primary
-              : colores.surfaceContainerHighest.withValues(alpha: 0.3));
+              : colores.surfaceContainerHighest.withValues(alpha: 1));
     final textColor = isHighContrast
         ? colores.onSurface
         : (isSelected ? colores.onPrimary : colores.primary);
