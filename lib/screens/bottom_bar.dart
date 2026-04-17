@@ -1,6 +1,14 @@
+// ignore_for_file: avoid-passing-async-when-sync-expected
+
 import 'package:flutter/material.dart';
 import 'package:globus_vermell_app/screens/settings_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_background_service/flutter_background_service.dart';
+import 'package:isar/isar.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import '../entity/building_entity.dart';
+import '../utils/service_locator.dart';
+import 'building_detail_screen.dart';
 import '../controller/themes_controller.dart';
 import '../providers/theme_provider.dart';
 import '../controller/building_list_controller.dart';
@@ -10,13 +18,40 @@ import 'themes_screen.dart';
 
 class BottomBar extends StatefulWidget {
   const BottomBar({super.key});
-
   @override
   State<BottomBar> createState() => BottomBarState();
 }
 
 class BottomBarState extends State<BottomBar> {
   int _selectedIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _listenToBackgroundEvents();
+  }
+
+  void _listenToBackgroundEvents() {
+    FlutterBackgroundService().on('open_building').listen((event) async {
+      if (event != null && event['id'] != null) {
+        final int buildingId = event['id'];
+        final isar = getIt<Isar>();
+        final building = await isar.buildings.get(buildingId);
+        if (building != null && mounted) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => BuildingDetailScreen(
+                building: building,
+                location: const LatLng(0, 0),
+              ),
+            ),
+          );
+        }
+      }
+    });
+  }
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -38,7 +73,6 @@ class BottomBarState extends State<BottomBar> {
   @override
   Widget build(BuildContext context) {
     final colores = Theme.of(context).colorScheme;
-
     final themeProvider = Provider.of<ThemeProvider>(context);
     final isHighContrast = themeProvider.isHighContrast;
 

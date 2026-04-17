@@ -14,6 +14,8 @@ import 'package:globus_vermell_app/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'entity/building_entity.dart';
 import 'entity/publication_entity.dart';
+import 'package:globus_vermell_app/services/background_location_service.dart';
+import 'package:geolocator/geolocator.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,6 +27,10 @@ Future<void> main() async {
     BuildingSchema,
     PublicationSchema,
   ], directory: dir.path);
+
+  await _handleLocationPermissions();
+
+  await initializeBackgroundService();
 
   setupServiceLocator(isar);
   final prefs = await SharedPreferences.getInstance();
@@ -39,6 +45,21 @@ Future<void> main() async {
       child: MisEdificiosApp(isFirstTime: isFirstTime),
     ),
   );
+}
+
+Future<void> _handleLocationPermissions() async {
+  bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  if (!serviceEnabled) return;
+
+  LocationPermission permission = await Geolocator.checkPermission();
+
+  if (permission == LocationPermission.denied) {
+    permission = await Geolocator.requestPermission();
+    if (permission == LocationPermission.denied) return;
+  }
+  if (permission == LocationPermission.whileInUse) {
+    await Geolocator.requestPermission();
+  }
 }
 
 class MisEdificiosApp extends StatelessWidget {
