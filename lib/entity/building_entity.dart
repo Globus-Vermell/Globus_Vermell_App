@@ -2,6 +2,24 @@ import 'package:isar/isar.dart';
 
 part 'building_entity.g.dart';
 
+@embedded
+class ExtraDescription {
+  String? content;
+  String? contentEs;
+  String? contentEn;
+  String? contentAr;
+  String? contentFr;
+
+  String getLocalizedContent(String langCode) {
+    if (langCode == 'es' && contentEs?.isNotEmpty == true) return contentEs!;
+    if (langCode == 'en' && contentEn?.isNotEmpty == true) return contentEn!;
+    if (langCode == 'fr' && contentFr?.isNotEmpty == true) return contentFr!;
+    if (langCode == 'ar' && contentAr?.isNotEmpty == true) return contentAr!;
+    return content ?? '';
+  }
+}
+// -------
+
 @collection
 class Building {
   Id idBuilding;
@@ -41,6 +59,9 @@ class Building {
   final List<String>? usesAr;
   final List<String>? usesFr;
 
+  List<ExtraDescription>? extraDescriptions;
+
+
   Building({
     required this.idBuilding,
     required this.name,
@@ -73,11 +94,11 @@ class Building {
     this.usesEn,
     this.usesAr,
     this.usesFr,
+    this.extraDescriptions, 
   });
 
   int get id => idBuilding;
 
-  // ✨ Robotitos Traductores de Edificios UwU ✨
   String getLocalizedDescription(String langCode) {
     if (langCode == 'es' && descriptionEs?.isNotEmpty == true) {
       return descriptionEs!;

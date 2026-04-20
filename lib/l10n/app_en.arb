@@ -63,5 +63,6 @@
   "onboardingDesc3": "Click on the map markers to view complete information, history, opening hours, and how to get to each building.",
   "adaptability": "Adaptability",
   "general": "General",
-  "searchBuilding": "Search building by name"
+  "searchBuilding": "Search building by name",
+  "moreInfo": "More information"
 }

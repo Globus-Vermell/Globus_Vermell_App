@@ -41,6 +41,8 @@ class BuildingDto with _$BuildingDto {
     List<String>? usesEn,
     List<String>? usesAr,
     List<String>? usesFr,
+
+    @Default([]) List<dynamic> extraDescriptions,
   }) = _BuildingDto;
 
   factory BuildingDto.fromMap(Map<String, dynamic> map) {
@@ -86,6 +88,8 @@ class BuildingDto with _$BuildingDto {
       usesEn: JsonHelper.parseList(map['uses_en'] ?? map['usos_en']),
       usesAr: JsonHelper.parseList(map['uses_ar'] ?? map['usos_ar']),
       usesFr: JsonHelper.parseList(map['uses_fr'] ?? map['usos_fr']),
+
+      extraDescriptions: map['extra_descriptions'] as List<dynamic>? ?? [],
     );
   }
 }

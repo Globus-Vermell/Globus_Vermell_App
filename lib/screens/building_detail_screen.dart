@@ -190,13 +190,11 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
     final themeProvider = Provider.of<ThemeProvider>(context);
     final isHighContrast = themeProvider.isHighContrast;
 
-    // ✨ 1. Atrapamos el idioma actual UwU ✨
     final langCode = context
         .watch<LanguageProvider>()
         .currentLocale
         .languageCode;
 
-    // ✨ 2. Sacamos las listas traducidas ✨
     final localPubs = building.getLocalizedPublications(langCode);
     final localUses = building.getLocalizedUses(langCode);
     final localDesc = building.getLocalizedDescription(langCode);
@@ -251,10 +249,10 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
 
                   const SizedBox(height: 20),
 
-                  if (localPubs.isNotEmpty) // ✨
+                  if (localPubs.isNotEmpty) 
                     InkWell(
                       borderRadius: BorderRadius.circular(50),
-                      onTap: () => _openPublication(localPubs.first), // ✨
+                      onTap: () => _openPublication(localPubs.first), 
                       child: Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 14,
@@ -282,7 +280,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                             const SizedBox(width: 8),
                             Flexible(
                               child: Text(
-                                localPubs.first, // ✨ Título traducido
+                                localPubs.first, 
                                 style: TextStyle(
                                   color: isHighContrast
                                       ? colores.onSurface
@@ -359,10 +357,11 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                   SectionHeader(title: context.loc.description),
                   const SizedBox(height: 16),
 
-                  (localDesc.isNotEmpty &&
-                          localDesc != context.loc.noDescription)
+                  (localDesc.isNotEmpty && 
+                   localDesc != 'null' && 
+                   localDesc.trim() != '' &&
+                   localDesc != context.loc.noDescription)
                       ? Text(
-                          // ✨ ¡Adios TranslatedText!
                           localDesc,
                           textAlign: TextAlign.justify,
                           style: TextStyle(
@@ -375,6 +374,62 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                           icon: Icons.description_outlined,
                           message: context.loc.noDescription,
                         ),
+                      
+                  if (building.extraDescriptions != null && building.extraDescriptions!.isNotEmpty) ...[
+                    const SizedBox(height: 16),
+                    ...building.extraDescriptions!.map((extra) {
+                      final textoTraducido = extra.getLocalizedContent(langCode);
+                  
+                      if (textoTraducido.isEmpty) return const SizedBox.shrink();
+
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 12.0),
+                        child: Theme(
+                          data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: isHighContrast
+                                  ? colores.surface
+                                  : colores.primary.withValues(alpha: 0.04),
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(
+                                color: isHighContrast
+                                    ? colores.onSurface
+                                    : colores.outline.withValues(alpha: 0.15),
+                                width: isHighContrast ? 2.0 : 1.0,
+                              ),
+                            ),
+                            child: ExpansionTile(
+                              iconColor: isHighContrast ? colores.onSurface : colores.primary,
+                              collapsedIconColor: isHighContrast ? colores.onSurface : colores.primary,
+                              title: Text(
+                                context.loc.moreInfo, 
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  color: isHighContrast ? colores.onSurface : colores.primary,
+                                ),
+                              ),
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0),
+                                  child: Text(
+                                    textoTraducido,
+                                    textAlign: TextAlign.justify,
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: isHighContrast ? colores.onSurface : colores.onSurfaceVariant,
+                                      height: 1.6,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ],
 
                   const SizedBox(height: 40),
 
@@ -389,11 +444,11 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
 
                   const SizedBox(height: 16),
 
-                  if (localUses.isNotEmpty) // ✨ Usos traducidos
+                  if (localUses.isNotEmpty) 
                     _buildExpandableSection(
                       title: context.loc.uses,
                       icon: Icons.domain_rounded,
-                      items: localUses, // ✨
+                      items: localUses, 
                       colores: colores,
                       isHighContrast: isHighContrast,
                     ),
