@@ -249,10 +249,10 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
 
                   const SizedBox(height: 20),
 
-                  if (localPubs.isNotEmpty) 
+                  if (localPubs.isNotEmpty)
                     InkWell(
                       borderRadius: BorderRadius.circular(50),
-                      onTap: () => _openPublication(localPubs.first), 
+                      onTap: () => _openPublication(localPubs.first),
                       child: Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 14,
@@ -280,7 +280,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                             const SizedBox(width: 8),
                             Flexible(
                               child: Text(
-                                localPubs.first, 
+                                localPubs.first,
                                 style: TextStyle(
                                   color: isHighContrast
                                       ? colores.onSurface
@@ -357,10 +357,10 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                   SectionHeader(title: context.loc.description),
                   const SizedBox(height: 16),
 
-                  (localDesc.isNotEmpty && 
-                   localDesc != 'null' && 
-                   localDesc.trim() != '' &&
-                   localDesc != context.loc.noDescription)
+                  (localDesc.isNotEmpty &&
+                          localDesc != 'null' &&
+                          localDesc.trim() != '' &&
+                          localDesc != context.loc.noDescription)
                       ? Text(
                           localDesc,
                           textAlign: TextAlign.justify,
@@ -374,18 +374,24 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                           icon: Icons.description_outlined,
                           message: context.loc.noDescription,
                         ),
-                      
-                  if (building.extraDescriptions != null && building.extraDescriptions!.isNotEmpty) ...[
+
+                  if (building.extraDescriptions != null &&
+                      building.extraDescriptions!.isNotEmpty) ...[
                     const SizedBox(height: 16),
                     ...building.extraDescriptions!.map((extra) {
-                      final textoTraducido = extra.getLocalizedContent(langCode);
-                  
-                      if (textoTraducido.isEmpty) return const SizedBox.shrink();
+                      final textoTraducido = extra.getLocalizedContent(
+                        langCode,
+                      );
+
+                      if (textoTraducido.isEmpty)
+                        return const SizedBox.shrink();
 
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 12.0),
                         child: Theme(
-                          data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                          data: Theme.of(
+                            context,
+                          ).copyWith(dividerColor: Colors.transparent),
                           child: Container(
                             decoration: BoxDecoration(
                               color: isHighContrast
@@ -400,25 +406,37 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                               ),
                             ),
                             child: ExpansionTile(
-                              iconColor: isHighContrast ? colores.onSurface : colores.primary,
-                              collapsedIconColor: isHighContrast ? colores.onSurface : colores.primary,
+                              iconColor: isHighContrast
+                                  ? colores.onSurface
+                                  : colores.primary,
+                              collapsedIconColor: isHighContrast
+                                  ? colores.onSurface
+                                  : colores.primary,
                               title: Text(
-                                context.loc.moreInfo, 
+                                context.loc.moreInfo,
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16,
-                                  color: isHighContrast ? colores.onSurface : colores.primary,
+                                  color: isHighContrast
+                                      ? colores.onSurface
+                                      : colores.primary,
                                 ),
                               ),
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0),
+                                  padding: const EdgeInsets.only(
+                                    left: 16.0,
+                                    right: 16.0,
+                                    bottom: 16.0,
+                                  ),
                                   child: Text(
                                     textoTraducido,
                                     textAlign: TextAlign.justify,
                                     style: TextStyle(
                                       fontSize: 15,
-                                      color: isHighContrast ? colores.onSurface : colores.onSurfaceVariant,
+                                      color: isHighContrast
+                                          ? colores.onSurface
+                                          : colores.onSurfaceVariant,
                                       height: 1.6,
                                     ),
                                   ),
@@ -444,11 +462,11 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
 
                   const SizedBox(height: 16),
 
-                  if (localUses.isNotEmpty) 
+                  if (localUses.isNotEmpty)
                     _buildExpandableSection(
                       title: context.loc.uses,
                       icon: Icons.domain_rounded,
-                      items: localUses, 
+                      items: localUses,
                       colores: colores,
                       isHighContrast: isHighContrast,
                     ),

@@ -61,7 +61,6 @@ class Building {
 
   List<ExtraDescription>? extraDescriptions;
 
-
   Building({
     required this.idBuilding,
     required this.name,
@@ -94,7 +93,7 @@ class Building {
     this.usesEn,
     this.usesAr,
     this.usesFr,
-    this.extraDescriptions, 
+    this.extraDescriptions,
   });
 
   int get id => idBuilding;

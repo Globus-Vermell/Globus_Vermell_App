@@ -9,14 +9,16 @@ extension BuildingMapper on BuildingDto {
       return '${AppConstants.baseUrl}$path';
     }).toList();
 
-    final List<ExtraDescription> mappedExtraDescriptions = extraDescriptions.map((item) {
-      return ExtraDescription()
-        ..content = item['content']?.toString()
-        ..contentEs = item['content_es']?.toString()
-        ..contentEn = item['content_en']?.toString()
-        ..contentFr = item['content_fr']?.toString()
-        ..contentAr = item['content_ar']?.toString();
-    }).toList();
+    final List<ExtraDescription> mappedExtraDescriptions = extraDescriptions
+        .map((item) {
+          return ExtraDescription()
+            ..content = item['content']?.toString()
+            ..contentEs = item['content_es']?.toString()
+            ..contentEn = item['content_en']?.toString()
+            ..contentFr = item['content_fr']?.toString()
+            ..contentAr = item['content_ar']?.toString();
+        })
+        .toList();
 
     return Building(
       idBuilding: idBuilding,
