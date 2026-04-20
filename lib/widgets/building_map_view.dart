@@ -4,7 +4,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../controller/building_list_controller.dart';
 import '../entity/building_entity.dart';
 import '../utils/app_constants.dart';
-import '../utils/lang_extensions.dart';
 
 class BuildingMapView extends StatelessWidget {
   final BuildingListController controller;

@@ -324,8 +324,9 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                     );
                   },
                   onSubmitted: (value) {
-                    if (_debounceSearch?.isActive ?? false)
+                    if (_debounceSearch?.isActive ?? false) {
                       _debounceSearch!.cancel();
+                    }
                     if (mounted && !_listView) {
                       _ajustarMapaBusqueda(
                         controller.filteredBuildings,
@@ -374,8 +375,9 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                               FocusScope.of(context).unfocus();
                               setState(() {});
 
-                              if (_debounceSearch?.isActive ?? false)
+                              if (_debounceSearch?.isActive ?? false) {
                                 _debounceSearch!.cancel();
+                              }
                               if (mounted && !_listView) {
                                 // ✨ Al borrar, le decimos que vuelva al usuario UwU ✨
                                 _ajustarMapaBusqueda(
@@ -749,11 +751,12 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
                             Future.delayed(
                               const Duration(milliseconds: 300),
                               () {
-                                if (mounted && !_listView)
+                                if (mounted && !_listView) {
                                   _ajustarMapaBusqueda(
                                     controller.filteredBuildings,
                                     userPos,
                                   );
+                                }
                               },
                             );
                           },
