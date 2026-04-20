@@ -3,6 +3,7 @@ import '../entity/publication_entity.dart';
 
 extension PublicationMapper on PublicationDto {
   Publication toEntity() {
+    final cleanThemes = themes.replaceAll(RegExp(r'[{}"\[\]]'), '');
     return Publication(
       idPublication: idPublication,
       title: title,
@@ -17,7 +18,7 @@ extension PublicationMapper on PublicationDto {
       descriptionFr: descriptionFr,
       descriptionAr: descriptionAr,
 
-      themes: themes,
+      themes: cleanThemes,
       publicationEdition: publicationEdition,
     );
   }
