@@ -77,6 +77,7 @@ class BottomBarState extends State<BottomBar> {
     final isHighContrast = themeProvider.isHighContrast;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: colores.surface,
       body: IndexedStack(index: _selectedIndex, children: _widgetOptions),
       bottomNavigationBar: BottomNavigationBar(

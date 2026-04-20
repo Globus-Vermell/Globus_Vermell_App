@@ -460,6 +460,7 @@ class _BuildingsListScreenState extends State<BuildingsListScreen> {
     final langCode = context.watch<LanguageProvider>().currentLocale.languageCode;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: colores.surface,
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       appBar: AppBar(
