@@ -383,8 +383,9 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                         langCode,
                       );
 
-                      if (textoTraducido.isEmpty)
+                      if (textoTraducido.isEmpty) {
                         return const SizedBox.shrink();
+                      }
 
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 12.0),
@@ -446,7 +447,7 @@ class _BuildingDetailScreenState extends State<BuildingDetailScreen> {
                           ),
                         ),
                       );
-                    }).toList(),
+                    }),
                   ],
 
                   const SizedBox(height: 40),
