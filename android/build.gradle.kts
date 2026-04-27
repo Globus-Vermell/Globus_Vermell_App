@@ -36,4 +36,13 @@ tasks.register<Delete>("clean") {
     delete(rootProject.layout.buildDirectory)
 }
 
+subprojects {
+    configurations.all {
+        resolutionStrategy.eachDependency {
+            if (requested.group == "androidx.core" && requested.name == "core-ktx") {
+                useVersion("1.12.0")
+            }
+        }
+    }
+}
 
