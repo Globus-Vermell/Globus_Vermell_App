@@ -5,14 +5,13 @@ import '../controller/building_list_controller.dart';
 import '../entity/building_entity.dart';
 import '../utils/app_constants.dart';
 
-class BuildingMapView extends StatelessWidget {
+class BuildingMapView extends StatefulWidget {
   final BuildingListController controller;
   final String? mapStyleDark;
   final BitmapDescriptor iconoYo;
   final BitmapDescriptor iconoEdificio;
   final void Function(GoogleMapController) onMapCreated;
-  final Future<void> Function(Building, BuildingListController)
-  onNavigateToDetail;
+  final Future<void> Function(Building, BuildingListController) onNavigateToDetail;
 
   const BuildingMapView({
     super.key,
@@ -25,7 +24,17 @@ class BuildingMapView extends StatelessWidget {
   });
 
   @override
+  State<BuildingMapView> createState() => _BuildingMapViewState();
+}
+
+class _BuildingMapViewState extends State<BuildingMapView> {
+  GoogleMapController? _internalMapController;
+  int? _lastPublicationId;
+
+  @override
   Widget build(BuildContext context) {
+    final controller = widget.controller;
+
     LatLng centro = LatLng(
       controller.location.latitude,
       controller.location.longitude,
@@ -44,13 +53,35 @@ class BuildingMapView extends StatelessWidget {
 
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
+    if (_internalMapController != null) {
+      if (controller.currentMode == SearchMode.publication && _lastPublicationId != controller.selectedPublicationId) {
+        _lastPublicationId = controller.selectedPublicationId;
+        final bounds = controller.getBoundsForFilteredBuildings();
+        
+        if (bounds != null) {
+          // Le damos un pequeño margen de tiempo para que la pantalla cambie antes de animar
+          Future.delayed(const Duration(milliseconds: 400), () {
+            if (mounted) {
+              // 50.0 es el padding para que los pines no queden pegados a los bordes
+              _internalMapController!.animateCamera(CameraUpdate.newLatLngBounds(bounds, 50.0));
+            }
+          });
+        }
+      } else if (controller.currentMode != SearchMode.publication) {
+        _lastPublicationId = null; // Reseteamos si quitan el filtro
+      }
+    }
+
     return GoogleMap(
       initialCameraPosition: CameraPosition(
         target: centro,
         zoom: AppConstants.defaultMapZoom,
       ),
-      style: isDarkMode ? mapStyleDark : null,
-      onMapCreated: onMapCreated,
+      style: isDarkMode ? widget.mapStyleDark : null,
+      onMapCreated: (mapController) {
+        _internalMapController = mapController;
+        widget.onMapCreated(mapController);
+      },
       myLocationEnabled: true,
       myLocationButtonEnabled: false,
       mapToolbarEnabled: false,
@@ -63,8 +94,8 @@ class BuildingMapView extends StatelessWidget {
               return Marker(
                 markerId: MarkerId(edificio.hashCode.toString()),
                 position: LatLng(edificio.latitude, edificio.longitude),
-                icon: iconoEdificio,
-                onTap: () => onNavigateToDetail(edificio, controller),
+                icon: widget.iconoEdificio,
+                onTap: () => widget.onNavigateToDetail(edificio, controller),
               );
             }),
       },

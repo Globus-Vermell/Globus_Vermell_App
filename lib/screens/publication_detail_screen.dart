@@ -5,6 +5,8 @@ import '../utils/lang_extensions.dart';
 import '../widgets/info_chip.dart';
 import '../widgets/section_header.dart';
 import '../providers/language_provider.dart';
+import '../controller/building_list_controller.dart'; 
+import '../screens/bottom_bar.dart';
 
 class PublicationDetailScreen extends StatelessWidget {
   final Publication publication;
@@ -33,6 +35,24 @@ class PublicationDetailScreen extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
         ),
       ),
+      
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          // Filtramos la lista globalmente
+          context.read<BuildingListController>().applyFilter(publication.idPublication);
+
+          // Volvemos a la raíz y cambiamos a la pestaña del Mapa
+          Navigator.popUntil(context, (route) => route.isFirst);
+          bottomBarKey.currentState?.changeTab(0);
+        },
+        icon: const Icon(Icons.map_rounded),
+        label: Text(context.loc.viewInMap),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+        elevation: 4,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
@@ -142,7 +162,7 @@ class PublicationDetailScreen extends StatelessWidget {
                               ],
                             ),
                           ),
-                    const SizedBox(height: 100),
+                    const SizedBox(height: 100), 
                   ],
                 ),
               ),

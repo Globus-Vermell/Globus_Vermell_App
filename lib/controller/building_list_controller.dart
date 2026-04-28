@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'dart:math'; 
+
 import '../entity/building_entity.dart';
 import '../entity/publication_entity.dart';
 import '../repository/building_repository.dart';
@@ -10,8 +12,7 @@ import 'dart:async';
 
 enum SearchMode { all, publication, nearby }
 
-class BuildingListController extends ChangeNotifier
-    with WidgetsBindingObserver {
+class BuildingListController extends ChangeNotifier with WidgetsBindingObserver {
   final BuildingRepository _service = getIt<BuildingRepository>();
   final PublicationRepository _pubService = getIt<PublicationRepository>();
   final LocationService _locationService = getIt<LocationService>();
@@ -27,7 +28,10 @@ class BuildingListController extends ChangeNotifier
   bool hasMoreData = true;
 
   SearchMode _currentMode = SearchMode.all;
+  
   int? _selectedPublicationId;
+  int? get selectedPublicationId => _selectedPublicationId; 
+
   LatLng location = const LatLng(0, 0);
 
   int _currentPage = 1;
@@ -54,11 +58,46 @@ class BuildingListController extends ChangeNotifier
     }).toList();
   }
 
+  LatLngBounds? getBoundsForFilteredBuildings() {
+    if (filteredBuildings.isEmpty) return null;
+
+    // Solo cogemos los edificios que tengan coordenadas reales
+    final validBuildings = filteredBuildings.where((b) => b.latitude != 0 && b.longitude != 0).toList();
+    
+    if (validBuildings.isEmpty) return null;
+
+    // Si solo hay un edificio, creamos un mini recuadro para que el mapa no explote
+    if (validBuildings.length == 1) {
+      double lat = validBuildings.first.latitude;
+      double lng = validBuildings.first.longitude;
+      return LatLngBounds(
+        southwest: LatLng(lat - 0.005, lng - 0.005),
+        northeast: LatLng(lat + 0.005, lng + 0.005),
+      );
+    }
+
+    double minLat = validBuildings.first.latitude;
+    double maxLat = validBuildings.first.latitude;
+    double minLng = validBuildings.first.longitude;
+    double maxLng = validBuildings.first.longitude;
+
+    for (var b in validBuildings) {
+      minLat = min(minLat, b.latitude);
+      maxLat = max(maxLat, b.latitude);
+      minLng = min(minLng, b.longitude);
+      maxLng = max(maxLng, b.longitude);
+    }
+
+    return LatLngBounds(
+      southwest: LatLng(minLat, minLng),
+      northeast: LatLng(maxLat, maxLng),
+    );
+  }
+
   StreamSubscription<LatLng>? _realPosition;
 
   SearchMode get currentMode => _currentMode;
 
-  //Controlar cuando estamos en segundo plano
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
@@ -187,8 +226,6 @@ class BuildingListController extends ChangeNotifier
     _realPosition = null;
   }
 
-  //Función que busca edifcios cercanos a partir de la posición actual del usuario.
-  //Mostramos un máximo de 20 edificios para que no se sature la pantalla del usuario.
   Future<void> nearbyBuildings() async {
     if (!await _locationService.checkPermissionsAndService()) return;
 

@@ -66,7 +66,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       if (!mounted) return;
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => const BottomBar()),
+        MaterialPageRoute(builder: (_) => BottomBar()),
       );
     }
   }

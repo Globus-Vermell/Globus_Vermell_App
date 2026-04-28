@@ -17,6 +17,9 @@ import 'entity/publication_entity.dart';
 import 'package:globus_vermell_app/services/background_location_service.dart';
 import 'package:geolocator/geolocator.dart';
 
+// ✨ ¡Aquí importamos tu controlador! UwU ✨
+import 'package:globus_vermell_app/controller/building_list_controller.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -41,6 +44,8 @@ Future<void> main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => LanguageProvider()),
+        // ✨ ¡AQUÍ ESTÁ LA MAGIA GLOBAL! UwU ✨
+        ChangeNotifierProvider(create: (_) => BuildingListController()),
       ],
       child: MisEdificiosApp(isFirstTime: isFirstTime),
     ),
@@ -84,7 +89,7 @@ class MisEdificiosApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
-      home: isFirstTime ? const OnboardingScreen() : const BottomBar(),
+      home: isFirstTime ? OnboardingScreen() : BottomBar(),
     );
   }
 }

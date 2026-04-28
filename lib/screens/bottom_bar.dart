@@ -16,8 +16,13 @@ import '../utils/lang_extensions.dart';
 import 'building_list_screen.dart';
 import 'themes_screen.dart';
 
+// ✨ ¡NUESTRA LLAVE MÁGICA PARA MOVER LA APP! UwU ✨
+final GlobalKey<BottomBarState> bottomBarKey = GlobalKey<BottomBarState>();
+
 class BottomBar extends StatefulWidget {
-  const BottomBar({super.key});
+  // Le pasamos la llave mágica al constructor por defecto OwO
+  BottomBar({Key? key}) : super(key: key ?? bottomBarKey);
+  
   @override
   State<BottomBar> createState() => BottomBarState();
 }
@@ -52,17 +57,15 @@ class BottomBarState extends State<BottomBar> {
     });
   }
 
-  void _onItemTapped(int index) {
+  // ✨ Le quitamos el "_" para poder llamarla desde otras pantallas UwU ✨
+  void changeTab(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
 
   List<Widget> get _widgetOptions => <Widget>[
-    ChangeNotifierProvider(
-      create: (context) => BuildingListController(),
-      child: const BuildingsListScreen(),
-    ),
+    const BuildingsListScreen(),
     ChangeNotifierProvider(
       create: (context) => ThemesController(),
       child: const ThemesScreen(),
@@ -102,7 +105,7 @@ class BottomBarState extends State<BottomBar> {
         unselectedItemColor: isHighContrast
             ? colores.onSurface.withValues(alpha: 0.5)
             : colores.onSurfaceVariant,
-        onTap: _onItemTapped,
+        onTap: changeTab, // ✨ ¡Usamos nuestra nueva función aquí!
       ),
     );
   }
