@@ -64,5 +64,11 @@
   "adaptability": "Adaptability",
   "general": "General",
   "searchBuilding": "Search building by name",
-  "moreInfo": "More information"
+  "moreInfo": "More information",
+  "nonArchitects": "No architects found",
+  "architectList": "List of architects",
+  "work": "WORKS",
+  "born": "Born",
+  "died": "Death",
+  "noWorks": "This architect has no works registered in the database."
 }

@@ -64,5 +64,11 @@
   "adaptability": "Adaptabilidad",
   "general": "General",
   "searchBuilding": "Buscar edificio por nombre",
-  "moreInfo": "Más información"
+  "moreInfo": "Más información",
+  "nonArchitects": "No se han encontrado arquitectos",
+  "architectList": "Lista de arquitectos",
+  "work": "OBRAS",
+  "born": "Nacido",
+  "died": "Defunción",
+  "noWorks": "Este arquitecto no tiene obras registradas en la base de datos."
 }

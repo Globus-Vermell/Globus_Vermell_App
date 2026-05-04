@@ -5,7 +5,8 @@ import '../utils/lang_extensions.dart';
 import '../widgets/info_chip.dart';
 import '../widgets/section_header.dart';
 import '../providers/language_provider.dart';
-import '../controller/building_list_controller.dart'; 
+import '../providers/theme_provider.dart';
+import '../controller/building_list_controller.dart';
 import '../screens/bottom_bar.dart';
 
 class PublicationDetailScreen extends StatelessWidget {
@@ -22,153 +23,193 @@ class PublicationDetailScreen extends StatelessWidget {
     final localTitle = publication.getLocalizedTitle(langCode);
     final localDesc = publication.getLocalizedDescription(langCode);
 
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final isHighContrast = themeProvider.isHighContrast;
+    final colores = Theme.of(context).colorScheme;
+
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_rounded,
-            color: Theme.of(context).colorScheme.onSurface,
-          ),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
-      
+      backgroundColor: colores.surface,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          // Filtramos la lista globalmente
           context.read<BuildingListController>().applyFilter(publication.idPublication);
-
-          // Volvemos a la raíz y cambiamos a la pestaña del Mapa
           Navigator.popUntil(context, (route) => route.isFirst);
           bottomBarKey.currentState?.changeTab(0);
         },
         icon: const Icon(Icons.map_rounded),
         label: Text(context.loc.viewInMap),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        foregroundColor: Theme.of(context).colorScheme.onPrimary,
+        backgroundColor: colores.primary,
+        foregroundColor: colores.onPrimary,
         elevation: 4,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
-
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 180.0,
+            pinned: true,
+            backgroundColor: isHighContrast ? colores.surface : colores.primary,
+            elevation: isHighContrast ? 0 : 2,
+            iconTheme: IconThemeData(
+              color: isHighContrast
+                  ? colores.onSurface
+                  : Theme.of(context).appBarTheme.foregroundColor,
+            ),
+            leading: Container(
+              margin: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: colores.surface.withValues(alpha: 0.9),
+                shape: BoxShape.circle,
+                border: isHighContrast
+                    ? Border.all(color: colores.onSurface, width: 2)
+                    : null,
+              ),
+              child: IconButton(
+                icon: Icon(Icons.arrow_back_rounded, color: colores.onSurface),
+                onPressed: () => Navigator.pop(context),
+                padding: EdgeInsets.zero,
+              ),
+            ),
+            flexibleSpace: FlexibleSpaceBar(
+              titlePadding:
+                  const EdgeInsets.only(left: 20, bottom: 16, right: 20),
+              title: Text(
                 localTitle,
-                textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  fontSize: 34,
-                  fontWeight: FontWeight.w900,
-                  height: 1.2,
-                  color: Theme.of(context).colorScheme.onSurface,
+                  color: isHighContrast
+                      ? colores.onSurface
+                      : Theme.of(context).appBarTheme.foregroundColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  shadows: isHighContrast
+                      ? []
+                      : [
+                          const Shadow(
+                            color: Colors.black26,
+                            blurRadius: 4,
+                            offset: Offset(0, 2),
+                          )
+                        ],
                 ),
               ),
-              const SizedBox(height: 16),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.bookmark_outline_rounded,
-                    color: Theme.of(context).colorScheme.onSurface,
-                    size: 18,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 24),
-              Divider(
-                color: Theme.of(
-                  context,
-                ).colorScheme.outline.withValues(alpha: 0.2),
-                thickness: 1,
-              ),
-              const SizedBox(height: 32),
-
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+              background: Container(
+                color: isHighContrast ? colores.surface : colores.primary,
+                child: Stack(
                   children: [
-                    if (publication.themes.isNotEmpty &&
-                        publication.themes != '{}' &&
-                        publication.themes != '[]') ...[
-                      SectionHeader(title: context.loc.themesTitle),
-                      const SizedBox(height: 16),
-                      Wrap(
-                        spacing: 10,
-                        runSpacing: 10,
-                        children: publication.themes
-                            .split(',')
-                            .map(
-                              (tema) => InfoChip(
-                                icon: Icons.label_important_rounded,
-                                label: tema.trim(),
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                            )
-                            .toList(),
+                    Positioned(
+                      right: -30,
+                      bottom: -20,
+                      child: Icon(
+                        Icons.menu_book,
+                        size: 150,
+                        color: isHighContrast
+                            ? colores.onSurface.withValues(alpha: 0.1)
+                            : Colors.white.withValues(alpha: 0.15),
                       ),
-                      const SizedBox(height: 40),
-                    ],
-
-                    SectionHeader(title: context.loc.description),
-                    const SizedBox(height: 16),
-
-                    (localDesc.isNotEmpty)
-                        ? Text(
-                            localDesc,
-                            textAlign: TextAlign.justify,
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Theme.of(context).colorScheme.onSurface,
-                              height: 1.6,
-                            ),
-                          )
-                        : Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.all(24),
-                            decoration: BoxDecoration(
-                              color: Theme.of(
-                                context,
-                              ).colorScheme.outline.withValues(alpha: 0.05),
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            child: Column(
-                              children: [
-                                Icon(
-                                  Icons.description_outlined,
-                                  size: 40,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onSurfaceVariant
-                                      .withValues(alpha: 0.5),
-                                ),
-                                const SizedBox(height: 12),
-                                Text(
-                                  context.loc.noDescription,
-                                  style: TextStyle(
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.onSurface,
-                                    fontStyle: FontStyle.italic,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                    const SizedBox(height: 100), 
+                    ),
+                    if (isHighContrast)
+                      Positioned(
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        child: Divider(
+                          color: colores.onSurface,
+                          height: 1,
+                          thickness: 2,
+                        ),
+                      ),
                   ],
                 ),
               ),
-            ],
+            ),
           ),
-        ),
+
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 24.0, vertical: 20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Chips de temes
+                  if (publication.themes.isNotEmpty &&
+                      publication.themes != '{}' &&
+                      publication.themes != '[]') ...[
+                    SectionHeader(title: context.loc.themesTitle),
+                    const SizedBox(height: 16),
+                    Wrap(
+                      spacing: 10,
+                      runSpacing: 10,
+                      children: publication.themes
+                          .split(',')
+                          .map(
+                            (tema) => InfoChip(
+                              icon: Icons.label_important_rounded,
+                              label: tema.trim(),
+                              color: colores.primary,
+                            ),
+                          )
+                          .toList(),
+                    ),
+                    const SizedBox(height: 32),
+                  ],
+
+                  Divider(
+                    color: isHighContrast
+                        ? colores.onSurface
+                        : colores.outline.withValues(alpha: 0.2),
+                    thickness: isHighContrast ? 2 : 1,
+                  ),
+                  const SizedBox(height: 24),
+
+                  // Descripció
+                  SectionHeader(title: context.loc.description),
+                  const SizedBox(height: 16),
+
+                  (localDesc.isNotEmpty)
+                      ? Text(
+                          localDesc,
+                          textAlign: TextAlign.justify,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: colores.onSurface,
+                            height: 1.6,
+                          ),
+                        )
+                      : Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(24),
+                          decoration: BoxDecoration(
+                            color: colores.outline.withValues(alpha: 0.05),
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Column(
+                            children: [
+                              Icon(
+                                Icons.description_outlined,
+                                size: 40,
+                                color: colores.onSurfaceVariant
+                                    .withValues(alpha: 0.5),
+                              ),
+                              const SizedBox(height: 12),
+                              Text(
+                                context.loc.noDescription,
+                                style: TextStyle(
+                                  color: colores.onSurface,
+                                  fontStyle: FontStyle.italic,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                  const SizedBox(height: 100),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

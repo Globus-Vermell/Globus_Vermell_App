@@ -64,5 +64,11 @@
   "adaptability": "Adaptabilitat",
   "general": "General",
   "searchBuilding": "Cercar edifici per nom",
-  "moreInfo": "Més informació"
+  "moreInfo": "Més informació",
+  "nonArchitects": "No s'han trobat arquitectes",
+  "architectList": "Llista d'arquitectes",
+  "work": "OBRES",
+  "born": "Nascut",
+  "died": "Defunció",
+  "noWorks": "Aquest arquitecte no té obres registrades a la base de dades."
 }

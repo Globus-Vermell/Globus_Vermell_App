@@ -11,7 +11,7 @@ import '../utils/lang_extensions.dart';
 import '../widgets/info_chip.dart';
 import '../widgets/section_header.dart';
 import 'publication_detail_screen.dart';
-import '../providers/language_provider.dart'; // ✨ IMPORTANTE
+import '../providers/language_provider.dart'; 
 
 class BuildingDetailScreen extends StatefulWidget {
   final Building building;

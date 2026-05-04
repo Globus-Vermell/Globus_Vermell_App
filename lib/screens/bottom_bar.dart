@@ -1,6 +1,8 @@
 // ignore_for_file: avoid-passing-async-when-sync-expected
 
 import 'package:flutter/material.dart';
+import 'package:globus_vermell_app/controller/architect_list_controller.dart';
+import 'package:globus_vermell_app/screens/architects_screen.dart';
 import 'package:globus_vermell_app/screens/settings_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
@@ -11,18 +13,15 @@ import '../utils/service_locator.dart';
 import 'building_detail_screen.dart';
 import '../controller/themes_controller.dart';
 import '../providers/theme_provider.dart';
-import '../controller/building_list_controller.dart';
 import '../utils/lang_extensions.dart';
 import 'building_list_screen.dart';
 import 'themes_screen.dart';
 
-// ✨ ¡NUESTRA LLAVE MÁGICA PARA MOVER LA APP! UwU ✨
 final GlobalKey<BottomBarState> bottomBarKey = GlobalKey<BottomBarState>();
 
 class BottomBar extends StatefulWidget {
-  // Le pasamos la llave mágica al constructor por defecto OwO
   BottomBar({Key? key}) : super(key: key ?? bottomBarKey);
-  
+
   @override
   State<BottomBar> createState() => BottomBarState();
 }
@@ -57,7 +56,6 @@ class BottomBarState extends State<BottomBar> {
     });
   }
 
-  // ✨ Le quitamos el "_" para poder llamarla desde otras pantallas UwU ✨
   void changeTab(int index) {
     setState(() {
       _selectedIndex = index;
@@ -69,6 +67,10 @@ class BottomBarState extends State<BottomBar> {
     ChangeNotifierProvider(
       create: (context) => ThemesController(),
       child: const ThemesScreen(),
+    ),
+    ChangeNotifierProvider(
+      create: (context) => ArchitectListController(),
+      child: const ArchitectsScreen(),
     ),
     const SettingsScreen(),
   ];
@@ -96,6 +98,10 @@ class BottomBarState extends State<BottomBar> {
             label: context.loc.publications,
           ),
           BottomNavigationBarItem(
+            icon: const Icon(Icons.architecture),
+            label: context.loc.architects,
+          ),
+          BottomNavigationBarItem(
             icon: const Icon(Icons.settings),
             label: context.loc.settings,
           ),
@@ -105,7 +111,7 @@ class BottomBarState extends State<BottomBar> {
         unselectedItemColor: isHighContrast
             ? colores.onSurface.withValues(alpha: 0.5)
             : colores.onSurfaceVariant,
-        onTap: changeTab, // ✨ ¡Usamos nuestra nueva función aquí!
+        onTap: changeTab, 
       ),
     );
   }

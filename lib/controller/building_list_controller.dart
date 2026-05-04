@@ -10,7 +10,7 @@ import '../repository/publication_repository.dart';
 import '../utils/service_locator.dart';
 import 'dart:async';
 
-enum SearchMode { all, publication, nearby }
+enum SearchMode { all, publication, nearby, architect }
 
 class BuildingListController extends ChangeNotifier with WidgetsBindingObserver {
   final BuildingRepository _service = getIt<BuildingRepository>();
@@ -31,6 +31,9 @@ class BuildingListController extends ChangeNotifier with WidgetsBindingObserver 
   
   int? _selectedPublicationId;
   int? get selectedPublicationId => _selectedPublicationId; 
+
+  int? _selectedArchitectId;
+  int? get selectedArchitectId => _selectedArchitectId;
 
   LatLng location = const LatLng(0, 0);
 
@@ -138,6 +141,9 @@ class BuildingListController extends ChangeNotifier with WidgetsBindingObserver 
         publicationId: _currentMode == SearchMode.publication
             ? _selectedPublicationId
             : null,
+        architectId: _currentMode == SearchMode.architect 
+            ? _selectedArchitectId 
+            : null,
         latitude: (isNearby || hasValidLocation) ? location.latitude : null,
         longitude: (isNearby || hasValidLocation) ? location.longitude : null,
         forceRefresh: reset,
@@ -183,9 +189,17 @@ class BuildingListController extends ChangeNotifier with WidgetsBindingObserver 
     await _loadPage(reset: true);
   }
 
+  Future<void> applyArchitectFilter(int idArchitect) async {
+    _currentMode = SearchMode.architect;
+    _selectedArchitectId = idArchitect;
+    _selectedPublicationId = null; 
+    await _loadPage(reset: true);
+  }
+
   Future<void> clearFilter() async {
     _currentMode = SearchMode.all;
     _selectedPublicationId = null;
+    _selectedArchitectId = null; 
     await _loadPage(reset: true);
   }
 
@@ -230,6 +244,8 @@ class BuildingListController extends ChangeNotifier with WidgetsBindingObserver 
     if (!await _locationService.checkPermissionsAndService()) return;
 
     _currentMode = SearchMode.nearby;
+    _selectedPublicationId = null; 
+    _selectedArchitectId = null;
     isLoading = true;
     notifyListeners();
 

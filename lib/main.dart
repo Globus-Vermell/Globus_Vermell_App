@@ -14,10 +14,9 @@ import 'package:globus_vermell_app/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'entity/building_entity.dart';
 import 'entity/publication_entity.dart';
+import 'entity/architect_entity.dart';
 import 'package:globus_vermell_app/services/background_location_service.dart';
 import 'package:geolocator/geolocator.dart';
-
-// ✨ ¡Aquí importamos tu controlador! UwU ✨
 import 'package:globus_vermell_app/controller/building_list_controller.dart';
 
 Future<void> main() async {
@@ -29,6 +28,7 @@ Future<void> main() async {
   final isar = await Isar.open([
     BuildingSchema,
     PublicationSchema,
+    ArchitectSchema,
   ], directory: dir.path);
 
   await _handleLocationPermissions();

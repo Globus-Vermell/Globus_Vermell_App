@@ -18,7 +18,7 @@ class BuildingRepository {
     bool forceRefresh = false,
     double? latitude,
     double? longitude,
-    int? publicationId,
+    int? publicationId, int? architectId,
   }) async {
     final bool isCleanFetch =
         publicationId == null && latitude == null && longitude == null;

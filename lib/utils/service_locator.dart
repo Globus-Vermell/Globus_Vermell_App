@@ -1,4 +1,7 @@
 import 'package:get_it/get_it.dart';
+import 'package:globus_vermell_app/datasource/architect_local_datasource.dart';
+import 'package:globus_vermell_app/datasource/architect_remote_datasource.dart';
+import 'package:globus_vermell_app/repository/architect_repository.dart';
 import 'package:globus_vermell_app/services/location_service.dart';
 import 'package:isar/isar.dart';
 import '../datasource/building_local_datasource.dart';
@@ -46,4 +49,8 @@ void setupServiceLocator(Isar isar) {
 
   //Servicio de ubicación
   getIt.registerLazySingleton<LocationService>(() => LocationService());
+
+  getIt.registerLazySingleton(() => ArchitectLocalDataSource(isar));
+  getIt.registerLazySingleton(() => ArchitectRemoteDataSource());
+  getIt.registerLazySingleton(() => ArchitectRepository(getIt(), getIt()));
 }
