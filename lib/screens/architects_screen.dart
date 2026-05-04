@@ -98,6 +98,8 @@ class ArchitectsScreen extends StatelessWidget {
     BuildContext context,
     ArchitectListController controller,
   ) {
+    final langCode = Localizations.localeOf(context).languageCode;
+
     return ListView.separated(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -105,10 +107,11 @@ class ArchitectsScreen extends StatelessWidget {
       separatorBuilder: (context, index) => const SizedBox(height: 16),
       itemBuilder: (context, index) {
         final architect = controller.filteredArchitects[index];
+        final localNat = architect.getLocalizedNationality(langCode);
 
         final chips = <String>[];
-        if (architect.nationality != null && architect.nationality!.isNotEmpty) {
-          chips.add(architect.nationality!);
+        if (localNat.isNotEmpty) {
+          chips.add(localNat);
         }
         if (architect.birthYear != null) {
           chips.add("${architect.birthYear}");
