@@ -7,9 +7,17 @@ extension ArchitectMapper on ArchitectDto {
       idArchitect: idArchitect,
       name: name,
       description: description,
+      descriptionEs: descriptionEs,
+      descriptionEn: descriptionEn,
+      descriptionFr: descriptionFr,
+      descriptionAr: descriptionAr,
       birthYear: birthYear,
       deathYear: deathYear,
       nationality: nationality,
+      nationalityEs: nationalityEs,
+      nationalityEn: nationalityEn,
+      nationalityFr: nationalityFr,
+      nationalityAr: nationalityAr,
     );
   }
 }

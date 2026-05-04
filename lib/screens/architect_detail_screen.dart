@@ -6,6 +6,7 @@ import '../controller/building_list_controller.dart';
 import '../providers/theme_provider.dart';
 import '../utils/lang_extensions.dart';
 import 'building_detail_screen.dart';
+import '../providers/language_provider.dart';
 
 class ArchitectDetailScreen extends StatelessWidget {
   final Architect architect;
@@ -17,6 +18,13 @@ class ArchitectDetailScreen extends StatelessWidget {
     final colores = Theme.of(context).colorScheme;
     final themeProvider = Provider.of<ThemeProvider>(context);
     final isHighContrast = themeProvider.isHighContrast;
+
+    final langCode = context
+        .watch<LanguageProvider>()
+        .currentLocale
+        .languageCode;
+    final localDesc = architect.getLocalizedDescription(langCode);
+    final localNat = architect.getLocalizedNationality(langCode);
 
     final buildingController = context.watch<BuildingListController>();
     final architectBuildings = buildingController.buildings.where((b) {
@@ -33,14 +41,18 @@ class ArchitectDetailScreen extends StatelessWidget {
             backgroundColor: isHighContrast ? colores.surface : colores.primary,
             elevation: isHighContrast ? 0 : 2,
             iconTheme: IconThemeData(
-              color: isHighContrast ? colores.onSurface : Theme.of(context).appBarTheme.foregroundColor,
+              color: isHighContrast
+                  ? colores.onSurface
+                  : Theme.of(context).appBarTheme.foregroundColor,
             ),
             leading: Container(
               margin: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 color: colores.surface.withValues(alpha: 0.9),
                 shape: BoxShape.circle,
-                border: isHighContrast ? Border.all(color: colores.onSurface, width: 2) : null,
+                border: isHighContrast
+                    ? Border.all(color: colores.onSurface, width: 2)
+                    : null,
               ),
               child: IconButton(
                 icon: Icon(Icons.arrow_back_rounded, color: colores.onSurface),
@@ -49,16 +61,28 @@ class ArchitectDetailScreen extends StatelessWidget {
               ),
             ),
             flexibleSpace: FlexibleSpaceBar(
-              titlePadding: const EdgeInsets.only(left: 20, bottom: 16, right: 20),
+              titlePadding: const EdgeInsets.only(
+                left: 20,
+                bottom: 16,
+                right: 20,
+              ),
               title: Text(
                 architect.name,
                 style: TextStyle(
-                  color: isHighContrast ? colores.onSurface : Theme.of(context).appBarTheme.foregroundColor,
+                  color: isHighContrast
+                      ? colores.onSurface
+                      : Theme.of(context).appBarTheme.foregroundColor,
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
-                  shadows: isHighContrast ? [] : [
-                    const Shadow(color: Colors.black26, blurRadius: 4, offset: Offset(0, 2))
-                  ]
+                  shadows: isHighContrast
+                      ? []
+                      : [
+                          const Shadow(
+                            color: Colors.black26,
+                            blurRadius: 4,
+                            offset: Offset(0, 2),
+                          ),
+                        ],
                 ),
               ),
               background: Container(
@@ -71,8 +95,8 @@ class ArchitectDetailScreen extends StatelessWidget {
                       child: Icon(
                         Icons.architecture_rounded,
                         size: 150,
-                        color: isHighContrast 
-                            ? colores.onSurface.withValues(alpha: 0.1) 
+                        color: isHighContrast
+                            ? colores.onSurface.withValues(alpha: 0.1)
                             : Colors.white.withValues(alpha: 0.15),
                       ),
                     ),
@@ -82,8 +106,12 @@ class ArchitectDetailScreen extends StatelessWidget {
                         bottom: 0,
                         left: 0,
                         right: 0,
-                        child: Divider(color: colores.onSurface, height: 1, thickness: 2),
-                      )
+                        child: Divider(
+                          color: colores.onSurface,
+                          height: 1,
+                          thickness: 2,
+                        ),
+                      ),
                   ],
                 ),
               ),
@@ -92,7 +120,10 @@ class ArchitectDetailScreen extends StatelessWidget {
 
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 24.0,
+                vertical: 20.0,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -100,34 +131,56 @@ class ArchitectDetailScreen extends StatelessWidget {
                     spacing: 10,
                     runSpacing: 10,
                     children: [
-                      if (architect.nationality != null && architect.nationality!.isNotEmpty)
-                        _buildInfoChip(Icons.flag_rounded, architect.nationality!, Colors.blue, colores, isHighContrast),
+                      if (localNat.isNotEmpty)
+                        _buildInfoChip(
+                          Icons.flag_rounded,
+                          localNat,
+                          Colors.blue,
+                          colores,
+                          isHighContrast,
+                        ),
                       if (architect.birthYear != null)
-                        _buildInfoChip(Icons.cake_rounded, "${context.loc.born}: ${architect.birthYear}", Colors.purple, colores, isHighContrast),
+                        _buildInfoChip(
+                          Icons.cake_rounded,
+                          "${context.loc.born}: ${architect.birthYear}",
+                          Colors.purple,
+                          colores,
+                          isHighContrast,
+                        ),
                       if (architect.deathYear != null)
-                        _buildInfoChip(Icons.church_rounded, "${context.loc.died}: ${architect.deathYear}", Colors.brown, colores, isHighContrast),
+                        _buildInfoChip(
+                          Icons.church_rounded,
+                          "${context.loc.died}: ${architect.deathYear}",
+                          Colors.brown,
+                          colores,
+                          isHighContrast,
+                        ),
                     ],
                   ),
 
                   const SizedBox(height: 20),
                   Divider(
-                    color: isHighContrast ? colores.onSurface : colores.outline.withValues(alpha: 0.2), 
-                    thickness: isHighContrast ? 2 : 1
+                    color: isHighContrast
+                        ? colores.onSurface
+                        : colores.outline.withValues(alpha: 0.2),
+                    thickness: isHighContrast ? 2 : 1,
                   ),
                   const SizedBox(height: 16),
 
-                  if (architect.description != null && architect.description!.trim().isNotEmpty) ...[
+                  if (localDesc.isNotEmpty) ...[
                     Text(
-                      context.loc.description,
+                      context.loc.description, // O "Descripció" si no usas i18n
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: isHighContrast ? colores.onSurface : colores.onSurfaceVariant,
+                        color: isHighContrast
+                            ? colores.onSurface
+                            : colores.onSurfaceVariant,
                       ),
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      architect.description!,
+                      localDesc, // ✨ Usamos la variable traducida
                       textAlign: TextAlign.justify,
                       style: TextStyle(
                         fontSize: 16,
@@ -143,10 +196,12 @@ class ArchitectDetailScreen extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: isHighContrast ? colores.onSurface : colores.onSurfaceVariant,
+                      color: isHighContrast
+                          ? colores.onSurface
+                          : colores.onSurfaceVariant,
                     ),
                   ),
-                  
+
                   const SizedBox(height: 12),
 
                   if (architectBuildings.isEmpty)
@@ -156,7 +211,10 @@ class ArchitectDetailScreen extends StatelessWidget {
                         child: Text(
                           context.loc.noWorks,
                           textAlign: TextAlign.center,
-                          style: TextStyle(color: colores.onSurfaceVariant, fontStyle: FontStyle.italic),
+                          style: TextStyle(
+                            color: colores.onSurfaceVariant,
+                            fontStyle: FontStyle.italic,
+                          ),
                         ),
                       ),
                     )
@@ -164,7 +222,7 @@ class ArchitectDetailScreen extends StatelessWidget {
                     ListView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      padding: EdgeInsets.zero, 
+                      padding: EdgeInsets.zero,
                       itemCount: architectBuildings.length,
                       itemBuilder: (context, index) {
                         final building = architectBuildings[index];
@@ -173,8 +231,8 @@ class ArchitectDetailScreen extends StatelessWidget {
                           margin: const EdgeInsets.only(bottom: 12),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
-                            side: isHighContrast 
-                                ? BorderSide(color: colores.onSurface, width: 2) 
+                            side: isHighContrast
+                                ? BorderSide(color: colores.onSurface, width: 2)
                                 : BorderSide.none,
                           ),
                           child: ListTile(
@@ -184,15 +242,23 @@ class ArchitectDetailScreen extends StatelessWidget {
                               child: Container(
                                 width: 60,
                                 height: 60,
-                                color: isHighContrast 
-                                    ? colores.surface 
+                                color: isHighContrast
+                                    ? colores.surface
                                     : colores.primary.withValues(alpha: 0.1),
-                                child: Icon(Icons.apartment_rounded, color: isHighContrast ? colores.onSurface : colores.primary),
+                                child: Icon(
+                                  Icons.apartment_rounded,
+                                  color: isHighContrast
+                                      ? colores.onSurface
+                                      : colores.primary,
+                                ),
                               ),
                             ),
                             title: Text(
                               building.name,
-                              style: TextStyle(fontWeight: FontWeight.bold, color: colores.onSurface),
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: colores.onSurface,
+                              ),
                             ),
                             subtitle: Text(
                               building.location,
@@ -200,7 +266,12 @@ class ArchitectDetailScreen extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(color: colores.onSurfaceVariant),
                             ),
-                            trailing: Icon(Icons.chevron_right_rounded, color: isHighContrast ? colores.onSurface : colores.primary),
+                            trailing: Icon(
+                              Icons.chevron_right_rounded,
+                              color: isHighContrast
+                                  ? colores.onSurface
+                                  : colores.primary,
+                            ),
                             onTap: () {
                               Navigator.push(
                                 context,
@@ -227,25 +298,41 @@ class ArchitectDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoChip(IconData icon, String text, Color baseColor, ColorScheme colores, bool isHighContrast) {
+  Widget _buildInfoChip(
+    IconData icon,
+    String text,
+    Color baseColor,
+    ColorScheme colores,
+    bool isHighContrast,
+  ) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: isHighContrast ? colores.surface : baseColor.withValues(alpha: 0.1),
+        color: isHighContrast
+            ? colores.surface
+            : baseColor.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(20),
-        border: isHighContrast ? Border.all(color: colores.onSurface, width: 2) : null,
+        border: isHighContrast
+            ? Border.all(color: colores.onSurface, width: 2)
+            : null,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 18, color: isHighContrast ? colores.onSurface : baseColor),
+          Icon(
+            icon,
+            size: 18,
+            color: isHighContrast ? colores.onSurface : baseColor,
+          ),
           const SizedBox(width: 6),
           Text(
             text,
             style: TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.bold,
-              color: isHighContrast ? colores.onSurface : baseColor.withValues(alpha: 0.8),
+              color: isHighContrast
+                  ? colores.onSurface
+                  : baseColor.withValues(alpha: 0.8),
             ),
           ),
         ],
