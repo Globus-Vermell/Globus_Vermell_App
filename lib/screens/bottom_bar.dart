@@ -62,7 +62,9 @@ class BottomBarState extends State<BottomBar> {
     });
   }
 
+  // El chat se ha comentado ya que es un beta, pero aún así es totalmente funcional por si se quiere utilizar, antes de implementarse vean el ai_service.dart 
   List<Widget> get _widgetOptions => <Widget>[
+        const BuildingsListScreen(),
         ChangeNotifierProvider(
           create: (context) => ArchitectListController(),
           child: const ArchitectsScreen(),
@@ -71,8 +73,7 @@ class BottomBarState extends State<BottomBar> {
           create: (context) => ThemesController(),
           child: const ThemesScreen(),
         ),
-        const BuildingsListScreen(),
-        const ChatScreen(),
+        // const ChatScreen(),
         const SettingsScreen(),
       ];
 
@@ -96,6 +97,10 @@ class BottomBarState extends State<BottomBar> {
               elevation: isHighContrast ? 0 : 8,
               items: <BottomNavigationBarItem>[
                 BottomNavigationBarItem(
+                  icon: const Icon(Icons.map),
+                  label: context.loc.map,
+                ),
+                BottomNavigationBarItem(
                   icon: const Icon(Icons.architecture),
                   label: context.loc.architects,
                 ),
@@ -103,14 +108,10 @@ class BottomBarState extends State<BottomBar> {
                   icon: const Icon(Icons.menu_book),
                   label: context.loc.publications,
                 ),
-                BottomNavigationBarItem(
-                  icon: const Icon(Icons.map),
-                  label: context.loc.map,
-                ),
-                BottomNavigationBarItem(
+                /*BottomNavigationBarItem(
                   icon: const Icon(Icons.smart_toy_outlined),
                   label: 'Chat',
-                ),
+                ),*/
                 BottomNavigationBarItem(
                   icon: const Icon(Icons.settings),
                   label: context.loc.settings,
