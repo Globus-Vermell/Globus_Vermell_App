@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:isar/isar.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:globus_vermell_app/screens/chat_screen.dart';
 import '../entity/building_entity.dart';
 import '../utils/service_locator.dart';
 import 'building_detail_screen.dart';
@@ -27,7 +26,7 @@ class BottomBar extends StatefulWidget {
 }
 
 class BottomBarState extends State<BottomBar> {
-  int _selectedIndex = 2;
+  int _selectedIndex = 0;
 
   @override
   void initState() {
