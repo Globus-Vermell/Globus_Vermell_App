@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:globus_vermell_app/utils/lang_extensions.dart';
 import 'package:provider/provider.dart';
+import 'package:speech_to_text/speech_to_text.dart' as stt;
 import '../services/ia_service.dart';
 import '../providers/theme_provider.dart';
 
@@ -18,15 +19,64 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  final IAService _iaService = IAService();
   final TextEditingController _controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   final List<Mensaje> _mensajes = [];
   bool _cargando = false;
 
+  // ── Speech to text ──────────────────────────────────────────────────────────
+  final stt.SpeechToText _speech = stt.SpeechToText();
+  bool _escuchando = false;
+  bool _speechDisponible = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _inicializarSpeech();
+  }
+
+  Future<void> _inicializarSpeech() async {
+    final disponible = await _speech.initialize(
+      onError: (error) => setState(() => _escuchando = false),
+      onStatus: (status) {
+        if (status == 'done' || status == 'notListening') {
+          setState(() => _escuchando = false);
+        }
+      },
+    );
+    setState(() => _speechDisponible = disponible);
+  }
+
+  void _toggleEscuchar() async {
+    if (_escuchando) {
+      await _speech.stop();
+      setState(() => _escuchando = false);
+    } else {
+      setState(() => _escuchando = true);
+      await _speech.listen(
+        onResult: (result) {
+          setState(() {
+            _controller.text = result.recognizedWords;
+            _controller.selection = TextSelection.fromPosition(
+              TextPosition(offset: _controller.text.length),
+            );
+          });
+        },
+        localeId: 'ca_ES', // catalán; cambia a 'es_ES' si prefieres castellano
+        listenFor: const Duration(seconds: 30),
+        pauseFor: const Duration(seconds: 4),
+      );
+    }
+  }
+
   void _enviar() async {
     if (_controller.text.trim().isEmpty) return;
-    String texto = _controller.text.trim();
+    final texto = _controller.text.trim();
+
+    if (_escuchando) {
+      await _speech.stop();
+      setState(() => _escuchando = false);
+    }
 
     setState(() {
       _mensajes.insert(0, Mensaje(texto, true));
@@ -34,12 +84,21 @@ class _ChatScreenState extends State<ChatScreen> {
     });
     _controller.clear();
 
-    String respuesta = await _iaService.enviarPregunta(texto);
+    final resultado = await IaService.enviarMensaje(texto);
+    final respuesta = resultado['respuesta'] as String? ?? '...';
 
     setState(() {
       _mensajes.insert(0, Mensaje(respuesta, false));
       _cargando = false;
     });
+  }
+
+  @override
+  void dispose() {
+    _speech.stop();
+    _controller.dispose();
+    _scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -83,6 +142,7 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
       body: Column(
         children: [
+          // ── Lista de mensajes ────────────────────────────────────────────────
           Expanded(
             child: _mensajes.isEmpty
                 ? _buildEmptyState(context, colores)
@@ -100,6 +160,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
           ),
 
+          // ── Indicador de escritura ───────────────────────────────────────────
           if (_cargando)
             Padding(
               padding:
@@ -148,6 +209,52 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
             ),
 
+          // ── Indicador de escucha ─────────────────────────────────────────────
+          if (_escuchando)
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 10),
+                    decoration: BoxDecoration(
+                      color: isHighContrast
+                          ? colores.surface
+                          : colores.primary.withValues(alpha: 0.08),
+                      borderRadius: BorderRadius.circular(16),
+                      border: isHighContrast
+                          ? Border.all(color: colores.onSurface, width: 1.5)
+                          : null,
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.mic_rounded,
+                          size: 14,
+                          color: isHighContrast
+                              ? colores.onSurface
+                              : colores.primary,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          "Escoltant...",
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: isHighContrast
+                                ? colores.onSurface
+                                : colores.primary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
           Divider(
             height: 1,
             thickness: isHighContrast ? 2 : 1,
@@ -156,12 +263,53 @@ class _ChatScreenState extends State<ChatScreen> {
                 : colores.outline.withValues(alpha: 0.15),
           ),
 
+          // ── Input ────────────────────────────────────────────────────────────
           SafeArea(
             top: false,
             child: Padding(
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
               child: Row(
                 children: [
+                  // Botón mic
+                  if (_speechDisponible) ...[
+                    GestureDetector(
+                      onTap: _toggleEscuchar,
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        width: 46,
+                        height: 46,
+                        decoration: BoxDecoration(
+                          color: _escuchando
+                              ? (isHighContrast
+                                  ? colores.onSurface
+                                  : colores.primary)
+                              : (isHighContrast
+                                  ? colores.surface
+                                  : colores.primary.withValues(alpha: 0.1)),
+                          shape: BoxShape.circle,
+                          border: isHighContrast
+                              ? Border.all(color: colores.onSurface, width: 2)
+                              : null,
+                        ),
+                        child: Icon(
+                          _escuchando
+                              ? Icons.mic_rounded
+                              : Icons.mic_none_rounded,
+                          size: 22,
+                          color: _escuchando
+                              ? (isHighContrast
+                                  ? colores.surface
+                                  : colores.onPrimary)
+                              : (isHighContrast
+                                  ? colores.onSurface
+                                  : colores.primary),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                  ],
+
+                  // Campo de texto
                   Expanded(
                     child: Container(
                       decoration: BoxDecoration(
@@ -199,7 +347,9 @@ class _ChatScreenState extends State<ChatScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 10),
+                  const SizedBox(width: 8),
+
+                  // Botón enviar
                   GestureDetector(
                     onTap: _enviar,
                     child: Container(

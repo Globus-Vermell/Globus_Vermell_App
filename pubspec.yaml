@@ -54,6 +54,7 @@ dependencies:
   google_fonts: ^8.0.2
   flutter_background_service: ^5.1.0
   flutter_local_notifications: ^21.0.0
+  speech_to_text: ^6.6.0
 
 
 
