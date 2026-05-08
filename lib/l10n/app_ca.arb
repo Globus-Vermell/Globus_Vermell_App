@@ -75,5 +75,9 @@
   "writting": "Escrivint...",
   "help": "Com puc ajudar-te?",
   "askForHelp": "Fes-me una pregunta sobre arquitectura\no edificis de Barcelona.",
-  "question": "Escriu un missatge..."
-}
+  "question": "Escriu un missatge...",
+  "tecnic": "Fitxa tècnica",
+  "viewDetails": "Veure tots els detalls de l'edifici",
+  "howToGo": "Com arribar-hi",
+  "googleMaps": "Obrir ruta a Google Maps"
+  }

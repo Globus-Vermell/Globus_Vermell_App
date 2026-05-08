@@ -75,5 +75,9 @@
   "writting": "Writing...",
   "help": "How can I help you?",
   "askForHelp": "Ask me a question about architecture\nor buildings in Barcelona.",
-  "question": "Write a message..."
+  "question": "Write a message...",
+  "tecnic": "Technical sheet",
+  "viewDetails": "See all the details of the building",
+  "howToGo": "How to get there",
+  "googleMaps": "Open route in Google Maps"
 }
