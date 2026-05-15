@@ -33,7 +33,7 @@ class PublicationDetailScreen extends StatelessWidget {
         onPressed: () {
           context.read<BuildingListController>().applyFilter(publication.idPublication);
           Navigator.popUntil(context, (route) => route.isFirst);
-          bottomBarKey.currentState?.changeTab(0);
+          bottomBarKey.currentState?.changeTab(2);
         },
         icon: const Icon(Icons.map_rounded),
         label: Text(context.loc.viewInMap),

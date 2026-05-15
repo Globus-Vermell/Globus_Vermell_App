@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:globus_vermell_app/controller/architect_list_controller.dart';
 import 'package:globus_vermell_app/screens/architects_screen.dart';
+import 'package:globus_vermell_app/screens/chat_screen.dart';
 import 'package:globus_vermell_app/screens/settings_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
@@ -26,7 +27,7 @@ class BottomBar extends StatefulWidget {
 }
 
 class BottomBarState extends State<BottomBar> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 2;
 
   @override
   void initState() {
@@ -61,9 +62,8 @@ class BottomBarState extends State<BottomBar> {
     });
   }
 
-  // El chat se ha comentado ya que es un beta, pero aún así es totalmente funcional por si se quiere utilizar, antes de implementarse vean el ai_service.dart 
+  // El chat estaba comentado ya que es un beta, pero aún así es totalmente funcional por si se quiere utilizar, antes de implementarse vean el ai_service.dart 
   List<Widget> get _widgetOptions => <Widget>[
-        const BuildingsListScreen(),
         ChangeNotifierProvider(
           create: (context) => ArchitectListController(),
           child: const ArchitectsScreen(),
@@ -72,7 +72,8 @@ class BottomBarState extends State<BottomBar> {
           create: (context) => ThemesController(),
           child: const ThemesScreen(),
         ),
-        // const ChatScreen(),
+        const BuildingsListScreen(),
+        const ChatScreen(),
         const SettingsScreen(),
       ];
 
@@ -96,10 +97,6 @@ class BottomBarState extends State<BottomBar> {
               elevation: isHighContrast ? 0 : 8,
               items: <BottomNavigationBarItem>[
                 BottomNavigationBarItem(
-                  icon: const Icon(Icons.map),
-                  label: context.loc.map,
-                ),
-                BottomNavigationBarItem(
                   icon: const Icon(Icons.architecture),
                   label: context.loc.architects,
                 ),
@@ -107,10 +104,14 @@ class BottomBarState extends State<BottomBar> {
                   icon: const Icon(Icons.menu_book),
                   label: context.loc.publications,
                 ),
-                /*BottomNavigationBarItem(
+                BottomNavigationBarItem(
+                  icon: const Icon(Icons.map),
+                  label: context.loc.map,
+                ),
+                BottomNavigationBarItem(
                   icon: const Icon(Icons.smart_toy_outlined),
                   label: 'Chat',
-                ),*/
+                ),
                 BottomNavigationBarItem(
                   icon: const Icon(Icons.settings),
                   label: context.loc.settings,
